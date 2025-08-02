@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { LatestPost } from "~/app/_components/post";
 import { api, HydrateClient } from "~/trpc/server";
+import { AuthStatus } from "~/components/auth/AuthStatus";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -43,6 +44,10 @@ export default async function Home() {
             <p className="text-2xl text-white">
               {hello ? hello.greeting : "Loading tRPC query..."}
             </p>
+          </div>
+
+          <div className="rounded-xl bg-white/10 p-6">
+            <AuthStatus />
           </div>
 
           <LatestPost />
