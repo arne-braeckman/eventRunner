@@ -1,10 +1,10 @@
 # Epic List (Revised)
 
 * **Epic 1: Core System Foundation & Local Environment Setup.**
-    * **Goal:** Establish the foundational T3 Stack infrastructure configured for local development, implement initial multi-user role management with Convex Auth, and enable basic lead capture to ensure initial system access and data entry. This prioritizes rapid development through type-safe fullstack integration.
+    * **Goal:** Establish the foundational T3 Stack infrastructure configured for local development, implement initial multi-user role management with Clerk authentication, and enable basic lead capture to ensure initial system access and data entry. This prioritizes rapid development through type-safe fullstack integration.
     * **Key FRs addressed (core setup):** FR7 (Multi-User Roles & Customization - core), initial aspects of FR1 (Contact & Lead Mgmt), fundamental NFRs (Deployment Flexibility - local, initial Security, Usability), and foundational setup for FR8 (Centralized Communication Integrations - e.g., web forms).
     * **Specifics for Core System Foundation & Local Environment Setup:**
-        * The core T3 Stack components to be set up locally include a **Next.js 14 application** with **tRPC API routes**, **Convex database and functions**, and **Convex Auth** for authentication.
+        * The core T3 Stack components to be set up locally include a **Next.js 14 application** with **tRPC API routes**, **Convex database and functions**, and **Clerk authentication** with JWT integration.
         * Essential development tools for consistent local environment setup will include **Node.js runtime environment**, **pnpm package manager**, **Convex CLI**, and **Git** for version control.
         * The monorepo structure will contain a single Next.js application with organized directories for frontend components, tRPC routers, Convex schema and functions, and shared utilities.
     * **Initial Scope for Basic Lead Capture:**
@@ -12,7 +12,7 @@
         * **Social media integrations (from FR8)** and the **lead heat calculation system (from FR1)** are explicitly deferred to later epics.
     * **Initial Scope for Multi-User Role Management:**
         * For FR7, the absolute minimum roles to be functional in Epic 1 will be **Admin** and **Sales**.
-        * Initial user authentication will utilize **Convex Auth with OAuth providers** (Google, GitHub, etc.) and secure session management (FR7). Advanced role-based permissions and additional authentication providers will be implemented in subsequent epics.
+        * Initial user authentication will utilize **Clerk with OAuth providers** (Google, GitHub, etc.) and JWT-based session management integrated with Convex (FR7). Advanced role-based permissions and additional authentication providers will be implemented in subsequent epics.
 * **Epic 2: Lead Management, Sales Touchpoints & Social Integrations.**
     * **Goal:** Implement comprehensive lead management with rich data, dynamic lead heat indicators, and customer journey tracking, fully integrating social media channels (Facebook, Instagram, LinkedIn) and initial communication streams for effective early client inquiry and sales touchpoint engagement.
     * **Key FRs addressed:** FR1 (Contact & Lead Mgmt - full expanded detail), FR8 (Centralized Communication Integrations - *specifically Facebook, Instagram, LinkedIn aspects for lead capture/interaction*).

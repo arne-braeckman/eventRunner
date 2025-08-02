@@ -11,7 +11,7 @@ eventRunner/
 ├── tsconfig.json                   # TypeScript configuration
 ├── convex/                         # Convex database functions and schema
 │   ├── schema.ts                  # Convex schema definition
-│   ├── auth.config.ts             # Convex Auth configuration
+│   ├── auth.ts                    # Clerk authentication helpers
 │   ├── _generated/                # Auto-generated Convex files
 │   └── functions/                 # Convex database functions
 ├── public/                         # Static assets
@@ -36,16 +36,11 @@ eventRunner/
 │   │   │   │   └── page.tsx       # Analytics dashboard
 │   │   │   └── settings/
 │   │   │       └── page.tsx       # Settings
-│   │   ├── (auth)/                # Authentication routes
-│   │   │   └── signin/
-│   │   │       └── page.tsx       # Sign in page
+│   │   ├── (auth)/                # Authentication routes (handled by Clerk)
 │   │   ├── api/                   # API routes
-│   │   │   ├── trpc/
-│   │   │   │   └── [trpc]/
-│   │   │   │       └── route.ts   # tRPC handler
-│   │   │   └── auth/
-│   │   │       └── [...nextauth]/
-│   │   │           └── route.ts   # Convex Auth handler
+│   │   │   └── trpc/
+│   │   │       └── [trpc]/
+│   │   │           └── route.ts   # tRPC handler
 │   │   ├── globals.css            # Global CSS styles
 │   │   ├── layout.tsx             # Root layout
 │   │   └── page.tsx               # Homepage
@@ -74,8 +69,7 @@ eventRunner/
 │   │   │   │   ├── payment.ts
 │   │   │   │   └── analytics.ts
 │   │   │   ├── root.ts            # Main router
-│   │   │   └── trpc.ts            # tRPC setup
-│   │   ├── auth.ts                # Convex Auth configuration
+│   │   │   └── trpc.ts            # tRPC setup with Clerk auth
 │   │   └── convex.ts              # Convex client
 │   ├── styles/                    # Additional stylesheets
 │   └── types/                     # TypeScript type definitions

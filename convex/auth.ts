@@ -1,16 +1,32 @@
-import { convexAuth } from "@convex-dev/auth/server";
-import GitHub from "@auth/core/providers/github";
-import Google from "@auth/core/providers/google";
+// Convex auth functions for Clerk integration
+// These are helper functions that work with Clerk's JWT tokens
 
-export const { auth, signIn, signOut, store } = convexAuth({
-  providers: [
-    GitHub({
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
-    }),
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-    }),
-  ],
+import type { UserIdentity } from "convex/server";
+import { query } from "./_generated/server";
+
+// Query to get current user information
+export const getCurrentUser = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+    
+    return {
+      id: identity.subject,
+      name: identity.name || identity.nickname || "Anonymous",
+      email: identity.email,
+      picture: identity.pictureUrl,
+    };
+  },
 });
+
+// Helper function to require authentication
+export const requireAuth = async (ctx: any): Promise<UserIdentity> => {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) {
+    throw new Error("Authentication required");
+  }
+  return identity;
+};

@@ -4,7 +4,7 @@
 
 This document defines the user experience goals, information architecture, user flows, and visual design specifications for **eventRunner**'s user interface. Its primary goal is to serve as the foundation for visual design and frontend development, ensuring a cohesive and user-centered experience.
 
-This specification is designed to work seamlessly with the **T3 Stack architecture** (Next.js 14, TypeScript, tRPC, Convex, Tailwind CSS, Convex Auth, and shadcn/ui) as defined in the system architecture document, providing a modern, type-safe, and component-based implementation approach.
+This specification is designed to work seamlessly with the **T3 Stack architecture** (Next.js 14, TypeScript, tRPC, Convex, Tailwind CSS, Clerk authentication, and shadcn/ui) as defined in the system architecture document, providing a modern, type-safe, and component-based implementation approach.
 
 ## Overall UX Goals & Principles
 

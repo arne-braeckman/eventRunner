@@ -21,4 +21,4 @@ The primary need for `eventRunner` stems from the desire to empower venue owners
 | Date | Version | Description | Author |
 |------|---------|-------------|--------|
 | 2025-08-01 | 1.1 | Updated Technical Assumptions to align with T3 Stack architecture | Winston (AI Architect) |
-| 2025-08-02 | 1.2 | Updated to use Convex database and Convex Auth instead of Supabase/NextAuth | Winston (AI Architect) |
+| 2025-08-02 | 1.2 | Updated to use Convex database and Clerk authentication instead of Supabase/NextAuth | Winston (AI Architect) |

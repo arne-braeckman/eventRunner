@@ -1,6 +1,7 @@
 "use client";
 
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { useMutation, usePreloadedQuery } from "convex/react";
+import type { Preloaded } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 export default function Home({

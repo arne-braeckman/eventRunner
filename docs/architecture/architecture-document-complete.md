@@ -5,7 +5,7 @@ This comprehensive architecture document defines eventRunner's complete technica
 - **Type-safe fullstack development** with TypeScript, tRPC, and Convex
 - **Modern deployment strategy** optimized for Vercel and edge computing
 - **Scalable real-time features** via Supabase for collaboration
-- **Comprehensive security model** with Convex Auth and proper authorization
+- **Comprehensive security model** with Clerk authentication and Convex authorization
 - **Developer-friendly experience** with excellent tooling and testing strategies
 - **Production-ready monitoring** and error handling
 

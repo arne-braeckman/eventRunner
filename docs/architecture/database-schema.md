@@ -100,7 +100,7 @@ const tasks = defineTable({
   .index("by_assignee", ["assigneeId"])
   .index("by_dueDate", ["dueDate"]);
 
-// User Management with Convex Auth integration
+// User Management with Clerk authentication integration
 const users = defineTable({
   name: v.optional(v.string()),
   email: v.string(),
@@ -114,7 +114,7 @@ const users = defineTable({
     v.literal("CLIENT")
   ),
   venueId: v.optional(v.string()),
-  // Convex Auth handles authentication sessions internally
+  // Clerk handles authentication sessions via JWT tokens
 })
   .index("by_email", ["email"])
   .index("by_venue", ["venueId"])

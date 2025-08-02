@@ -10,7 +10,7 @@
 - Authentication wrapper
 - Protected route guards
 
-**Dependencies:** Convex Auth, React Query (via tRPC)
+**Dependencies:** Clerk authentication, React Query (via tRPC)
 **Technology Stack:** Next.js 14 App Router, TypeScript, Tailwind CSS
 
 ### Contact Management Module

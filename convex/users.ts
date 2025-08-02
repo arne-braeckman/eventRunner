@@ -1,6 +1,5 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { auth } from "./auth";
 
 export const createUser = mutation({
   args: {
@@ -69,10 +68,50 @@ export const getAllUsers = query({
 export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await auth.getUserId(ctx);
-    if (!userId) {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
       return null;
     }
-    return await ctx.db.get(userId);
+    
+    // Look up user based on Clerk identity
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", identity.email || ""))
+      .first();
+    
+    return existingUser;
+  },
+});
+
+export const createOrGetCurrentUser = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("User not authenticated");
+    }
+    
+    // Look up user based on Clerk identity
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", identity.email || ""))
+      .first();
+    
+    if (existingUser) {
+      return existingUser;
+    }
+    
+    // Create user from Clerk identity if they don't exist
+    if (identity.email) {
+      const newUserId = await ctx.db.insert("users", {
+        name: identity.name || identity.nickname,
+        email: identity.email,
+        image: identity.pictureUrl,
+        role: "STAFF", // Default role
+      });
+      return await ctx.db.get(newUserId);
+    }
+    
+    throw new Error("Unable to create user: no email provided");
   },
 });

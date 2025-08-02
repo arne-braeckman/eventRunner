@@ -12,7 +12,7 @@
 | Backend Framework | tRPC | 10.x | Type-safe API framework | End-to-end type safety, excellent DX |
 | Runtime | Node.js | 18.x | JavaScript runtime | Vercel compatibility, T3 standard |
 | Database | Convex | Latest | Real-time database | Type-safe, real-time, serverless database |
-| Authentication | Convex Auth | Latest | Authentication library | Built-in auth with Convex, multiple providers |
+| Authentication | Clerk | Latest | Authentication platform | Complete auth solution with user management, OAuth providers, JWT tokens |
 | File Storage | Cloudinary | Latest | Media management | Image optimization, CDN delivery |
 | Email Service | Resend | Latest | Transactional emails | Developer-friendly, reliable delivery |
 | Payment Processing | Stripe | Latest | Payment gateway | European support, comprehensive features |

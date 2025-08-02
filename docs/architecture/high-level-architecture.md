@@ -2,14 +2,14 @@
 
 ## Technical Summary
 
-The **eventRunner** application will be built as a **monolithic T3 Stack application** deployed on **Vercel**. The system consists of a **Next.js fullstack application** with integrated API routes using **tRPC** for type-safe client-server communication, **Convex** for database management and real-time features, and **Convex Auth** for authentication. This architecture is designed to support eventRunner's core mission of providing an all-in-one web application for event venue businesses, enabling efficient customer journey management, streamlined workflows, seamless collaboration, and timely revenue realization through a unified, type-safe development experience.
+The **eventRunner** application will be built as a **monolithic T3 Stack application** deployed on **Vercel**. The system consists of a **Next.js fullstack application** with integrated API routes using **tRPC** for type-safe client-server communication, **Convex** for database management and real-time features, and **Clerk** for authentication with JWT integration. This architecture is designed to support eventRunner's core mission of providing an all-in-one web application for event venue businesses, enabling efficient customer journey management, streamlined workflows, seamless collaboration, and timely revenue realization through a unified, type-safe development experience.
 
 ## Platform and Infrastructure Choice
 
 **Platform:** Vercel (primary) with fallback to Azure
 **Key Services:** 
 - **Vercel**: Hosting, edge functions, static assets, CI/CD
-- **Convex**: Database, authentication provider, real-time subscriptions
+- **Convex**: Database, real-time subscriptions, JWT authentication integration
 - **Cloudinary**: File storage and image optimization
 - **Resend**: Email delivery service
 - **Stripe**: Payment processing
@@ -25,7 +25,7 @@ The **eventRunner** application will be built as a **monolithic T3 Stack applica
 - `/src/components` - Reusable UI components with shadcn/ui
 - `/src/server` - tRPC routers and server-side logic
 - `/src/lib` - Shared utilities and configurations
-- `/prisma` - Database schema and migrations
+- `/convex` - Database schema and serverless functions
 
 ## High Level Architecture Diagram
 
@@ -45,8 +45,10 @@ graph TD
     end
     
     subgraph Authentication[Authentication]
-        NextApp --> ConvexAuth[Convex Auth]
-        ConvexAuth --> AuthProviders[OAuth Providers]
+        NextApp --> ClerkAuth[Clerk Authentication]
+        ClerkAuth --> AuthProviders[OAuth Providers]
+        ClerkAuth --> JWTTokens[JWT Tokens]
+        JWTTokens --> Convex
     end
     
     subgraph External_Services[External Services]
@@ -70,5 +72,5 @@ graph TD
 - **Server-First Architecture:** React Server Components for optimal performance
 - **Component-Based UI:** shadcn/ui components with Tailwind CSS for consistent design
 - **Database-First Design:** Convex schema drives TypeScript types and API structure
-- **Authentication-as-a-Service:** Convex Auth handles all authentication flows
+- **Authentication-as-a-Service:** Clerk handles all authentication flows with JWT integration
 - **Real-time Communication:** Convex real-time for live chat and collaboration features

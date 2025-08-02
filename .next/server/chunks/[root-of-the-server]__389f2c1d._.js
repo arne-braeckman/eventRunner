@@ -72,19 +72,27 @@ const env = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f4
             "development",
             "test",
             "production"
-        ])
+        ]),
+        CLERK_SECRET_KEY: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string(),
+        CONVEX_DEPLOYMENT: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().optional()
     },
     /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
    */ client: {
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string(),
+        NEXT_PUBLIC_CONVEX_URL: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string()
     },
     /**
    * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
    * middlewares) or client-side so we need to destruct manually.
    */ runtimeEnv: {
-        NODE_ENV: ("TURBOPACK compile-time value", "development")
+        NODE_ENV: ("TURBOPACK compile-time value", "development"),
+        CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+        CONVEX_DEPLOYMENT: process.env.CONVEX_DEPLOYMENT,
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ("TURBOPACK compile-time value", "pk_test_cmVsYXRlZC1zYXdmaXNoLTcwLmNsZXJrLmFjY291bnRzLmRldiQ"),
+        NEXT_PUBLIC_CONVEX_URL: ("TURBOPACK compile-time value", "https://grateful-hummingbird-983.convex.cloud")
     },
     /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -7,10 +7,12 @@
 src/
   components/
     ui/              # shadcn/ui base components
+    auth/            # Clerk authentication components (SignInButton, SignOutButton, AuthStatus)
     forms/           # Form components with react-hook-form
     tables/          # Data table components
     charts/          # Analytics visualization components
     layout/          # Layout and navigation components
+    providers/       # React context providers (Clerk, Convex, tRPC)
     features/        # Feature-specific component groups
       contacts/      # Contact management components
       opportunities/ # CRM pipeline components  
@@ -94,41 +96,67 @@ src/app/
     trpc/
       [trpc]/
         route.ts        # tRPC API handler
-    auth/
-      [...nextauth]/
-        route.ts        # NextAuth.js handler
-  (auth)/               # Route group for auth pages  
-    signin/
-      page.tsx          # Sign in page
-  layout.tsx            # Root layout
+  (auth)/               # Route group for auth pages (handled by Clerk)  
+  layout.tsx            # Root layout with ClerkProvider
   page.tsx             # Homepage/dashboard
 ```
 
-### Protected Route Pattern
+### Protected Route Pattern with Clerk
 ```typescript
-// Middleware-based protection with NextAuth.js
-import { withAuth } from "next-auth/middleware";
+// middleware.ts - Clerk-based route protection
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default withAuth(
-  function middleware(req) {
-    // Additional middleware logic
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        // Authorization logic based on route
-        if (req.nextUrl.pathname.startsWith('/admin')) {
-          return token?.role === 'ADMIN';
-        }
-        return !!token;
-      },
-    },
-  }
-);
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  '/admin(.*)',
+  '/api/trpc(.*)',
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) auth().protect();
+});
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/api/trpc/:path*']
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
 };
+```
+
+### Clerk Authentication Components
+```typescript
+// components/auth/AuthStatus.tsx - Authentication status component
+import { useUser } from "@clerk/nextjs";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { SignInButton } from "./SignInButton";
+import { SignOutButton } from "./SignOutButton";
+
+export function AuthStatus() {
+  const { isLoaded, isSignedIn, user } = useUser();
+  const convexUser = useQuery(api.users.getCurrentUser, isSignedIn ? {} : "skip");
+
+  if (!isLoaded) return <div>Loading...</div>;
+
+  if (!isSignedIn) {
+    return (
+      <div className="flex gap-4">
+        <SignInButton />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      <span>Welcome, {user?.fullName || user?.emailAddresses[0]?.emailAddress}!</span>
+      {user?.imageUrl && (
+        <img src={user.imageUrl} alt="Profile" className="w-8 h-8 rounded-full" />
+      )}
+      <SignOutButton />
+    </div>
+  );
+}
 ```
 
 ## Frontend Services Layer

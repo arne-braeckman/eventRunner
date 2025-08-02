@@ -13,13 +13,14 @@
 - CORS Policy: Strict CORS configuration for API endpoints
 
 **Authentication Security:**
-- Token Storage: Secure session management via Convex Auth
-- Session Management: JWT tokens with secure refresh rotation
-- Password Policy: OAuth-first approach, secure fallback for email/password
+- Token Storage: Secure session management via Clerk JWT tokens
+- Session Management: Clerk-managed JWT tokens with automatic refresh and validation
+- Authentication Providers: OAuth-first approach (Google, GitHub) via Clerk dashboard
+- User Management: Clerk-hosted user management with enterprise-grade security
 
 **Database Security:**
 - Connection Security: Built-in security with Convex serverless architecture
-- Row Level Security: Function-level access control with Convex Auth
+- Row Level Security: Function-level access control with Clerk JWT authentication in Convex
 - Data Encryption: Encryption at rest and in transit via Convex, sensitive data hashing
 
 ## Performance Optimization
