@@ -27,6 +27,7 @@ The primary need for `eventRunner` stems from the desire to empower venue owners
 | Date | Version | Description | Author |
 |------|---------|-------------|--------|
 | 2025-08-01 | 1.1 | Updated Technical Assumptions to align with T3 Stack architecture | Winston (AI Architect) |
+| 2025-08-02 | 1.2 | Updated to use Convex database and Convex Auth instead of Supabase/NextAuth | Winston (AI Architect) |
 
 ## Requirements
 
@@ -423,28 +424,28 @@ This section outlines the foundational technical decisions that will guide the A
         * **Rationale:** Next.js provides a complete fullstack framework with App Router, React Server Components, and optimal performance. It enables server-side rendering, static generation, and seamless API integration, perfect for eventRunner's dynamic web application needs.
     * **Type Safety: TypeScript + tRPC**
         * **Rationale:** End-to-end type safety from database to UI eliminates entire classes of bugs and provides excellent developer experience. tRPC ensures API contracts are enforced at compile time, reducing integration errors.
-    * **Database: PostgreSQL via Prisma + Supabase**
-        * **Rationale:** PostgreSQL provides robust relational capabilities for complex business logic. Prisma offers type-safe database access with excellent TypeScript integration. Supabase adds real-time capabilities essential for collaborative features while maintaining PostgreSQL compatibility.
+    * **Database: Convex Serverless Database**
+        * **Rationale:** Convex provides a complete backend-as-a-service with real-time capabilities built-in. It offers type-safe database access, automatic scaling, and real-time subscriptions essential for collaborative features. The serverless architecture eliminates database management overhead while providing excellent TypeScript integration and enhanced security through function-level access control.
     * **Hosting Platform: Vercel**
         * **Rationale:** Vercel is optimized for Next.js applications, providing edge functions, automatic scaling, and seamless deployment. It offers excellent performance for European users and integrates perfectly with the T3 Stack architecture.
-    * **Authentication: NextAuth.js**
-        * **Rationale:** NextAuth.js provides secure, flexible authentication built specifically for Next.js applications. It supports multiple providers and integrates seamlessly with the database layer for user management.
+    * **Authentication: Convex Auth**
+        * **Rationale:** Convex Auth provides secure, serverless authentication that integrates seamlessly with the Convex database. It supports multiple providers and eliminates the need for separate authentication infrastructure while maintaining excellent security and developer experience. This provides better security isolation compared to traditional authentication solutions.
 
 ## Epic List (Revised)
 
 * **Epic 1: Core System Foundation & Local Environment Setup.**
-    * **Goal:** Establish the foundational T3 Stack infrastructure configured for local development, implement initial multi-user role management with NextAuth.js, and enable basic lead capture to ensure initial system access and data entry. This prioritizes rapid development through type-safe fullstack integration.
+    * **Goal:** Establish the foundational T3 Stack infrastructure configured for local development, implement initial multi-user role management with Convex Auth, and enable basic lead capture to ensure initial system access and data entry. This prioritizes rapid development through type-safe fullstack integration.
     * **Key FRs addressed (core setup):** FR7 (Multi-User Roles & Customization - core), initial aspects of FR1 (Contact & Lead Mgmt), fundamental NFRs (Deployment Flexibility - local, initial Security, Usability), and foundational setup for FR8 (Centralized Communication Integrations - e.g., web forms).
     * **Specifics for Core System Foundation & Local Environment Setup:**
-        * The core T3 Stack components to be set up locally include a **Next.js 14 application** with **tRPC API routes**, **Prisma ORM**, and **Supabase PostgreSQL database instance**.
-        * Essential development tools for consistent local environment setup will include **Node.js runtime environment**, **pnpm package manager**, **Prisma CLI**, and **Git** for version control.
-        * The monorepo structure will contain a single Next.js application with organized directories for frontend components, tRPC routers, Prisma schema, and shared utilities.
+        * The core T3 Stack components to be set up locally include a **Next.js 14 application** with **tRPC API routes**, **Convex database and functions**, and **Convex Auth** for authentication.
+        * Essential development tools for consistent local environment setup will include **Node.js runtime environment**, **pnpm package manager**, **Convex CLI**, and **Git** for version control.
+        * The monorepo structure will contain a single Next.js application with organized directories for frontend components, tRPC routers, Convex schema and functions, and shared utilities.
     * **Initial Scope for Basic Lead Capture:**
         * "Basic lead capture" in this epic will strictly entail implementing **simple web (lead capture) forms** that store essential contact details (e.g., name, email, phone) directly into the local database (FR1).
         * **Social media integrations (from FR8)** and the **lead heat calculation system (from FR1)** are explicitly deferred to later epics.
     * **Initial Scope for Multi-User Role Management:**
         * For FR7, the absolute minimum roles to be functional in Epic 1 will be **Admin** and **Sales**.
-        * Initial user authentication will utilize **NextAuth.js with OAuth providers** (Google, etc.) and session management (FR7). Advanced role-based permissions and additional authentication providers will be implemented in subsequent epics.
+        * Initial user authentication will utilize **Convex Auth with OAuth providers** (Google, GitHub, etc.) and secure session management (FR7). Advanced role-based permissions and additional authentication providers will be implemented in subsequent epics.
 * **Epic 2: Lead Management, Sales Touchpoints & Social Integrations.**
     * **Goal:** Implement comprehensive lead management with rich data, dynamic lead heat indicators, and customer journey tracking, fully integrating social media channels (Facebook, Instagram, LinkedIn) and initial communication streams for effective early client inquiry and sales touchpoint engagement.
     * **Key FRs addressed:** FR1 (Contact & Lead Mgmt - full expanded detail), FR8 (Centralized Communication Integrations - *specifically Facebook, Instagram, LinkedIn aspects for lead capture/interaction*).

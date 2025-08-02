@@ -4,13 +4,13 @@
 
 This document outlines the complete fullstack architecture for **eventRunner**, including backend systems, frontend implementation, and their integration. It serves as the single source of truth for AI-driven development, ensuring consistency across the entire technology stack.
 
-This unified approach uses the **T3 Stack** methodology, combining Next.js, TypeScript, tRPC, Prisma, Tailwind CSS, and NextAuth.js to create a modern, type-safe, and developer-friendly fullstack application optimized for event venue businesses.
+This unified approach uses the **T3 Stack** methodology, combining Next.js, TypeScript, tRPC, Convex, Tailwind CSS, and Convex Auth to create a modern, type-safe, and developer-friendly fullstack application optimized for event venue businesses.
 
 ### Starter Template or Existing Project
 
-**Decision:** Greenfield project using Create T3 App as the foundation
-- **Template:** [Create T3 App](https://create.t3.gg/) with all options enabled
-- **Rationale:** T3 Stack provides excellent type safety, developer experience, and rapid development capabilities perfect for the complex CRM and project management features required by eventRunner
+**Decision:** Greenfield project using Create T3 App as the foundation with Convex integration
+- **Template:** [Create T3 App](https://create.t3.gg/) with Next.js, TypeScript, Tailwind CSS, and tRPC, then integrate Convex for database and authentication
+- **Rationale:** T3 Stack provides excellent type safety, developer experience, and rapid development capabilities. Convex integration adds serverless database, real-time capabilities, and enhanced security perfect for the complex CRM and project management features required by eventRunner
 
 ### Change Log
 
@@ -22,14 +22,14 @@ This unified approach uses the **T3 Stack** methodology, combining Next.js, Type
 
 ### Technical Summary
 
-The **eventRunner** application will be built as a **monolithic T3 Stack application** deployed on **Vercel**. The system consists of a **Next.js fullstack application** with integrated API routes using **tRPC** for type-safe client-server communication, **Prisma** for database management with **PostgreSQL**, and **NextAuth.js** for authentication. This architecture is designed to support eventRunner's core mission of providing an all-in-one web application for event venue businesses, enabling efficient customer journey management, streamlined workflows, seamless collaboration, and timely revenue realization through a unified, type-safe development experience.
+The **eventRunner** application will be built as a **monolithic T3 Stack application** deployed on **Vercel**. The system consists of a **Next.js fullstack application** with integrated API routes using **tRPC** for type-safe client-server communication, **Convex** for database management and real-time features, and **Convex Auth** for authentication. This architecture is designed to support eventRunner's core mission of providing an all-in-one web application for event venue businesses, enabling efficient customer journey management, streamlined workflows, seamless collaboration, and timely revenue realization through a unified, type-safe development experience.
 
 ### Platform and Infrastructure Choice
 
 **Platform:** Vercel (primary) with fallback to Azure
 **Key Services:** 
 - **Vercel**: Hosting, edge functions, static assets, CI/CD
-- **Supabase**: PostgreSQL database, authentication provider, real-time subscriptions
+- **Convex**: Database, authentication provider, real-time subscriptions
 - **Cloudinary**: File storage and image optimization
 - **Resend**: Email delivery service
 - **Stripe**: Payment processing
@@ -61,14 +61,12 @@ graph TD
     end
     
     subgraph Database_Layer[Database Layer]
-        APIRoutes --> Prisma[Prisma ORM]
-        Prisma --> Supabase[(Supabase PostgreSQL)]
+        APIRoutes --> Convex[Convex Database]
     end
     
     subgraph Authentication[Authentication]
-        NextApp --> NextAuth[NextAuth.js]
-        NextAuth --> AuthProviders[OAuth Providers]
-        NextAuth --> Supabase
+        NextApp --> ConvexAuth[Convex Auth]
+        ConvexAuth --> AuthProviders[OAuth Providers]
     end
     
     subgraph External_Services[External Services]
@@ -80,8 +78,8 @@ graph TD
     end
     
     subgraph Real_Time[Real-time Features]
-        ClientComponents --> Supabase_Realtime[Supabase Realtime]
-        Supabase_Realtime --> Supabase
+        ClientComponents --> Convex_Realtime[Convex Real-time]
+        Convex_Realtime --> Convex
     end
 ```
 
@@ -91,9 +89,9 @@ graph TD
 - **End-to-End Type Safety:** TypeScript + tRPC ensures type safety from database to UI
 - **Server-First Architecture:** React Server Components for optimal performance
 - **Component-Based UI:** shadcn/ui components with Tailwind CSS for consistent design
-- **Database-First Design:** Prisma schema drives TypeScript types and API structure
-- **Authentication-as-a-Service:** NextAuth.js handles all authentication flows
-- **Real-time Communication:** Supabase realtime for live chat and collaboration features
+- **Database-First Design:** Convex schema drives TypeScript types and API structure
+- **Authentication-as-a-Service:** Convex Auth handles all authentication flows
+- **Real-time Communication:** Convex real-time for live chat and collaboration features
 
 ## Tech Stack
 
@@ -108,9 +106,8 @@ graph TD
 | State Management | React Query + Zustand | Latest | Server state + client state | Built into tRPC, lightweight client state |
 | Backend Framework | tRPC | 10.x | Type-safe API framework | End-to-end type safety, excellent DX |
 | Runtime | Node.js | 18.x | JavaScript runtime | Vercel compatibility, T3 standard |
-| Database | PostgreSQL | 15.x | Relational database | Complex relationships, ACID compliance |
-| Database ORM | Prisma | 5.x | Type-safe database client | Schema-first, excellent TypeScript integration |
-| Authentication | NextAuth.js | 4.x | Authentication library | Built for Next.js, multiple providers |
+| Database | Convex | Latest | Real-time database | Type-safe, real-time, serverless database |
+| Authentication | Convex Auth | Latest | Authentication library | Built-in auth with Convex, multiple providers |
 | File Storage | Cloudinary | Latest | Media management | Image optimization, CDN delivery |
 | Email Service | Resend | Latest | Transactional emails | Developer-friendly, reliable delivery |
 | Payment Processing | Stripe | Latest | Payment gateway | European support, comprehensive features |
@@ -267,7 +264,7 @@ export const contactRouter = router({
       status: z.nativeEnum(ContactStatus).optional()
     }))
     .query(async ({ input, ctx }) => {
-      // Implementation with Prisma
+      // Implementation with Convex
     }),
     
   getById: publicProcedure
@@ -297,18 +294,36 @@ export const contactRouter = router({
 });
 
 // Real-time subscriptions for project collaboration
-export const projectRouter = router({
-  getMessages: protectedProcedure
-    .input(z.string()) // projectId
-    .subscription(async ({ input: projectId }) => {
-      // Supabase realtime subscription
-    }),
+// Convex handles real-time automatically, no need for manual subscriptions
+export const getProjectMessages = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, { projectId }) => {
+    await requireAuth(ctx);
     
-  sendMessage: protectedProcedure
-    .input(messageCreateSchema)
-    .mutation(async ({ input, ctx }) => {
-      // Send message and trigger realtime update
-    }),
+    return await ctx.db
+      .query("messages")
+      .withIndex("by_project", (q) => q.eq("projectId", projectId))
+      .order("desc")
+      .collect();
+  },
+});
+
+export const sendMessage = mutation({
+  args: {
+    projectId: v.id("projects"),
+    content: v.string(),
+    messageType: v.optional(v.string()),
+  },
+  handler: async (ctx, { projectId, content, messageType = "text" }) => {
+    const user = await requireAuth(ctx);
+    
+    return await ctx.db.insert("messages", {
+      projectId,
+      senderId: user._id,
+      content,
+      messageType,
+    });
+  },
 });
 ```
 
@@ -324,7 +339,7 @@ export const projectRouter = router({
 - Authentication wrapper
 - Protected route guards
 
-**Dependencies:** NextAuth.js, React Query (via tRPC)
+**Dependencies:** Convex Auth, React Query (via tRPC)
 **Technology Stack:** Next.js 14 App Router, TypeScript, Tailwind CSS
 
 #### Contact Management Module
@@ -335,7 +350,7 @@ export const projectRouter = router({
 - Lead heat visualization
 - Social media integration panels
 
-**Dependencies:** tRPC contact router, Prisma Contact model
+**Dependencies:** tRPC contact router, Convex Contact model
 **Technology Stack:** React Server Components, shadcn/ui, Zustand for UI state
 
 #### CRM Pipeline Module  
@@ -346,7 +361,7 @@ export const projectRouter = router({
 - Stage progression validation
 - Date conflict detection
 
-**Dependencies:** tRPC opportunity router, real-time updates via Supabase
+**Dependencies:** tRPC opportunity router, real-time updates via Convex
 **Technology Stack:** @dnd-kit for drag-and-drop, React Query for optimistic updates
 
 #### Project Collaboration Hub
@@ -357,7 +372,7 @@ export const projectRouter = router({
 - Task management Kanban board
 - File sharing interface
 
-**Dependencies:** Supabase realtime, tRPC project router, Cloudinary for file uploads
+**Dependencies:** Convex realtime, tRPC project router, Cloudinary for file uploads
 **Technology Stack:** WebSocket connections, React Suspense for real-time UI
 
 #### Document Management System
@@ -442,20 +457,20 @@ sequenceDiagram
     participant Client as Client User
     participant Staff as Venue Staff  
     participant App as Next.js App
-    participant Supabase as Supabase Realtime
+    participant Convex as Convex Realtime
     participant DB as PostgreSQL
     
     Client->>App: Send chat message
     App->>DB: INSERT message
-    App->>Supabase: Broadcast message
-    Supabase-->>Staff: Real-time message
-    Supabase-->>Client: Message confirmation
+    App->>Convex: Broadcast message
+    Convex-->>Staff: Real-time message
+    Convex-->>Client: Message confirmation
     
     Staff->>App: Update task status
     App->>DB: UPDATE task
-    App->>Supabase: Broadcast task change
-    Supabase-->>Client: Real-time task update
-    Supabase-->>Staff: Update confirmation
+    App->>Convex: Broadcast task change
+    Convex-->>Client: Real-time task update
+    Convex-->>Staff: Update confirmation
 ```
 
 ## Database Schema
@@ -702,7 +717,7 @@ interface AppState {
 - **Server State:** Managed by tRPC with React Query under the hood
 - **UI State:** Zustand for lightweight client-side state
 - **Form State:** React Hook Form for form management
-- **Real-time State:** Supabase subscriptions for live updates
+- **Real-time State:** Convex subscriptions for live updates
 
 ### Routing Architecture
 
@@ -846,8 +861,8 @@ src/server/
       user.ts          # User management procedures
     root.ts            # Main router combining all sub-routers
     trpc.ts           # tRPC configuration and context
-  auth.ts             # NextAuth.js configuration
-  db.ts              # Prisma client instance
+  auth.ts             # Convex Auth configuration
+  convex.ts          # Convex client instance
 ```
 
 #### Server-side Function Template
@@ -1040,7 +1055,7 @@ eventRunner/
 ├── tailwind.config.js              # Tailwind CSS configuration
 ├── tsconfig.json                   # TypeScript configuration
 ├── prisma/                         # Database schema and migrations
-│   ├── schema.prisma              # Prisma schema definition
+│   ├── schema.ts                  # Convex schema definition
 │   ├── migrations/                # Database migrations
 │   └── seed.ts                    # Database seeding script
 ├── public/                         # Static assets
@@ -1074,7 +1089,7 @@ eventRunner/
 │   │   │   │       └── route.ts   # tRPC handler
 │   │   │   └── auth/
 │   │   │       └── [...nextauth]/
-│   │   │           └── route.ts   # NextAuth handler
+│   │   │           └── route.ts   # Convex Auth handler
 │   │   ├── globals.css            # Global CSS styles
 │   │   ├── layout.tsx             # Root layout
 │   │   └── page.tsx               # Homepage
@@ -1104,8 +1119,8 @@ eventRunner/
 │   │   │   │   └── analytics.ts
 │   │   │   ├── root.ts            # Main router
 │   │   │   └── trpc.ts            # tRPC setup
-│   │   ├── auth.ts                # NextAuth configuration
-│   │   └── db.ts                  # Prisma client
+│   │   ├── auth.ts                # Convex Auth configuration
+│   │   └── convex.ts              # Convex client
 │   ├── styles/                    # Additional stylesheets
 │   └── types/                     # TypeScript type definitions
 ├── tests/                         # Test files
@@ -1147,12 +1162,11 @@ pnpm install
 # Copy environment variables
 cp .env.example .env
 
-# Set up database
-pnpm db:push
-pnpm db:seed
+# Set up Convex
+npx convex dev --until-success
 
-# Generate Prisma client
-pnpm db:generate
+# Deploy schema
+npx convex deploy
 ```
 
 #### Development Commands
@@ -1160,10 +1174,10 @@ pnpm db:generate
 # Start development server (all services)
 pnpm dev
 
-# Database operations
-pnpm db:studio    # Open Prisma Studio
-pnpm db:migrate   # Run migrations
-pnpm db:reset     # Reset database
+# Convex operations
+npx convex dashboard  # Open Convex Dashboard
+npx convex deploy     # Deploy functions and schema
+npx convex dev        # Start development mode
 
 # Type checking
 pnpm type-check
@@ -1177,16 +1191,16 @@ pnpm test:e2e     # E2E tests with Playwright
 
 #### Required Environment Variables
 ```bash
-# Database
-DATABASE_URL="postgresql://username:password@localhost:5432/eventrunner"
+# Convex
+CONVEX_DEPLOYMENT="your-convex-deployment"
+NEXT_PUBLIC_CONVEX_URL="https://your-deployment.convex.cloud"
 
-# NextAuth.js
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-
-# OAuth Providers
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
+# Convex Auth
+AUTH_GOOGLE_ID="your-google-client-id"
+AUTH_GOOGLE_SECRET="your-google-client-secret"
+AUTH_GITHUB_ID="your-github-client-id"
+AUTH_GITHUB_SECRET="your-github-client-secret"
+AUTH_RESEND_KEY="your-resend-api-key"
 
 # External Services
 STRIPE_SECRET_KEY="sk_test_..."
@@ -1284,14 +1298,14 @@ jobs:
 - CORS Policy: Strict CORS configuration for API endpoints
 
 **Authentication Security:**
-- Token Storage: HTTP-only cookies for session tokens via NextAuth.js
+- Token Storage: Secure session management via Convex Auth
 - Session Management: JWT tokens with secure refresh rotation
 - Password Policy: OAuth-first approach, secure fallback for email/password
 
 **Database Security:**
-- Connection Security: TLS-encrypted connections to Supabase
-- Row Level Security: Prisma middleware for multi-tenant data isolation
-- Data Encryption: Encryption at rest via Supabase, sensitive data hashing
+- Connection Security: Built-in security with Convex serverless architecture
+- Row Level Security: Function-level access control with Convex Auth
+- Data Encryption: Encryption at rest and in transit via Convex, sensitive data hashing
 
 ### Performance Optimization
 
@@ -1302,13 +1316,13 @@ jobs:
 
 **Backend Performance:**
 - Response Time Target: < 200ms API response time for 95th percentile
-- Database Optimization: Prisma query optimization + strategic indexes
-- Caching Strategy: React Query for client-side, Redis for server-side caching of expensive operations
+- Database Optimization: Convex automatic query optimization + built-in indexes
+- Caching Strategy: Convex built-in caching + React Query for client-side optimistic updates
 
 **Real-time Performance:**
-- WebSocket Optimization: Supabase realtime with selective subscriptions
-- State Synchronization: Optimistic updates with conflict resolution
-- Memory Management: Automatic cleanup of stale subscriptions
+- Real-time Optimization: Convex real-time subscriptions with automatic optimization
+- State Synchronization: Convex optimistic updates with automatic conflict resolution
+- Memory Management: Automatic subscription cleanup via Convex
 
 ## Testing Strategy
 
@@ -1320,7 +1334,7 @@ jobs:
           Integration Tests (tRPC)
          /                          \
     Frontend Unit Tests         Backend Unit Tests
-    (Vitest + RTL)             (Vitest + Prisma)
+    (Vitest + RTL)             (Vitest + Convex)
 ```
 
 ### Test Organization
@@ -1452,7 +1466,7 @@ test('complete sales pipeline flow', async ({ page }) => {
 - **Database Access:** Never query database directly from components, always use tRPC procedures
 - **Authentication:** Check user permissions in all protected tRPC procedures using middleware
 - **Error Handling:** All tRPC procedures must use proper error codes (UNAUTHORIZED, FORBIDDEN, etc.)
-- **Real-time Updates:** Use Supabase realtime subscriptions for collaborative features, not polling
+- **Real-time Updates:** Use Convex real-time subscriptions for collaborative features, not polling
 - **File Uploads:** Always validate file types and sizes, use Cloudinary for processing
 - **Environment Variables:** Access env vars only through validated config objects, never process.env directly
 
@@ -1593,8 +1607,8 @@ export const contactRouter = createTRPCRouter({
         return contact;
         
       } catch (error) {
-        // Handle Prisma errors
-        if (error instanceof PrismaClientKnownRequestError) {
+        // Handle Convex errors
+        if (error instanceof ConvexError) {
           throw new TRPCError({
             code: 'INTERNAL_SERVER_ERROR',
             message: 'Database error occurred',
@@ -1689,10 +1703,10 @@ export const logError = (error: Error, context: Record<string, any>) => {
 
 This comprehensive architecture document defines eventRunner's complete technical foundation using the T3 Stack approach. The architecture provides:
 
-- **Type-safe fullstack development** with TypeScript, tRPC, and Prisma
+- **Type-safe fullstack development** with TypeScript, tRPC, and Convex
 - **Modern deployment strategy** optimized for Vercel and edge computing
 - **Scalable real-time features** via Supabase for collaboration
-- **Comprehensive security model** with NextAuth.js and proper authorization
+- **Comprehensive security model** with Convex Auth and proper authorization
 - **Developer-friendly experience** with excellent tooling and testing strategies
 - **Production-ready monitoring** and error handling
 

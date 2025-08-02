@@ -4,7 +4,7 @@
 
 This document defines the user experience goals, information architecture, user flows, and visual design specifications for **eventRunner**'s user interface. Its primary goal is to serve as the foundation for visual design and frontend development, ensuring a cohesive and user-centered experience.
 
-This specification is designed to work seamlessly with the **T3 Stack architecture** (Next.js 14, TypeScript, tRPC, Prisma, Tailwind CSS, NextAuth.js, and shadcn/ui) as defined in the system architecture document, providing a modern, type-safe, and component-based implementation approach.
+This specification is designed to work seamlessly with the **T3 Stack architecture** (Next.js 14, TypeScript, tRPC, Convex, Tailwind CSS, Convex Auth, and shadcn/ui) as defined in the system architecture document, providing a modern, type-safe, and component-based implementation approach.
 
 ## Overall UX Goals & Principles
 
@@ -291,10 +291,11 @@ This frontend specification is implemented using the **T3 Stack** which provides
 - **Parallel Routes** for complex layouts like split-view contact details
 - **Intercepting Routes** for modal workflows (document preview, payment forms)
 
-#### **TypeScript + tRPC Integration**
+#### **TypeScript + tRPC + Convex Integration**
 - **End-to-end type safety** eliminates UI bugs from data mismatches
 - **Auto-completion** improves developer experience and reduces errors
 - **Runtime validation** ensures data integrity between frontend and backend
+- **Real-time subscriptions** built into Convex for live data updates
 
 #### **Tailwind CSS + shadcn/ui**
 - **Utility-first approach** enables rapid UI development
@@ -399,31 +400,34 @@ module.exports = {
 
 ### State Management Implementation
 
-#### **Server State via tRPC**
+#### **Server State via Convex**
 ```typescript
-// Contact data fetching with optimistic updates
+// Contact data fetching with real-time updates
 const ContactList = () => {
-  const { data: contacts, isLoading } = api.contact.getAll.useQuery();
-  const createContact = api.contact.create.useMutation({
-    onMutate: async (newContact) => {
-      // Optimistic update for immediate UI feedback
-      await utils.contact.getAll.cancel();
-      const previousContacts = utils.contact.getAll.getData();
-      utils.contact.getAll.setData(undefined, (old) => [
-        ...old ?? [], 
-        { ...newContact, id: 'temp', createdAt: new Date() }
-      ]);
-      return { previousContacts };
-    },
-    onError: (err, newContact, context) => {
-      // Rollback on error
-      utils.contact.getAll.setData(undefined, context?.previousContacts);
-    },
-    onSettled: () => {
-      // Always refetch after mutation
-      utils.contact.getAll.invalidate();
-    },
-  });
+  const contacts = useQuery(api.contacts.getAll);
+  const createContact = useMutation(api.contacts.create);
+  
+  const handleCreateContact = async (newContact: ContactData) => {
+    try {
+      await createContact(newContact);
+      // Convex automatically updates all subscribed components
+    } catch (error) {
+      // Handle error
+      console.error('Failed to create contact:', error);
+    }
+  };
+  
+  if (contacts === undefined) {
+    return <ContactListSkeleton />;
+  }
+  
+  return (
+    <div>
+      {contacts.map(contact => (
+        <ContactCard key={contact._id} contact={contact} />
+      ))}
+    </div>
+  );
 };
 ```
 
@@ -452,34 +456,37 @@ interface UIState {
 
 ### Real-time Features Implementation
 
-#### **Supabase Integration for Live Updates**
+#### **Convex Integration for Live Updates**
 ```typescript
 // Real-time project collaboration
-const ProjectChat = ({ projectId }: { projectId: string }) => {
-  const { data: messages } = api.project.getMessages.useQuery({ projectId });
+const ProjectChat = ({ projectId }: { projectId: Id<"projects"> }) => {
+  const messages = useQuery(api.messages.getByProject, { projectId });
+  const sendMessage = useMutation(api.messages.send);
   
-  // Subscribe to real-time updates
-  useEffect(() => {
-    const channel = supabase
-      .channel(`project-${projectId}`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `project_id=eq.${projectId}`,
-      }, (payload) => {
-        // Update local state with new message
-        utils.project.getMessages.setData({ projectId }, (old) => [
-          ...old ?? [],
-          payload.new as Message
-        ]);
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [projectId]);
+  // Convex automatically provides real-time updates
+  // No need for manual subscription setup
+  
+  const handleSendMessage = async (content: string) => {
+    try {
+      await sendMessage({ projectId, content });
+      // New message will automatically appear for all users
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
+  
+  if (messages === undefined) {
+    return <ChatSkeleton />;
+  }
+  
+  return (
+    <div className="chat-container">
+      {messages.map(message => (
+        <MessageBubble key={message._id} message={message} />
+      ))}
+      <MessageInput onSend={handleSendMessage} />
+    </div>
+  );
 };
 ```
 
@@ -533,3 +540,4 @@ All shadcn/ui components come with accessibility features built-in:
 | Date | Version | Description | Author |
 |------|---------|-------------|--------|
 | 2025-08-01 | 1.1 | Added T3 Stack implementation guidelines and technical specifications | Winston (AI Architect) |
+| 2025-08-02 | 1.2 | Updated to use Convex database and Convex Auth instead of Supabase/NextAuth | Winston (AI Architect) |
