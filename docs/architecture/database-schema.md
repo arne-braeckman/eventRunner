@@ -1,175 +1,180 @@
 # Database Schema
 
-## Prisma Schema Definition
+## Convex Schema Definition
 
-```prisma
+```typescript
+// convex/schema.ts
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+
 // Contact and Lead Management
-model Contact {
-  id              String          @id @default(cuid())
-  name            String
-  email           String          @unique
-  phone           String?
-  leadSource      LeadSource
-  leadHeat        Int             @default(0)
-  status          ContactStatus   @default(UNQUALIFIED)
-  socialProfiles  Json?
-  customFields    Json?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  
-  // Relations
-  opportunities   Opportunity[]
-  projects        Project[]
-  interactions    Interaction[]
-  
-  @@map("contacts")
-  @@index([status])
-  @@index([leadHeat])
-  @@index([createdAt])
-}
+const contacts = defineTable({
+  name: v.string(),
+  email: v.string(),
+  phone: v.optional(v.string()),
+  leadSource: v.union(
+    v.literal("WEBSITE"),
+    v.literal("FACEBOOK"),
+    v.literal("INSTAGRAM"),
+    v.literal("LINKEDIN"),
+    v.literal("REFERRAL"),
+    v.literal("DIRECT"),
+    v.literal("OTHER")
+  ),
+  leadHeat: v.number(),
+  status: v.union(
+    v.literal("UNQUALIFIED"),
+    v.literal("PROSPECT"),
+    v.literal("LEAD"),
+    v.literal("QUALIFIED"),
+    v.literal("CUSTOMER"),
+    v.literal("LOST")
+  ),
+  socialProfiles: v.optional(v.any()),
+  customFields: v.optional(v.any()),
+  venueId: v.optional(v.string()),
+})
+  .index("by_email", ["email"])
+  .index("by_status", ["status"])
+  .index("by_leadHeat", ["leadHeat"])
+  .index("by_venue", ["venueId"]);
 
 // Sales Pipeline
-model Opportunity {
-  id              String      @id @default(cuid())
-  name            String
-  contactId       String
-  stage           String      @default("prospect")
-  value           Decimal?
-  eventType       String?
-  eventDate       DateTime?
-  guestCount      Int?
-  requiresCatering Boolean    @default(false)
-  roomAssignment  String?
-  customFields    Json?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  
-  // Relations
-  contact         Contact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  project         Project?
-  documents       Document[]
-  payments        Payment[]
-  
-  @@map("opportunities")
-  @@index([stage])
-  @@index([eventDate])
-  @@index([contactId])
-}
+const opportunities = defineTable({
+  name: v.string(),
+  contactId: v.id("contacts"),
+  stage: v.string(),
+  value: v.optional(v.number()),
+  eventType: v.optional(v.string()),
+  eventDate: v.optional(v.number()), // Unix timestamp
+  guestCount: v.optional(v.number()),
+  requiresCatering: v.boolean(),
+  roomAssignment: v.optional(v.string()),
+  customFields: v.optional(v.any()),
+  venueId: v.optional(v.string()),
+})
+  .index("by_contact", ["contactId"])
+  .index("by_stage", ["stage"])
+  .index("by_eventDate", ["eventDate"])
+  .index("by_venue", ["venueId"]);
 
 // Project Management
-model Project {
-  id            String              @id @default(cuid())
-  name          String
-  opportunityId String              @unique
-  status        ProjectStatus       @default(ACTIVE)
-  startDate     DateTime
-  endDate       DateTime
-  clientLink    String              @unique @default(cuid())
-  settings      Json?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  
-  // Relations
-  opportunity   Opportunity         @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
-  tasks         Task[]
-  messages      Message[]
-  documents     Document[]
-  participants  ProjectParticipant[]
-  
-  @@map("projects")
-  @@index([status])
-  @@index([clientLink])
-}
+const projects = defineTable({
+  name: v.string(),
+  opportunityId: v.id("opportunities"),
+  status: v.union(
+    v.literal("ACTIVE"),
+    v.literal("COMPLETED"),
+    v.literal("CANCELLED"),
+    v.literal("ON_HOLD")
+  ),
+  startDate: v.number(), // Unix timestamp
+  endDate: v.number(), // Unix timestamp
+  clientLink: v.string(),
+  settings: v.optional(v.any()),
+  venueId: v.optional(v.string()),
+})
+  .index("by_opportunity", ["opportunityId"])
+  .index("by_status", ["status"])
+  .index("by_clientLink", ["clientLink"])
+  .index("by_venue", ["venueId"]);
 
-// Task Management  
-model Task {
-  id          String        @id @default(cuid())
-  projectId   String
-  title       String
-  description String?
-  status      TaskStatus    @default(TODO)
-  assigneeId  String
-  dueDate     DateTime?
-  isInternal  Boolean       @default(false)
-  position    Int           @default(0)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  
-  // Relations
-  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assignee    User          @relation(fields: [assigneeId], references: [id])
-  comments    TaskComment[]
-  
-  @@map("tasks")
-  @@index([projectId])
-  @@index([status])
-  @@index([assigneeId])
-  @@index([dueDate])
-}
+// Task Management
+const tasks = defineTable({
+  projectId: v.id("projects"),
+  title: v.string(),
+  description: v.optional(v.string()),
+  status: v.union(
+    v.literal("TODO"),
+    v.literal("IN_PROGRESS"),
+    v.literal("ON_HOLD"),
+    v.literal("COMPLETED")
+  ),
+  assigneeId: v.id("users"),
+  dueDate: v.optional(v.number()), // Unix timestamp
+  isInternal: v.boolean(),
+  position: v.number(),
+})
+  .index("by_project", ["projectId"])
+  .index("by_status", ["status"])
+  .index("by_assignee", ["assigneeId"])
+  .index("by_dueDate", ["dueDate"]);
 
-// User Management with NextAuth.js integration
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  role          UserRole  @default(STAFF)
-  venueId       String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  // NextAuth.js relations
-  accounts      Account[]
-  sessions      Session[]
-  
-  // Application relations
-  venue         Venue?              @relation(fields: [venueId], references: [id])
-  assignedTasks Task[]
-  sentMessages  Message[]
-  
-  @@map("users")
-}
+// User Management with Convex Auth integration
+const users = defineTable({
+  name: v.optional(v.string()),
+  email: v.string(),
+  emailVerified: v.optional(v.number()), // Unix timestamp
+  image: v.optional(v.string()),
+  role: v.union(
+    v.literal("ADMIN"),
+    v.literal("SALES"),
+    v.literal("PROJECT_MANAGER"),
+    v.literal("STAFF"),
+    v.literal("CLIENT")
+  ),
+  venueId: v.optional(v.string()),
+  // Convex Auth handles authentication sessions internally
+})
+  .index("by_email", ["email"])
+  .index("by_venue", ["venueId"])
+  .index("by_role", ["role"]);
 
-// Enums
-enum ContactStatus {
-  UNQUALIFIED
-  PROSPECT
-  LEAD
-  QUALIFIED
-  CUSTOMER
-  LOST
-}
+// Messages for real-time chat
+const messages = defineTable({
+  projectId: v.id("projects"),
+  senderId: v.id("users"),
+  content: v.string(),
+  messageType: v.union(v.literal("text"), v.literal("file"), v.literal("system")),
+  metadata: v.optional(v.any()),
+})
+  .index("by_project", ["projectId"])
+  .index("by_sender", ["senderId"]);
 
-enum LeadSource {
-  WEBSITE
-  FACEBOOK
-  INSTAGRAM
-  LINKEDIN
-  REFERRAL
-  DIRECT
-  OTHER
-}
+// Documents
+const documents = defineTable({
+  name: v.string(),
+  type: v.string(),
+  url: v.string(),
+  opportunityId: v.optional(v.id("opportunities")),
+  projectId: v.optional(v.id("projects")),
+  contactId: v.optional(v.id("contacts")),
+  isSigned: v.boolean(),
+  signedAt: v.optional(v.number()), // Unix timestamp
+  venueId: v.optional(v.string()),
+})
+  .index("by_opportunity", ["opportunityId"])
+  .index("by_project", ["projectId"])
+  .index("by_contact", ["contactId"])
+  .index("by_venue", ["venueId"]);
 
-enum ProjectStatus {
-  ACTIVE
-  COMPLETED
-  CANCELLED
-  ON_HOLD
-}
+// Payments
+const payments = defineTable({
+  opportunityId: v.id("opportunities"),
+  amount: v.number(),
+  dueDate: v.number(), // Unix timestamp
+  status: v.union(
+    v.literal("PENDING"),
+    v.literal("PAID"),
+    v.literal("OVERDUE"),
+    v.literal("CANCELLED")
+  ),
+  paymentMethod: v.optional(v.string()),
+  externalPaymentId: v.optional(v.string()),
+  venueId: v.optional(v.string()),
+})
+  .index("by_opportunity", ["opportunityId"])
+  .index("by_status", ["status"])
+  .index("by_venue", ["venueId"]);
 
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  ON_HOLD
-  COMPLETED
-}
-
-enum UserRole {
-  ADMIN
-  SALES
-  PROJECT_MANAGER
-  STAFF
-  CLIENT
-}
+export default defineSchema({
+  contacts,
+  opportunities,
+  projects,
+  tasks,
+  users,
+  messages,
+  documents,
+  payments,
+});
 ```

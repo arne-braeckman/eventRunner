@@ -9,10 +9,11 @@ eventRunner/
 ├── package.json                    # Dependencies and scripts
 ├── tailwind.config.js              # Tailwind CSS configuration
 ├── tsconfig.json                   # TypeScript configuration
-├── prisma/                         # Database schema and migrations
+├── convex/                         # Convex database functions and schema
 │   ├── schema.ts                  # Convex schema definition
-│   ├── migrations/                # Database migrations
-│   └── seed.ts                    # Database seeding script
+│   ├── auth.config.ts             # Convex Auth configuration
+│   ├── _generated/                # Auto-generated Convex files
+│   └── functions/                 # Convex database functions
 ├── public/                         # Static assets
 │   ├── favicon.ico
 │   └── images/
