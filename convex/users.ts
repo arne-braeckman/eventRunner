@@ -1,5 +1,5 @@
-import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
 import { auth } from "./auth";
 
 export const createUser = mutation({
@@ -9,7 +9,7 @@ export const createUser = mutation({
     image: v.optional(v.string()),
     role: v.union(
       v.literal("ADMIN"),
-      v.literal("SALES"), 
+      v.literal("SALES"),
       v.literal("PROJECT_MANAGER"),
       v.literal("STAFF"),
       v.literal("CLIENT")
@@ -18,7 +18,7 @@ export const createUser = mutation({
   handler: async (ctx, args) => {
     const existingUser = await ctx.db
       .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .withIndex("email", (q) => q.eq("email", args.email))
       .first();
 
     if (existingUser) {
@@ -39,7 +39,7 @@ export const getUserByEmail = query({
   handler: async (ctx, args) => {
     return await ctx.db
       .query("users")
-      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .withIndex("email", (q) => q.eq("email", args.email))
       .first();
   },
 });
@@ -49,7 +49,7 @@ export const updateUserRole = mutation({
     userId: v.id("users"),
     role: v.union(
       v.literal("ADMIN"),
-      v.literal("SALES"), 
+      v.literal("SALES"),
       v.literal("PROJECT_MANAGER"),
       v.literal("STAFF"),
       v.literal("CLIENT")

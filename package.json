@@ -13,6 +13,7 @@
     "convex:deploy": "convex deploy"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.28.1",
     "@convex-dev/auth": "^0.0.88",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.69.0",
@@ -21,6 +22,7 @@
     "@trpc/server": "^11.0.0",
     "convex": "^1.25.4",
     "next": "^15.2.3",
+    "nextjs": "^0.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "server-only": "^0.0.1",
