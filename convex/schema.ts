@@ -1,0 +1,54 @@
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+
+export default defineSchema({
+  users: defineTable({
+    name: v.string(),
+    email: v.string(),
+    image: v.optional(v.string()),
+    emailVerified: v.optional(v.number()),
+    role: v.union(
+      v.literal("ADMIN"),
+      v.literal("SALES"), 
+      v.literal("PROJECT_MANAGER"),
+      v.literal("STAFF"),
+      v.literal("CLIENT")
+    ),
+  }).index("by_email", ["email"]),
+
+  contacts: defineTable({
+    name: v.string(),
+    email: v.string(),
+    phone: v.optional(v.string()),
+    company: v.optional(v.string()),
+    leadSource: v.union(
+      v.literal("WEBSITE"),
+      v.literal("FACEBOOK"),
+      v.literal("INSTAGRAM"), 
+      v.literal("LINKEDIN"),
+      v.literal("REFERRAL"),
+      v.literal("DIRECT"),
+      v.literal("OTHER")
+    ),
+    leadHeat: v.union(
+      v.literal("COLD"),
+      v.literal("WARM"),
+      v.literal("HOT")
+    ),
+    status: v.union(
+      v.literal("UNQUALIFIED"),
+      v.literal("PROSPECT"),
+      v.literal("LEAD"),
+      v.literal("QUALIFIED"),
+      v.literal("CUSTOMER"),
+      v.literal("LOST")
+    ),
+    notes: v.optional(v.string()),
+    assignedTo: v.optional(v.id("users")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_email", ["email"])
+    .index("by_status", ["status"])
+    .index("by_assignedTo", ["assignedTo"]),
+});
