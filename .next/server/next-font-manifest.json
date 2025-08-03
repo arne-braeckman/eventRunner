@@ -6,7 +6,19 @@
     "[project]/src/app/admin/page": [
       "static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2"
     ],
+    "[project]/src/app/contacts/[id]/edit/page": [
+      "static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2"
+    ],
+    "[project]/src/app/contacts/[id]/page": [
+      "static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2"
+    ],
     "[project]/src/app/contacts/page": [
+      "static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2"
+    ],
+    "[project]/src/app/page": [
+      "static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2"
+    ],
+    "[project]/src/app/projects/page": [
       "static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2"
     ]
   },
