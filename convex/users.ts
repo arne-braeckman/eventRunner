@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireRole } from "./auth";
 
 export const createUser = mutation({
   args: {
@@ -55,12 +56,18 @@ export const updateUserRole = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    // Only ADMIN users can update roles
+    await requireRole(ctx, "ADMIN");
+    
     return await ctx.db.patch(args.userId, { role: args.role });
   },
 });
 
 export const getAllUsers = query({
   handler: async (ctx) => {
+    // Only ADMIN users can view all users
+    await requireRole(ctx, "ADMIN");
+    
     return await ctx.db.query("users").collect();
   },
 });

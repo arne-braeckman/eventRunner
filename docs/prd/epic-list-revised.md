@@ -4,7 +4,7 @@
     * **Goal:** Establish the foundational T3 Stack infrastructure configured for local development, implement initial multi-user role management with Clerk authentication, and enable basic lead capture to ensure initial system access and data entry. This prioritizes rapid development through type-safe fullstack integration.
     * **Key FRs addressed (core setup):** FR7 (Multi-User Roles & Customization - core), initial aspects of FR1 (Contact & Lead Mgmt), fundamental NFRs (Deployment Flexibility - local, initial Security, Usability), and foundational setup for FR8 (Centralized Communication Integrations - e.g., web forms).
     * **Specifics for Core System Foundation & Local Environment Setup:**
-        * The core T3 Stack components to be set up locally include a **Next.js 14 application** with **tRPC API routes**, **Convex database and functions**, and **Clerk authentication** with JWT integration.
+        * The core T3 Stack components to be set up locally include a **Next.js 15 application** with **tRPC API routes**, **Convex database and functions**, and **Clerk authentication** with JWT integration.
         * Essential development tools for consistent local environment setup will include **Node.js runtime environment**, **pnpm package manager**, **Convex CLI**, and **Git** for version control.
         * The monorepo structure will contain a single Next.js application with organized directories for frontend components, tRPC routers, Convex schema and functions, and shared utilities.
     * **Initial Scope for Basic Lead Capture:**

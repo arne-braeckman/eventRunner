@@ -1,5 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { requireRole } from "./auth";
 
 export const createContact = mutation({
   args: {
@@ -25,6 +26,9 @@ export const createContact = mutation({
     assignedTo: v.optional(v.id("users")),
   },
   handler: async (ctx, args) => {
+    // All authenticated staff can create contacts
+    await requireRole(ctx, "STAFF");
+    
     const now = Date.now();
     
     return await ctx.db.insert("contacts", {
@@ -55,6 +59,12 @@ export const getContactByEmail = query({
 
 export const getAllContacts = query({
   handler: async (ctx) => {
+    // Check authentication but don't enforce roles for viewing contacts
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+    
     return await ctx.db.query("contacts").collect();
   },
 });
@@ -91,6 +101,9 @@ export const updateContactStatus = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    // Sales staff and above can update contact status
+    await requireRole(ctx, "SALES");
+    
     return await ctx.db.patch(args.contactId, { 
       status: args.status,
       updatedAt: Date.now(),
@@ -104,6 +117,9 @@ export const assignContact = mutation({
     assignedTo: v.id("users"),
   },
   handler: async (ctx, args) => {
+    // Sales staff and above can assign contacts
+    await requireRole(ctx, "SALES");
+    
     return await ctx.db.patch(args.contactId, { 
       assignedTo: args.assignedTo,
       updatedAt: Date.now(),

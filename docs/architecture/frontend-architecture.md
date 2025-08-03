@@ -72,7 +72,7 @@ interface AppState {
 
 ## Routing Architecture
 
-### Route Organization (Next.js 14 App Router)
+### Route Organization (Next.js 15 App Router)
 ```
 src/app/
   (dashboard)/           # Route group for authenticated pages

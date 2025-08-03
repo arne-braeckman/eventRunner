@@ -4,16 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useConvexAuth } from "convex/react";
+import { useRolePermissions } from "../auth/RoleGuard";
 
 export function Navigation() {
   const pathname = usePathname();
   const { isAuthenticated } = useConvexAuth();
   const { user } = useUser();
+  const { permissions } = useRolePermissions();
 
   const navItems = [
-    { href: "/", label: "Dashboard", auth: true },
-    { href: "/contacts", label: "Contacts", auth: true },
-    { href: "/projects", label: "Projects", auth: true },
+    { href: "/", label: "Dashboard", auth: true, permission: "canViewDashboard" },
+    { href: "/contacts", label: "Contacts", auth: true, permission: "canViewDashboard" }, // All staff can view contacts
+    { href: "/projects", label: "Projects", auth: true, permission: "canManageProjects" },
+    { href: "/admin", label: "User Management", auth: true, permission: "canManageUsers" },
   ];
 
   return (
@@ -32,6 +35,11 @@ export function Navigation() {
             <div className="hidden md:flex space-x-8">
               {navItems.map((item) => {
                 if (item.auth && !isAuthenticated) return null;
+                
+                // Check role-based permissions
+                if (item.permission && permissions && !permissions[item.permission as keyof typeof permissions]) {
+                  return null;
+                }
                 
                 const isActive = pathname === item.href;
                 return (
@@ -74,6 +82,11 @@ export function Navigation() {
             <div className="flex flex-col space-y-2">
               {navItems.map((item) => {
                 if (item.auth && !isAuthenticated) return null;
+                
+                // Check role-based permissions
+                if (item.permission && permissions && !permissions[item.permission as keyof typeof permissions]) {
+                  return null;
+                }
                 
                 const isActive = pathname === item.href;
                 return (

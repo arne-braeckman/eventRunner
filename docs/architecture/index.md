@@ -45,7 +45,7 @@
       - [State Structure](./frontend-architecture.md#state-structure)
       - [State Management Patterns](./frontend-architecture.md#state-management-patterns)
     - [Routing Architecture](./frontend-architecture.md#routing-architecture)
-      - [Route Organization (Next.js 14 App Router)](./frontend-architecture.md#route-organization-nextjs-14-app-router)
+      - [Route Organization (Next.js 15 App Router)](./frontend-architecture.md#route-organization-nextjs-15-app-router)
       - [Protected Route Pattern](./frontend-architecture.md#protected-route-pattern)
     - [Frontend Services Layer](./frontend-architecture.md#frontend-services-layer)
       - [tRPC Client Setup](./frontend-architecture.md#trpc-client-setup)

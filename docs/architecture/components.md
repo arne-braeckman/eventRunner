@@ -11,7 +11,7 @@
 - Protected route guards
 
 **Dependencies:** Clerk authentication, React Query (via tRPC)
-**Technology Stack:** Next.js 14 App Router, TypeScript, Tailwind CSS
+**Technology Stack:** Next.js 15 App Router, TypeScript, Tailwind CSS
 
 ### Contact Management Module
 **Responsibility:** Lead capture, contact management, and customer journey tracking

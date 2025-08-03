@@ -15,7 +15,8 @@ vi.mock('@clerk/nextjs', () => ({
 
 // Mock Convex
 vi.mock('convex/react', () => ({
-  useConvexAuth: () => ({ isAuthenticated: true })
+  useConvexAuth: () => ({ isAuthenticated: true }),
+  useQuery: () => ({ permissions: { canManageUsers: true, canManageContacts: true, canManageProjects: true, canViewDashboard: true } })
 }))
 
 describe('Navigation', () => {

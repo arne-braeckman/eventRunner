@@ -21,7 +21,7 @@ The **eventRunner** application will be built as a **monolithic T3 Stack applica
 **Structure:** Monorepo (T3 Stack approach)
 **Monorepo Tool:** Built-in Next.js workspace capabilities
 **Package Organization:** Single repository containing:
-- `/src/app` - Next.js 14 App Router pages and layouts
+- `/src/app` - Next.js 15 App Router pages and layouts
 - `/src/components` - Reusable UI components with shadcn/ui
 - `/src/server` - tRPC routers and server-side logic
 - `/src/lib` - Shared utilities and configurations
@@ -31,7 +31,7 @@ The **eventRunner** application will be built as a **monolithic T3 Stack applica
 
 ```mermaid
 graph TD
-    User[Users: Staff & Clients] --> NextApp[Next.js 14 App]
+    User[Users: Staff & Clients] --> NextApp[Next.js 15 App]
     
     subgraph Vercel_Environment[Vercel Environment]
         NextApp --> AppRouter[App Router Pages]

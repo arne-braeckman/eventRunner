@@ -41,7 +41,7 @@ The **eventRunner** application will be built as a **monolithic T3 Stack applica
 **Structure:** Monorepo (T3 Stack approach)
 **Monorepo Tool:** Built-in Next.js workspace capabilities
 **Package Organization:** Single repository containing:
-- `/src/app` - Next.js 14 App Router pages and layouts
+- `/src/app` - Next.js 15 App Router pages and layouts
 - `/src/components` - Reusable UI components with shadcn/ui
 - `/src/server` - tRPC routers and server-side logic
 - `/src/lib` - Shared utilities and configurations
@@ -51,7 +51,7 @@ The **eventRunner** application will be built as a **monolithic T3 Stack applica
 
 ```mermaid
 graph TD
-    User[Users: Staff & Clients] --> NextApp[Next.js 14 App]
+    User[Users: Staff & Clients] --> NextApp[Next.js 15 App]
     
     subgraph Vercel_Environment[Vercel Environment]
         NextApp --> AppRouter[App Router Pages]
@@ -340,7 +340,7 @@ export const sendMessage = mutation({
 - Protected route guards
 
 **Dependencies:** Convex Auth, React Query (via tRPC)
-**Technology Stack:** Next.js 14 App Router, TypeScript, Tailwind CSS
+**Technology Stack:** Next.js 15 App Router, TypeScript, Tailwind CSS
 
 #### Contact Management Module
 **Responsibility:** Lead capture, contact management, and customer journey tracking
@@ -721,7 +721,7 @@ interface AppState {
 
 ### Routing Architecture
 
-#### Route Organization (Next.js 14 App Router)
+#### Route Organization (Next.js 15 App Router)
 ```
 src/app/
   (dashboard)/           # Route group for authenticated pages
@@ -1062,7 +1062,7 @@ eventRunner/
 │   ├── favicon.ico
 │   └── images/
 ├── src/                           # Source code
-│   ├── app/                       # Next.js 14 App Router
+│   ├── app/                       # Next.js 15 App Router
 │   │   ├── (dashboard)/           # Authenticated routes group
 │   │   │   ├── contacts/
 │   │   │   │   ├── page.tsx       # Contact list

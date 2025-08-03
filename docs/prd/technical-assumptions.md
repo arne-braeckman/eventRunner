@@ -9,7 +9,7 @@ This section outlines the foundational technical decisions that will guide the A
 * **Testing Requirements: Comprehensive Testing Strategy**
     * **Rationale:** Multi-layered testing approach including unit tests (Vitest), integration tests (tRPC), and end-to-end tests (Playwright) to ensure reliability. This strategy leverages TypeScript's compile-time guarantees while providing runtime confidence through comprehensive test coverage.
 * **T3 Technology Stack Selection:**
-    * **Frontend Framework: Next.js 14**
+    * **Frontend Framework: Next.js 15**
         * **Rationale:** Next.js provides a complete fullstack framework with App Router, React Server Components, and optimal performance. It enables server-side rendering, static generation, and seamless API integration, perfect for eventRunner's dynamic web application needs.
     * **Type Safety: TypeScript + tRPC**
         * **Rationale:** End-to-end type safety from database to UI eliminates entire classes of bugs and provides excellent developer experience. tRPC ensures API contracts are enforced at compile time, reducing integration errors.

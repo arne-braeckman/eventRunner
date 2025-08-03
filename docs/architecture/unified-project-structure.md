@@ -18,7 +18,7 @@ eventRunner/
 │   ├── favicon.ico
 │   └── images/
 ├── src/                           # Source code
-│   ├── app/                       # Next.js 14 App Router
+│   ├── app/                       # Next.js 15 App Router
 │   │   ├── (dashboard)/           # Authenticated routes group
 │   │   │   ├── contacts/
 │   │   │   │   ├── page.tsx       # Contact list

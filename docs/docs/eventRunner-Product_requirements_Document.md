@@ -420,7 +420,7 @@ This section outlines the foundational technical decisions that will guide the A
 * **Testing Requirements: Comprehensive Testing Strategy**
     * **Rationale:** Multi-layered testing approach including unit tests (Vitest), integration tests (tRPC), and end-to-end tests (Playwright) to ensure reliability. This strategy leverages TypeScript's compile-time guarantees while providing runtime confidence through comprehensive test coverage.
 * **T3 Technology Stack Selection:**
-    * **Frontend Framework: Next.js 14**
+    * **Frontend Framework: Next.js 15**
         * **Rationale:** Next.js provides a complete fullstack framework with App Router, React Server Components, and optimal performance. It enables server-side rendering, static generation, and seamless API integration, perfect for eventRunner's dynamic web application needs.
     * **Type Safety: TypeScript + tRPC**
         * **Rationale:** End-to-end type safety from database to UI eliminates entire classes of bugs and provides excellent developer experience. tRPC ensures API contracts are enforced at compile time, reducing integration errors.
@@ -437,7 +437,7 @@ This section outlines the foundational technical decisions that will guide the A
     * **Goal:** Establish the foundational T3 Stack infrastructure configured for local development, implement initial multi-user role management with Convex Auth, and enable basic lead capture to ensure initial system access and data entry. This prioritizes rapid development through type-safe fullstack integration.
     * **Key FRs addressed (core setup):** FR7 (Multi-User Roles & Customization - core), initial aspects of FR1 (Contact & Lead Mgmt), fundamental NFRs (Deployment Flexibility - local, initial Security, Usability), and foundational setup for FR8 (Centralized Communication Integrations - e.g., web forms).
     * **Specifics for Core System Foundation & Local Environment Setup:**
-        * The core T3 Stack components to be set up locally include a **Next.js 14 application** with **tRPC API routes**, **Convex database and functions**, and **Convex Auth** for authentication.
+        * The core T3 Stack components to be set up locally include a **Next.js 15 application** with **tRPC API routes**, **Convex database and functions**, and **Convex Auth** for authentication.
         * Essential development tools for consistent local environment setup will include **Node.js runtime environment**, **pnpm package manager**, **Convex CLI**, and **Git** for version control.
         * The monorepo structure will contain a single Next.js application with organized directories for frontend components, tRPC routers, Convex schema and functions, and shared utilities.
     * **Initial Scope for Basic Lead Capture:**
