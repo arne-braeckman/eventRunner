@@ -17,13 +17,27 @@ export const createContact = mutation({
       v.literal("DIRECT"),
       v.literal("OTHER")
     ),
-    leadHeat: v.union(
+    leadHeat: v.optional(v.union(
       v.literal("COLD"),
       v.literal("WARM"),
       v.literal("HOT")
-    ),
+    )),
     notes: v.optional(v.string()),
     assignedTo: v.optional(v.id("users")),
+    socialProfiles: v.optional(v.array(v.object({
+      platform: v.union(
+        v.literal("FACEBOOK"),
+        v.literal("INSTAGRAM"),
+        v.literal("LINKEDIN"),
+        v.literal("TWITTER"),
+        v.literal("TIKTOK")
+      ),
+      profileUrl: v.string(),
+      username: v.optional(v.string()),
+      isConnected: v.boolean(),
+      lastSyncAt: v.optional(v.number()),
+    }))),
+    customFields: v.optional(v.object({})),
   },
   handler: async (ctx, args) => {
     // All authenticated staff can create contacts
@@ -37,10 +51,13 @@ export const createContact = mutation({
       phone: args.phone,
       company: args.company,
       leadSource: args.leadSource,
-      leadHeat: args.leadHeat,
+      leadHeat: args.leadHeat || "COLD",
+      leadHeatScore: 0,
       status: "UNQUALIFIED",
       notes: args.notes,
       assignedTo: args.assignedTo,
+      socialProfiles: args.socialProfiles || [],
+      customFields: args.customFields || {},
       createdAt: now,
       updatedAt: now,
     });
@@ -232,6 +249,7 @@ export const updateContact = mutation({
       v.literal("WARM"),
       v.literal("HOT")
     )),
+    leadHeatScore: v.optional(v.number()),
     status: v.optional(v.union(
       v.literal("UNQUALIFIED"),
       v.literal("PROSPECT"),
@@ -242,6 +260,21 @@ export const updateContact = mutation({
     )),
     notes: v.optional(v.string()),
     assignedTo: v.optional(v.id("users")),
+    socialProfiles: v.optional(v.array(v.object({
+      platform: v.union(
+        v.literal("FACEBOOK"),
+        v.literal("INSTAGRAM"),
+        v.literal("LINKEDIN"),
+        v.literal("TWITTER"),
+        v.literal("TIKTOK")
+      ),
+      profileUrl: v.string(),
+      username: v.optional(v.string()),
+      isConnected: v.boolean(),
+      lastSyncAt: v.optional(v.number()),
+    }))),
+    customFields: v.optional(v.object({})),
+    lastInteractionAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     // Staff and above can update basic contact info, Sales and above can update status

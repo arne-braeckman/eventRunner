@@ -1,19 +1,4 @@
-import type { Id } from "../../../convex/_generated/dataModel";
-
-export interface Contact {
-  _id: Id<"contacts">;
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  leadSource: "WEBSITE" | "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "REFERRAL" | "DIRECT" | "OTHER";
-  leadHeat: "COLD" | "WARM" | "HOT";
-  status: "UNQUALIFIED" | "PROSPECT" | "LEAD" | "QUALIFIED" | "CUSTOMER" | "LOST";
-  notes?: string;
-  assignedTo?: Id<"users">;
-  createdAt: number;
-  updatedAt: number;
-}
+import type { Contact } from "../types/contact";
 
 export function exportContactsToCSV(contacts: Contact[]): void {
   // Define CSV headers

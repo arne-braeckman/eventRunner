@@ -37,7 +37,7 @@ function ContactDetail({ contactId }) {
                             children: "Contact Not Found"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 32,
+                            lineNumber: 33,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -45,7 +45,7 @@ function ContactDetail({ contactId }) {
                             children: "The contact you're looking for doesn't exist or has been deleted."
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 33,
+                            lineNumber: 34,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -54,23 +54,23 @@ function ContactDetail({ contactId }) {
                             children: "Back to Contacts"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 34,
+                            lineNumber: 35,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 31,
+                    lineNumber: 32,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                lineNumber: 30,
+                lineNumber: 31,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-            lineNumber: 29,
+            lineNumber: 30,
             columnNumber: 7
         }, this);
     }
@@ -86,7 +86,7 @@ function ContactDetail({ contactId }) {
                             className: "h-6 bg-gray-200 rounded w-1/4 mb-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 51,
+                            lineNumber: 52,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -96,7 +96,7 @@ function ContactDetail({ contactId }) {
                                     className: "h-8 bg-gray-200 rounded w-1/3 mb-6"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 53,
+                                    lineNumber: 54,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -106,49 +106,49 @@ function ContactDetail({ contactId }) {
                                             className: "h-4 bg-gray-200 rounded w-1/2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 55,
+                                            lineNumber: 56,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "h-4 bg-gray-200 rounded w-1/3"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 56,
+                                            lineNumber: 57,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "h-4 bg-gray-200 rounded w-2/3"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 57,
+                                            lineNumber: 58,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 54,
+                                    lineNumber: 55,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 52,
+                            lineNumber: 53,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 50,
+                    lineNumber: 51,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                lineNumber: 49,
+                lineNumber: 50,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-            lineNumber: 48,
+            lineNumber: 49,
             columnNumber: 7
         }, this);
     }
@@ -165,7 +165,7 @@ function ContactDetail({ contactId }) {
                             children: "Contact Not Found"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 71,
+                            lineNumber: 72,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -173,7 +173,7 @@ function ContactDetail({ contactId }) {
                             children: "The contact you're looking for doesn't exist or has been deleted."
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 72,
+                            lineNumber: 73,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -182,23 +182,23 @@ function ContactDetail({ contactId }) {
                             children: "Back to Contacts"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 73,
+                            lineNumber: 74,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 70,
+                    lineNumber: 71,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                lineNumber: 69,
+                lineNumber: 70,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-            lineNumber: 68,
+            lineNumber: 69,
             columnNumber: 7
         }, this);
     }
@@ -255,24 +255,24 @@ function ContactDetail({ contactId }) {
                                                 d: "M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 127,
+                                                lineNumber: 128,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 126,
+                                            lineNumber: 127,
                                             columnNumber: 17
                                         }, this),
                                         "Contacts"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 122,
+                                    lineNumber: 123,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                lineNumber: 121,
+                                lineNumber: 122,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -289,12 +289,12 @@ function ContactDetail({ contactId }) {
                                                 clipRule: "evenodd"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 135,
+                                                lineNumber: 136,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 134,
+                                            lineNumber: 135,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -302,29 +302,29 @@ function ContactDetail({ contactId }) {
                                             children: contact.name
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 137,
+                                            lineNumber: 138,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 133,
+                                    lineNumber: 134,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                lineNumber: 132,
+                                lineNumber: 133,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                        lineNumber: 120,
+                        lineNumber: 121,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 119,
+                    lineNumber: 120,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -342,7 +342,7 @@ function ContactDetail({ contactId }) {
                                                 children: contact.name
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 148,
+                                                lineNumber: 149,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -350,13 +350,13 @@ function ContactDetail({ contactId }) {
                                                 children: "Contact Details"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 149,
+                                                lineNumber: 150,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                        lineNumber: 147,
+                                        lineNumber: 148,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -367,7 +367,7 @@ function ContactDetail({ contactId }) {
                                                 children: contact.leadHeat
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 152,
+                                                lineNumber: 153,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -375,24 +375,24 @@ function ContactDetail({ contactId }) {
                                                 children: contact.status
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 155,
+                                                lineNumber: 156,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                        lineNumber: 151,
+                                        lineNumber: 152,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                lineNumber: 146,
+                                lineNumber: 147,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 145,
+                            lineNumber: 146,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -410,7 +410,7 @@ function ContactDetail({ contactId }) {
                                                         children: "Contact Information"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                        lineNumber: 167,
+                                                        lineNumber: 168,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -431,12 +431,12 @@ function ContactDetail({ contactId }) {
                                                                             d: "M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 171,
+                                                                            lineNumber: 172,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 170,
+                                                                        lineNumber: 171,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -446,7 +446,7 @@ function ContactDetail({ contactId }) {
                                                                                 children: "Email"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 174,
+                                                                                lineNumber: 175,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -455,19 +455,19 @@ function ContactDetail({ contactId }) {
                                                                                 children: contact.email
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 175,
+                                                                                lineNumber: 176,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 173,
+                                                                        lineNumber: 174,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 169,
+                                                                lineNumber: 170,
                                                                 columnNumber: 21
                                                             }, this),
                                                             contact.phone && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -485,12 +485,12 @@ function ContactDetail({ contactId }) {
                                                                             d: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 184,
+                                                                            lineNumber: 185,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 183,
+                                                                        lineNumber: 184,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -500,7 +500,7 @@ function ContactDetail({ contactId }) {
                                                                                 children: "Phone"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 187,
+                                                                                lineNumber: 188,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -509,19 +509,19 @@ function ContactDetail({ contactId }) {
                                                                                 children: contact.phone
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 188,
+                                                                                lineNumber: 189,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 186,
+                                                                        lineNumber: 187,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 182,
+                                                                lineNumber: 183,
                                                                 columnNumber: 23
                                                             }, this),
                                                             contact.company && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -539,12 +539,12 @@ function ContactDetail({ contactId }) {
                                                                             d: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 198,
+                                                                            lineNumber: 199,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 197,
+                                                                        lineNumber: 198,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -554,7 +554,7 @@ function ContactDetail({ contactId }) {
                                                                                 children: "Company"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 201,
+                                                                                lineNumber: 202,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -562,36 +562,36 @@ function ContactDetail({ contactId }) {
                                                                                 children: contact.company
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 202,
+                                                                                lineNumber: 203,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 200,
+                                                                        lineNumber: 201,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 196,
+                                                                lineNumber: 197,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                        lineNumber: 168,
+                                                        lineNumber: 169,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 166,
+                                                lineNumber: 167,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 166,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -603,7 +603,7 @@ function ContactDetail({ contactId }) {
                                                         children: "Lead Information"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                        lineNumber: 212,
+                                                        lineNumber: 213,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -624,12 +624,12 @@ function ContactDetail({ contactId }) {
                                                                             d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 216,
+                                                                            lineNumber: 217,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 215,
+                                                                        lineNumber: 216,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -639,7 +639,7 @@ function ContactDetail({ contactId }) {
                                                                                 children: "Source"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 219,
+                                                                                lineNumber: 220,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -647,19 +647,19 @@ function ContactDetail({ contactId }) {
                                                                                 children: contact.leadSource
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 220,
+                                                                                lineNumber: 221,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 218,
+                                                                        lineNumber: 219,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 214,
+                                                                lineNumber: 215,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -677,12 +677,12 @@ function ContactDetail({ contactId }) {
                                                                             d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 226,
+                                                                            lineNumber: 227,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 225,
+                                                                        lineNumber: 226,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -692,7 +692,7 @@ function ContactDetail({ contactId }) {
                                                                                 children: "Created"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 229,
+                                                                                lineNumber: 230,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -700,19 +700,19 @@ function ContactDetail({ contactId }) {
                                                                                 children: new Date(contact.createdAt).toLocaleDateString()
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 230,
+                                                                                lineNumber: 231,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 228,
+                                                                        lineNumber: 229,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 224,
+                                                                lineNumber: 225,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -730,12 +730,12 @@ function ContactDetail({ contactId }) {
                                                                             d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 236,
+                                                                            lineNumber: 237,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 235,
+                                                                        lineNumber: 236,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -745,7 +745,7 @@ function ContactDetail({ contactId }) {
                                                                                 children: "Last Updated"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 239,
+                                                                                lineNumber: 240,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -753,42 +753,42 @@ function ContactDetail({ contactId }) {
                                                                                 children: new Date(contact.updatedAt).toLocaleDateString()
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 240,
+                                                                                lineNumber: 241,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 238,
+                                                                        lineNumber: 239,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 234,
+                                                                lineNumber: 235,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                        lineNumber: 213,
+                                                        lineNumber: 214,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 211,
+                                                lineNumber: 212,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 210,
+                                            lineNumber: 211,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 164,
+                                    lineNumber: 165,
                                     columnNumber: 13
                                 }, this),
                                 contact.notes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -799,7 +799,7 @@ function ContactDetail({ contactId }) {
                                             children: "Notes"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 250,
+                                            lineNumber: 251,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -807,25 +807,25 @@ function ContactDetail({ contactId }) {
                                             children: contact.notes
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                            lineNumber: 251,
+                                            lineNumber: 252,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 249,
+                                    lineNumber: 250,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 163,
+                            lineNumber: 164,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 144,
+                    lineNumber: 145,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -839,7 +839,7 @@ function ContactDetail({ contactId }) {
                                     children: "Activity Timeline"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 260,
+                                    lineNumber: 261,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -847,13 +847,13 @@ function ContactDetail({ contactId }) {
                                     children: "Contact interaction history and updates"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 261,
+                                    lineNumber: 262,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 259,
+                            lineNumber: 260,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -873,7 +873,7 @@ function ContactDetail({ contactId }) {
                                                             "aria-hidden": "true"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                            lineNumber: 268,
+                                                            lineNumber: 269,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -892,22 +892,22 @@ function ContactDetail({ contactId }) {
                                                                                 clipRule: "evenodd"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 273,
+                                                                                lineNumber: 274,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 272,
+                                                                            lineNumber: 273,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 271,
+                                                                        lineNumber: 272,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                    lineNumber: 270,
+                                                                    lineNumber: 271,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -922,7 +922,7 @@ function ContactDetail({ contactId }) {
                                                                                     children: contact.leadSource
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                    lineNumber: 280,
+                                                                                    lineNumber: 281,
                                                                                     columnNumber: 50
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -933,40 +933,40 @@ function ContactDetail({ contactId }) {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                    lineNumber: 281,
+                                                                                    lineNumber: 282,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 279,
+                                                                            lineNumber: 280,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 278,
+                                                                        lineNumber: 279,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                    lineNumber: 277,
+                                                                    lineNumber: 278,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                            lineNumber: 269,
+                                                            lineNumber: 270,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                    lineNumber: 267,
+                                                    lineNumber: 268,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 266,
+                                                lineNumber: 267,
                                                 columnNumber: 17
                                             }, this),
                                             contact.updatedAt !== contact.createdAt && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -990,22 +990,22 @@ function ContactDetail({ contactId }) {
                                                                             d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                            lineNumber: 296,
+                                                                            lineNumber: 297,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 295,
+                                                                        lineNumber: 296,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                    lineNumber: 294,
+                                                                    lineNumber: 295,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 293,
+                                                                lineNumber: 294,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1023,50 +1023,50 @@ function ContactDetail({ contactId }) {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                                lineNumber: 304,
+                                                                                lineNumber: 305,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                        lineNumber: 302,
+                                                                        lineNumber: 303,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                    lineNumber: 301,
+                                                                    lineNumber: 302,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                                lineNumber: 300,
+                                                                lineNumber: 301,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                        lineNumber: 292,
+                                                        lineNumber: 293,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                    lineNumber: 291,
+                                                    lineNumber: 292,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                                lineNumber: 290,
+                                                lineNumber: 291,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                        lineNumber: 265,
+                                        lineNumber: 266,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 264,
+                                    lineNumber: 265,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1076,24 +1076,24 @@ function ContactDetail({ contactId }) {
                                         children: "More activity tracking features coming soon..."
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                        lineNumber: 317,
+                                        lineNumber: 318,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                                    lineNumber: 316,
+                                    lineNumber: 317,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 263,
+                            lineNumber: 264,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 258,
+                    lineNumber: 259,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1105,7 +1105,7 @@ function ContactDetail({ contactId }) {
                             children: "Back to Contacts"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 324,
+                            lineNumber: 325,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1114,24 +1114,24 @@ function ContactDetail({ contactId }) {
                             children: "Edit Contact"
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                            lineNumber: 330,
+                            lineNumber: 331,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-                    lineNumber: 323,
+                    lineNumber: 324,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-            lineNumber: 117,
+            lineNumber: 118,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/features/contacts/ContactDetail.tsx",
-        lineNumber: 116,
+        lineNumber: 117,
         columnNumber: 5
     }, this);
 }

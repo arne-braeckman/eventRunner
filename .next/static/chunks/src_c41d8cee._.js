@@ -596,6 +596,14 @@ function ContactList(param) {
     };
     const totalPages = contactsData ? Math.ceil(contactsData.total / limit) : 0;
     const hasFilters = appliedSearch || leadSource || leadHeat || status;
+    // Handle row click to navigate to contact detail
+    const handleRowClick = (contactId, event)=>{
+        // Don't navigate if clicking on a link or button
+        if (event.target.closest('a, button')) {
+            return;
+        }
+        router.push("/contacts/".concat(contactId));
+    };
     if (contactsData === undefined) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "bg-white rounded-lg shadow p-6",
@@ -606,7 +614,7 @@ function ContactList(param) {
                         className: "h-4 bg-gray-200 rounded w-1/4 mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                        lineNumber: 142,
+                        lineNumber: 165,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -616,38 +624,38 @@ function ContactList(param) {
                                 className: "h-4 bg-gray-200 rounded"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 144,
+                                lineNumber: 167,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "h-4 bg-gray-200 rounded"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 145,
+                                lineNumber: 168,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "h-4 bg-gray-200 rounded"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 146,
+                                lineNumber: 169,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                        lineNumber: 143,
+                        lineNumber: 166,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                lineNumber: 141,
+                lineNumber: 164,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-            lineNumber: 140,
+            lineNumber: 163,
             columnNumber: 7
         }, this);
     }
@@ -659,16 +667,49 @@ function ContactList(param) {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            className: "text-xl font-semibold text-gray-900",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             children: [
-                                "Contacts (",
-                                contactsData.total,
-                                ")"
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                    className: "text-xl font-semibold text-gray-900",
+                                    children: [
+                                        "Contacts (",
+                                        contactsData.total,
+                                        ")"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                    lineNumber: 182,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-sm text-gray-500 mt-1",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "hidden sm:inline",
+                                            children: "Click any row to view contact details"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                            lineNumber: 186,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "sm:hidden",
+                                            children: "Tap rows for details • Scroll right to see all columns"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                            lineNumber: 187,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                    lineNumber: 185,
+                                    columnNumber: 13
+                                }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                            lineNumber: 158,
+                            lineNumber: 181,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -679,23 +720,23 @@ function ContactList(param) {
                                 children: "Export CSV"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 163,
+                                lineNumber: 192,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                            lineNumber: 161,
+                            lineNumber: 190,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                    lineNumber: 157,
+                    lineNumber: 180,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                lineNumber: 156,
+                lineNumber: 179,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -712,7 +753,7 @@ function ContactList(param) {
                                         children: "Search"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 179,
+                                        lineNumber: 208,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -731,7 +772,7 @@ function ContactList(param) {
                                         className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 182,
+                                        lineNumber: 211,
                                         columnNumber: 13
                                     }, this),
                                     showSuggestions && suggestionsData && suggestionsData.contacts.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -747,7 +788,7 @@ function ContactList(param) {
                                                             children: contact.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                            lineNumber: 210,
+                                                            lineNumber: 239,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -755,13 +796,13 @@ function ContactList(param) {
                                                             children: contact.email
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                            lineNumber: 211,
+                                                            lineNumber: 240,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, contact._id, true, {
                                                     fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                    lineNumber: 205,
+                                                    lineNumber: 234,
                                                     columnNumber: 19
                                                 }, this)),
                                             searchInput && !suggestionsData.contacts.some((c)=>c.name.toLowerCase() === searchInput.toLowerCase() || c.email.toLowerCase() === searchInput.toLowerCase()) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -776,24 +817,24 @@ function ContactList(param) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                    lineNumber: 222,
+                                                    lineNumber: 251,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 218,
+                                                lineNumber: 247,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 200,
+                                        lineNumber: 229,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 178,
+                                lineNumber: 207,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -803,7 +844,7 @@ function ContactList(param) {
                                         children: "Lead Source"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 231,
+                                        lineNumber: 260,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -816,7 +857,7 @@ function ContactList(param) {
                                                 children: "All Sources"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 239,
+                                                lineNumber: 268,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -824,7 +865,7 @@ function ContactList(param) {
                                                 children: "Website"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 240,
+                                                lineNumber: 269,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -832,7 +873,7 @@ function ContactList(param) {
                                                 children: "Facebook"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 241,
+                                                lineNumber: 270,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -840,7 +881,7 @@ function ContactList(param) {
                                                 children: "Instagram"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 242,
+                                                lineNumber: 271,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -848,7 +889,7 @@ function ContactList(param) {
                                                 children: "LinkedIn"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 243,
+                                                lineNumber: 272,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -856,7 +897,7 @@ function ContactList(param) {
                                                 children: "Referral"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 244,
+                                                lineNumber: 273,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -864,7 +905,7 @@ function ContactList(param) {
                                                 children: "Direct"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 245,
+                                                lineNumber: 274,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -872,19 +913,19 @@ function ContactList(param) {
                                                 children: "Other"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 246,
+                                                lineNumber: 275,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 234,
+                                        lineNumber: 263,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 230,
+                                lineNumber: 259,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -894,7 +935,7 @@ function ContactList(param) {
                                         children: "Lead Heat"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 252,
+                                        lineNumber: 281,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -907,7 +948,7 @@ function ContactList(param) {
                                                 children: "All Heat Levels"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 260,
+                                                lineNumber: 289,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -915,7 +956,7 @@ function ContactList(param) {
                                                 children: "Hot"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 261,
+                                                lineNumber: 290,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -923,7 +964,7 @@ function ContactList(param) {
                                                 children: "Warm"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 262,
+                                                lineNumber: 291,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -931,19 +972,19 @@ function ContactList(param) {
                                                 children: "Cold"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 263,
+                                                lineNumber: 292,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 255,
+                                        lineNumber: 284,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 251,
+                                lineNumber: 280,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -953,7 +994,7 @@ function ContactList(param) {
                                         children: "Status"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 269,
+                                        lineNumber: 298,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -966,7 +1007,7 @@ function ContactList(param) {
                                                 children: "All Statuses"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 277,
+                                                lineNumber: 306,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -974,7 +1015,7 @@ function ContactList(param) {
                                                 children: "Unqualified"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 278,
+                                                lineNumber: 307,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -982,7 +1023,7 @@ function ContactList(param) {
                                                 children: "Prospect"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 279,
+                                                lineNumber: 308,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -990,7 +1031,7 @@ function ContactList(param) {
                                                 children: "Lead"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 280,
+                                                lineNumber: 309,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -998,7 +1039,7 @@ function ContactList(param) {
                                                 children: "Qualified"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 281,
+                                                lineNumber: 310,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1006,7 +1047,7 @@ function ContactList(param) {
                                                 children: "Customer"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 282,
+                                                lineNumber: 311,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1014,25 +1055,25 @@ function ContactList(param) {
                                                 children: "Lost"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 283,
+                                                lineNumber: 312,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 272,
+                                        lineNumber: 301,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 268,
+                                lineNumber: 297,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                        lineNumber: 176,
+                        lineNumber: 205,
                         columnNumber: 9
                     }, this),
                     hasFilters && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1046,7 +1087,7 @@ function ContactList(param) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 290,
+                                lineNumber: 319,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1055,248 +1096,352 @@ function ContactList(param) {
                                 children: "Clear all filters"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 293,
+                                lineNumber: 322,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                        lineNumber: 289,
+                        lineNumber: 318,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                lineNumber: 175,
+                lineNumber: 204,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "overflow-x-auto",
-                children: contactsData.contacts.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                    className: "min-w-full divide-y divide-gray-200",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
-                            className: "bg-gray-50",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Name"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 309,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Email"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 312,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Phone"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 315,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Company"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 318,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Source"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 321,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Heat"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 324,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Status"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 327,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                        className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-                                        children: "Actions"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                        lineNumber: 330,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 308,
-                                columnNumber: 15
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                            lineNumber: 307,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                            className: "bg-white divide-y divide-gray-200",
-                            children: contactsData.contacts.map((contact)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                    className: "hover:bg-gray-50",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "text-sm font-medium text-gray-900",
-                                                children: contact.name
+                className: "relative",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 rounded-r-lg sm:hidden"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                        lineNumber: 335,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "overflow-x-auto border border-gray-200 rounded-lg shadow-sm",
+                        children: contactsData.contacts.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
+                            className: "min-w-full divide-y divide-gray-200",
+                            style: {
+                                minWidth: '1000px'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
+                                    className: "bg-gray-50",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '150px'
+                                                },
+                                                children: "Name"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 339,
-                                                columnNumber: 21
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 338,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: contact.email
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 341,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: contact.phone || '-'
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 344,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: contact.company || '-'
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 347,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-                                            children: contact.leadSource
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 350,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "inline-flex px-2 py-1 text-xs font-semibold rounded-full ".concat(contact.leadHeat === 'HOT' ? 'bg-red-100 text-red-800' : contact.leadHeat === 'WARM' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'),
-                                                children: contact.leadHeat
+                                                lineNumber: 342,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '200px'
+                                                },
+                                                children: "Email"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                lineNumber: 345,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '120px'
+                                                },
+                                                children: "Phone"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                lineNumber: 348,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '120px'
+                                                },
+                                                children: "Company"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                lineNumber: 351,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '100px'
+                                                },
+                                                children: "Source"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
                                                 lineNumber: 354,
-                                                columnNumber: 21
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 353,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800",
-                                                children: contact.status
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '80px'
+                                                },
+                                                children: "Heat"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                lineNumber: 357,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '120px'
+                                                },
+                                                children: "Status"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                lineNumber: 360,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+                                                style: {
+                                                    minWidth: '120px'
+                                                },
+                                                children: "Actions"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
                                                 lineNumber: 363,
-                                                columnNumber: 21
+                                                columnNumber: 17
                                             }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 362,
-                                            columnNumber: 19
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                            className: "px-6 py-4 whitespace-nowrap text-sm font-medium",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                href: "/contacts/".concat(contact._id),
-                                                className: "text-blue-600 hover:text-blue-900",
-                                                children: "View"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                                lineNumber: 368,
-                                                columnNumber: 21
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                            lineNumber: 367,
-                                            columnNumber: 19
-                                        }, this)
-                                    ]
-                                }, contact._id, true, {
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                        lineNumber: 341,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
                                     fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                    lineNumber: 337,
-                                    columnNumber: 17
-                                }, this))
-                        }, void 0, false, {
+                                    lineNumber: 340,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
+                                    className: "bg-white divide-y divide-gray-200",
+                                    children: contactsData.contacts.map((contact)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                            className: "hover:bg-gray-50 cursor-pointer transition-colors",
+                                            onClick: (e)=>handleRowClick(contact._id, e),
+                                            role: "button",
+                                            tabIndex: 0,
+                                            onKeyDown: (e)=>{
+                                                if (e.key === 'Enter' || e.key === ' ') {
+                                                    e.preventDefault();
+                                                    router.push("/contacts/".concat(contact._id));
+                                                }
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap",
+                                                    style: {
+                                                        minWidth: '150px'
+                                                    },
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "text-sm font-medium text-gray-900",
+                                                        children: contact.name
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                        lineNumber: 384,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 383,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
+                                                    style: {
+                                                        minWidth: '200px'
+                                                    },
+                                                    children: contact.email
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 386,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
+                                                    style: {
+                                                        minWidth: '120px'
+                                                    },
+                                                    children: contact.phone || '-'
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 389,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
+                                                    style: {
+                                                        minWidth: '120px'
+                                                    },
+                                                    children: contact.company || '-'
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 392,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
+                                                    style: {
+                                                        minWidth: '100px'
+                                                    },
+                                                    children: contact.leadSource
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 395,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap",
+                                                    style: {
+                                                        minWidth: '80px'
+                                                    },
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "inline-flex px-2 py-1 text-xs font-semibold rounded-full ".concat(contact.leadHeat === 'HOT' ? 'bg-red-100 text-red-800' : contact.leadHeat === 'WARM' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'),
+                                                        children: contact.leadHeat
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                        lineNumber: 399,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 398,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap",
+                                                    style: {
+                                                        minWidth: '120px'
+                                                    },
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800",
+                                                        children: contact.status
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                        lineNumber: 408,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 407,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                    className: "px-6 py-4 whitespace-nowrap text-sm font-medium",
+                                                    style: {
+                                                        minWidth: '120px'
+                                                    },
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex space-x-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                                href: "/contacts/".concat(contact._id),
+                                                                className: "text-blue-600 hover:text-blue-900 font-medium",
+                                                                onClick: (e)=>e.stopPropagation(),
+                                                                children: "View"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                                lineNumber: 414,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-gray-300",
+                                                                children: "|"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                                lineNumber: 421,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                                href: "/contacts/".concat(contact._id, "/edit"),
+                                                                className: "text-green-600 hover:text-green-900 font-medium",
+                                                                onClick: (e)=>e.stopPropagation(),
+                                                                children: "Edit"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                                lineNumber: 422,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                        lineNumber: 413,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                                    lineNumber: 412,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, contact._id, true, {
+                                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                            lineNumber: 370,
+                                            columnNumber: 17
+                                        }, this))
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                    lineNumber: 368,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                            lineNumber: 335,
+                            lineNumber: 339,
                             columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                    lineNumber: 306,
-                    columnNumber: 11
-                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "text-center py-12",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-gray-500 text-lg",
-                            children: hasFilters ? 'No contacts found matching your filters.' : 'No contacts yet.'
-                        }, void 0, false, {
+                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-center py-12",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-gray-500 text-lg",
+                                    children: hasFilters ? 'No contacts found matching your filters.' : 'No contacts yet.'
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                    lineNumber: 437,
+                                    columnNumber: 13
+                                }, this),
+                                hasFilters && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: clearFilters,
+                                    className: "mt-2 text-blue-600 hover:text-blue-800 font-medium",
+                                    children: "Clear filters to see all contacts"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                                    lineNumber: 441,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                            lineNumber: 381,
-                            columnNumber: 13
-                        }, this),
-                        hasFilters && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: clearFilters,
-                            className: "mt-2 text-blue-600 hover:text-blue-800 font-medium",
-                            children: "Clear filters to see all contacts"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                            lineNumber: 385,
-                            columnNumber: 15
+                            lineNumber: 436,
+                            columnNumber: 11
                         }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                    lineNumber: 380,
-                    columnNumber: 11
-                }, this)
-            }, void 0, false, {
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/features/contacts/ContactList.tsx",
+                        lineNumber: 337,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                lineNumber: 304,
+                lineNumber: 333,
                 columnNumber: 7
             }, this),
             totalPages > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1315,7 +1460,7 @@ function ContactList(param) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                        lineNumber: 399,
+                        lineNumber: 456,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1328,7 +1473,7 @@ function ContactList(param) {
                                 children: "Previous"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 403,
+                                lineNumber: 460,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1341,7 +1486,7 @@ function ContactList(param) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 410,
+                                lineNumber: 467,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1351,25 +1496,25 @@ function ContactList(param) {
                                 children: "Next"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                                lineNumber: 413,
+                                lineNumber: 470,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                        lineNumber: 402,
+                        lineNumber: 459,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-                lineNumber: 398,
+                lineNumber: 455,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/features/contacts/ContactList.tsx",
-        lineNumber: 154,
+        lineNumber: 177,
         columnNumber: 5
     }, this);
 }

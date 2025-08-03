@@ -6,14 +6,13 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import Link from 'next/link';
+import { isValidConvexId, isValidEmail } from "~/lib/utils/validation";
+import type { LeadSource, LeadHeat, ContactStatus } from "~/lib/types/contact";
 
 interface ContactEditProps {
   contactId: Id<"contacts">;
 }
 
-type LeadSource = "WEBSITE" | "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "REFERRAL" | "DIRECT" | "OTHER";
-type LeadHeat = "COLD" | "WARM" | "HOT";
-type ContactStatus = "UNQUALIFIED" | "PROSPECT" | "LEAD" | "QUALIFIED" | "CUSTOMER" | "LOST";
 
 interface ContactFormData {
   name: string;
@@ -30,11 +29,7 @@ export function ContactEdit({ contactId }: ContactEditProps) {
   const router = useRouter();
   
   // Check if contactId looks like a valid Convex ID format
-  // Convex IDs are typically alphanumeric strings with specific length/pattern
-  const isValidId = typeof contactId === 'string' && 
-                   contactId.length > 10 && 
-                   /^[a-zA-Z0-9]+$/.test(contactId) &&
-                   !contactId.includes('invalid');
+  const isValidId = isValidConvexId(contactId);
   
   const contact = useQuery(
     api.contacts.getContactById, 
@@ -99,7 +94,7 @@ export function ContactEdit({ contactId }: ContactEditProps) {
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!isValidEmail(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
 

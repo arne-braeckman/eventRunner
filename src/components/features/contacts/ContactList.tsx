@@ -10,8 +10,22 @@ type LeadSource = "WEBSITE" | "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "REFERRAL"
 type LeadHeat = "COLD" | "WARM" | "HOT";
 type ContactStatus = "UNQUALIFIED" | "PROSPECT" | "LEAD" | "QUALIFIED" | "CUSTOMER" | "LOST";
 
+interface Contact {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  leadSource: LeadSource;
+  leadHeat: LeadHeat;
+  status: ContactStatus;
+  notes?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
 interface ContactListProps {
-  onExport?: (filteredContacts: any[]) => void;
+  onExport?: (filteredContacts: Contact[]) => void;
 }
 
 export function ContactList({ onExport }: ContactListProps) {
@@ -101,17 +115,17 @@ export function ContactList({ onExport }: ContactListProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleFilterChange = (filterType: string, value: any) => {
+  const handleFilterChange = (filterType: 'leadSource' | 'leadHeat' | 'status', value: string) => {
     setCurrentPage(1);
     switch (filterType) {
       case 'leadSource':
-        setLeadSource(value);
+        setLeadSource(value as LeadSource | '');
         break;
       case 'leadHeat':
-        setLeadHeat(value);
+        setLeadHeat(value as LeadHeat | '');
         break;
       case 'status':
-        setStatus(value);
+        setStatus(value as ContactStatus | '');
         break;
     }
   };
@@ -135,6 +149,15 @@ export function ContactList({ onExport }: ContactListProps) {
   const totalPages = contactsData ? Math.ceil(contactsData.total / limit) : 0;
   const hasFilters = appliedSearch || leadSource || leadHeat || status;
 
+  // Handle row click to navigate to contact detail
+  const handleRowClick = (contactId: string, event: React.MouseEvent) => {
+    // Don't navigate if clicking on a link or button
+    if ((event.target as HTMLElement).closest('a, button')) {
+      return;
+    }
+    router.push(`/contacts/${contactId}`);
+  };
+
   if (contactsData === undefined) {
     return (
       <div className="bg-white rounded-lg shadow p-6">
@@ -155,9 +178,15 @@ export function ContactList({ onExport }: ContactListProps) {
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Contacts ({contactsData.total})
-          </h2>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Contacts ({contactsData.total})
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              <span className="hidden sm:inline">Click any row to view contact details</span>
+              <span className="sm:hidden">Tap rows for details • Scroll right to see all columns</span>
+            </p>
+          </div>
           <div className="flex gap-2">
             {onExport && (
               <button
@@ -301,56 +330,72 @@ export function ContactList({ onExport }: ContactListProps) {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        {contactsData.contacts.length > 0 ? (
-          <table className="min-w-full divide-y divide-gray-200">
+      <div className="relative">
+        {/* Mobile scroll indicator */}
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 rounded-r-lg sm:hidden"></div>
+        
+        <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
+          {contactsData.contacts.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1000px' }}>
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '150px' }}>
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '200px' }}>
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
                   Phone
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
                   Company
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '100px' }}>
                   Source
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '80px' }}>
                   Heat
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {contactsData.contacts.map((contact) => (
-                <tr key={contact._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                <tr 
+                  key={contact._id} 
+                  className="hover:bg-gray-50 cursor-pointer transition-colors"
+                  onClick={(e) => handleRowClick(contact._id, e)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      router.push(`/contacts/${contact._id}`);
+                    }
+                  }}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap" style={{ minWidth: '150px' }}>
                     <div className="text-sm font-medium text-gray-900">{contact.name}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ minWidth: '200px' }}>
                     {contact.email}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ minWidth: '120px' }}>
                     {contact.phone || '-'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ minWidth: '120px' }}>
                     {contact.company || '-'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ minWidth: '100px' }}>
                     {contact.leadSource}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap" style={{ minWidth: '80px' }}>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       contact.leadHeat === 'HOT' ? 'bg-red-100 text-red-800' :
                       contact.leadHeat === 'WARM' ? 'bg-yellow-100 text-yellow-800' :
@@ -359,18 +404,29 @@ export function ContactList({ onExport }: ContactListProps) {
                       {contact.leadHeat}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap" style={{ minWidth: '120px' }}>
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
                       {contact.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Link
-                      href={`/contacts/${contact._id}`}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      View
-                    </Link>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ minWidth: '120px' }}>
+                    <div className="flex space-x-2">
+                      <Link
+                        href={`/contacts/${contact._id}`}
+                        className="text-blue-600 hover:text-blue-900 font-medium"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        View
+                      </Link>
+                      <span className="text-gray-300">|</span>
+                      <Link
+                        href={`/contacts/${contact._id}/edit`}
+                        className="text-green-600 hover:text-green-900 font-medium"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Edit
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -391,6 +447,7 @@ export function ContactList({ onExport }: ContactListProps) {
             )}
           </div>
         )}
+        </div>
       </div>
 
       {/* Pagination */}

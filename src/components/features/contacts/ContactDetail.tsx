@@ -5,6 +5,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import Link from 'next/link';
+import { isValidConvexId } from "~/lib/utils/validation";
 
 interface ContactDetailProps {
   contactId: Id<"contacts">;
@@ -12,11 +13,7 @@ interface ContactDetailProps {
 
 export function ContactDetail({ contactId }: ContactDetailProps) {
   // Check if contactId looks like a valid Convex ID format
-  // Convex IDs are typically alphanumeric strings with specific length/pattern
-  const isValidId = typeof contactId === 'string' && 
-                   contactId.length > 10 && 
-                   /^[a-zA-Z0-9]+$/.test(contactId) &&
-                   !contactId.includes('invalid');
+  const isValidId = isValidConvexId(contactId);
   
   const contact = useQuery(
     api.contacts.getContactById, 
