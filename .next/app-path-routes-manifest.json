@@ -1,8 +1,0 @@
-{
-  "/api/trpc/[trpc]/route": "/api/trpc/[trpc]",
-  "/_not-found/page": "/_not-found",
-  "/contacts/page": "/contacts",
-  "/page": "/",
-  "/projects/page": "/projects",
-  "/admin/page": "/admin"
-}
