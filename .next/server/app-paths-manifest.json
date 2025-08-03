@@ -1,1 +1,7 @@
-{}
+{
+  "/contacts/[id]/edit/page": "app/contacts/[id]/edit/page.js",
+  "/contacts/[id]/page": "app/contacts/[id]/page.js",
+  "/contacts/page": "app/contacts/page.js",
+  "/page": "app/page.js",
+  "/projects/page": "app/projects/page.js"
+}
