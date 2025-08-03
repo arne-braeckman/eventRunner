@@ -2,9 +2,10 @@
 
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { LeadCaptureForm } from "~/components/forms/LeadCaptureForm";
+import { useEffect } from "react";
 
 export default function Home() {
   return (
@@ -49,6 +50,15 @@ export default function Home() {
 function Content() {
   const currentUser = useQuery(api.users.getCurrentUser);
   const contacts = useQuery(api.contacts.getAllContacts);
+  const ensureUserExists = useMutation(api.users.ensureUserExists);
+  
+  // Ensure user record exists in database on first load
+  useEffect(() => {
+    if (currentUser === null) {
+      // User is authenticated but no database record found, create one
+      ensureUserExists().catch(console.error);
+    }
+  }, [currentUser, ensureUserExists]);
   
   return (
     <div className="w-full max-w-6xl mx-auto">

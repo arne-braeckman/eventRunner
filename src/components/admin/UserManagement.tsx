@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 import { RoleGuard } from "../auth/RoleGuard";
 
 type UserRole = "ADMIN" | "SALES" | "PROJECT_MANAGER" | "STAFF" | "CLIENT";
@@ -15,7 +16,7 @@ const ROLE_OPTIONS: { value: UserRole; label: string; description: string }[] = 
   { value: "CLIENT", label: "Client", description: "Client portal access only" },
 ];
 
-export function UserManagement() {
+function UserManagementContent() {
   const users = useQuery(api.users.getAllUsers);
   const updateUserRole = useMutation(api.users.updateUserRole);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
@@ -23,7 +24,7 @@ export function UserManagement() {
   const handleRoleUpdate = async (userId: string, newRole: UserRole) => {
     try {
       setIsUpdating(userId);
-      await updateUserRole({ userId: userId as any, role: newRole });
+      await updateUserRole({ userId: userId as Id<"users">, role: newRole });
     } catch (error) {
       console.error("Failed to update user role:", error);
       alert("Failed to update user role. Please try again.");
@@ -33,8 +34,7 @@ export function UserManagement() {
   };
 
   return (
-    <RoleGuard requiredRole="ADMIN">
-      <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">User Management</h2>
         
         {users === undefined ? (
@@ -133,7 +133,14 @@ export function UserManagement() {
             ))}
           </ul>
         </div>
-      </div>
+    </div>
+  );
+}
+
+export function UserManagement() {
+  return (
+    <RoleGuard requiredRole="ADMIN">
+      <UserManagementContent />
     </RoleGuard>
   );
 }

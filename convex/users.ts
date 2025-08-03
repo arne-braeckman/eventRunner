@@ -122,3 +122,37 @@ export const createOrGetCurrentUser = mutation({
     throw new Error("Unable to create user: no email provided");
   },
 });
+
+// Mutation to ensure user exists - call this when user first signs in
+export const ensureUserExists = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("User not authenticated");
+    }
+    
+    // Check if user already exists
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", identity.email || ""))
+      .first();
+    
+    if (existingUser) {
+      return existingUser;
+    }
+    
+    // Create user if they don't exist
+    if (identity.email) {
+      const newUserId = await ctx.db.insert("users", {
+        name: identity.name || identity.nickname,
+        email: identity.email,
+        image: identity.pictureUrl,
+        role: "STAFF", // Default role
+      });
+      return await ctx.db.get(newUserId);
+    }
+    
+    throw new Error("Unable to create user: no email provided");
+  },
+});
