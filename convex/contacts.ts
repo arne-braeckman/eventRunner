@@ -24,6 +24,8 @@ export const createContact = mutation({
     )),
     notes: v.optional(v.string()),
     assignedTo: v.optional(v.id("users")),
+    geographicLocation: v.optional(v.string()),
+    preferredEventType: v.optional(v.string()),
     socialProfiles: v.optional(v.array(v.object({
       platform: v.union(
         v.literal("FACEBOOK"),
@@ -56,6 +58,8 @@ export const createContact = mutation({
       status: "UNQUALIFIED",
       notes: args.notes,
       assignedTo: args.assignedTo,
+      geographicLocation: args.geographicLocation,
+      preferredEventType: args.preferredEventType,
       socialProfiles: args.socialProfiles || [],
       customFields: args.customFields || {},
       createdAt: now,
@@ -181,6 +185,8 @@ export const searchContacts = query({
       v.literal("CUSTOMER"),
       v.literal("LOST")
     )),
+    geographicLocation: v.optional(v.string()),
+    preferredEventType: v.optional(v.string()),
     limit: v.optional(v.number()),
     offset: v.optional(v.number()),
   },
@@ -201,6 +207,12 @@ export const searchContacts = query({
     }
     if (args.status) {
       query = query.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    if (args.geographicLocation) {
+      query = query.filter((q) => q.eq(q.field("geographicLocation"), args.geographicLocation));
+    }
+    if (args.preferredEventType) {
+      query = query.filter((q) => q.eq(q.field("preferredEventType"), args.preferredEventType));
     }
     
     let contacts = await query.collect();
@@ -225,6 +237,26 @@ export const searchContacts = query({
       total,
       hasMore: offset + limit < total,
     };
+  },
+});
+
+export const getContactsByGeographicLocation = query({
+  args: { geographicLocation: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("contacts")
+      .withIndex("by_geographicLocation", (q) => q.eq("geographicLocation", args.geographicLocation))
+      .collect();
+  },
+});
+
+export const getContactsByEventType = query({
+  args: { preferredEventType: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("contacts")
+      .withIndex("by_preferredEventType", (q) => q.eq("preferredEventType", args.preferredEventType))
+      .collect();
   },
 });
 
@@ -260,6 +292,8 @@ export const updateContact = mutation({
     )),
     notes: v.optional(v.string()),
     assignedTo: v.optional(v.id("users")),
+    geographicLocation: v.optional(v.string()),
+    preferredEventType: v.optional(v.string()),
     socialProfiles: v.optional(v.array(v.object({
       platform: v.union(
         v.literal("FACEBOOK"),
@@ -293,5 +327,37 @@ export const updateContact = mutation({
       ...filteredUpdates,
       updatedAt: Date.now(),
     });
+  },
+});
+
+export const migrateContactsWithNewFields = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // Admin only for data migration
+    await requireRole(ctx, "ADMIN");
+    
+    const contacts = await ctx.db.query("contacts").collect();
+    let updated = 0;
+    
+    for (const contact of contacts) {
+      const needsUpdate = 
+        contact.geographicLocation === undefined || 
+        contact.preferredEventType === undefined;
+        
+      if (needsUpdate) {
+        await ctx.db.patch(contact._id, {
+          geographicLocation: contact.geographicLocation || undefined,
+          preferredEventType: contact.preferredEventType || undefined,
+          updatedAt: Date.now(),
+        });
+        updated++;
+      }
+    }
+    
+    return { 
+      message: `Migration completed. Updated ${updated} contacts.`,
+      totalContacts: contacts.length,
+      updatedContacts: updated 
+    };
   },
 });

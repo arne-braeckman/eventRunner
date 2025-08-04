@@ -6,6 +6,8 @@ import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import Link from 'next/link';
 import { isValidConvexId } from "~/lib/utils/validation";
+import { ContactJourneyStage } from './ContactJourneyStage';
+import { ContactProfileSection } from './ContactProfileSection';
 
 interface ContactDetailProps {
   contactId: Id<"contacts">;
@@ -250,6 +252,15 @@ export function ContactDetail({ contactId }: ContactDetailProps) {
             )}
           </div>
         </div>
+
+        {/* Contact Preferences */}
+        <ContactProfileSection contact={contact} />
+
+        {/* Journey Stage Management */}
+        <ContactJourneyStage 
+          contactId={contactId}
+          currentStatus={contact.status}
+        />
 
         {/* Interaction Timeline */}
         <div className="bg-white rounded-lg shadow">

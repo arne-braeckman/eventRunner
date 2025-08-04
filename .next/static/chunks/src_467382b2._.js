@@ -264,6 +264,8 @@ var { k: __turbopack_refresh__, m: module } = __turbopack_context__;
 {
 __turbopack_context__.s({
     "CONTACT_STATUS_OPTIONS": ()=>CONTACT_STATUS_OPTIONS,
+    "EVENT_TYPE_OPTIONS": ()=>EVENT_TYPE_OPTIONS,
+    "GEOGRAPHIC_REGIONS": ()=>GEOGRAPHIC_REGIONS,
     "INTERACTION_TYPE_OPTIONS": ()=>INTERACTION_TYPE_OPTIONS,
     "LEAD_HEAT_OPTIONS": ()=>LEAD_HEAT_OPTIONS,
     "LEAD_HEAT_THRESHOLDS": ()=>LEAD_HEAT_THRESHOLDS,
@@ -428,6 +430,72 @@ const INTERACTION_TYPE_OPTIONS = [
         value: "OTHER",
         label: "Other",
         weight: 1
+    },
+    // New interaction types for journey stage management
+    {
+        value: "EMAIL_SENT",
+        label: "Email Sent",
+        weight: 2
+    },
+    {
+        value: "EMAIL_OPENED",
+        label: "Email Opened",
+        weight: 1
+    },
+    {
+        value: "EMAIL_CLICKED",
+        label: "Email Clicked",
+        weight: 3
+    },
+    {
+        value: "EMAIL_REPLIED",
+        label: "Email Replied",
+        weight: 4
+    },
+    {
+        value: "MEETING_SCHEDULED",
+        label: "Meeting Scheduled",
+        weight: 6
+    },
+    {
+        value: "MEETING_COMPLETED",
+        label: "Meeting Completed",
+        weight: 8
+    },
+    {
+        value: "FORM_SUBMITTED",
+        label: "Form Submitted",
+        weight: 4
+    },
+    {
+        value: "PROPOSAL_SENT",
+        label: "Proposal Sent",
+        weight: 7
+    },
+    {
+        value: "CONTRACT_SENT",
+        label: "Contract Sent",
+        weight: 9
+    },
+    {
+        value: "PAYMENT_RECEIVED",
+        label: "Payment Received",
+        weight: 12
+    },
+    {
+        value: "SOCIAL_MEDIA_ENGAGEMENT",
+        label: "Social Media Engagement",
+        weight: 2
+    },
+    {
+        value: "REFERRAL_GIVEN",
+        label: "Referral Given",
+        weight: 3
+    },
+    {
+        value: "STAGE_PROGRESSION",
+        label: "Stage Progression",
+        weight: 0
     }
 ];
 const LEAD_HEAT_THRESHOLDS = {
@@ -444,6 +512,90 @@ const LEAD_HEAT_THRESHOLDS = {
         max: Infinity
     }
 };
+const EVENT_TYPE_OPTIONS = [
+    {
+        value: "WEDDING",
+        label: "Wedding"
+    },
+    {
+        value: "CORPORATE",
+        label: "Corporate Event"
+    },
+    {
+        value: "BIRTHDAY",
+        label: "Birthday Party"
+    },
+    {
+        value: "ANNIVERSARY",
+        label: "Anniversary"
+    },
+    {
+        value: "CONFERENCE",
+        label: "Conference"
+    },
+    {
+        value: "WORKSHOP",
+        label: "Workshop"
+    },
+    {
+        value: "FUNDRAISER",
+        label: "Fundraiser"
+    },
+    {
+        value: "HOLIDAY",
+        label: "Holiday Party"
+    },
+    {
+        value: "REUNION",
+        label: "Reunion"
+    },
+    {
+        value: "OTHER",
+        label: "Other"
+    }
+];
+const GEOGRAPHIC_REGIONS = [
+    {
+        value: "BRUSSELS",
+        label: "Brussels"
+    },
+    {
+        value: "FLANDERS",
+        label: "Flanders"
+    },
+    {
+        value: "WALLONIA",
+        label: "Wallonia"
+    },
+    {
+        value: "ANTWERP",
+        label: "Antwerp"
+    },
+    {
+        value: "GHENT",
+        label: "Ghent"
+    },
+    {
+        value: "BRUGES",
+        label: "Bruges"
+    },
+    {
+        value: "LEUVEN",
+        label: "Leuven"
+    },
+    {
+        value: "NAMUR",
+        label: "Namur"
+    },
+    {
+        value: "LIEGE",
+        label: "Liège"
+    },
+    {
+        value: "OTHER",
+        label: "Other"
+    }
+];
 const PAGINATION = {
     DEFAULT_LIMIT: 20,
     SUGGESTIONS_LIMIT: 10,

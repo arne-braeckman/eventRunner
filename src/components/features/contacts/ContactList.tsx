@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import Link from 'next/link';
+import { EVENT_TYPE_OPTIONS, GEOGRAPHIC_REGIONS } from '~/lib/types/contact';
 
 type LeadSource = "WEBSITE" | "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "REFERRAL" | "DIRECT" | "OTHER";
 type LeadHeat = "COLD" | "WARM" | "HOT";
@@ -20,6 +21,8 @@ interface Contact {
   leadHeat: LeadHeat;
   status: ContactStatus;
   notes?: string;
+  geographicLocation?: string;
+  preferredEventType?: string;
   createdAt: number;
   updatedAt: number;
 }
@@ -47,6 +50,12 @@ export function ContactList({ onExport }: ContactListProps) {
   const [status, setStatus] = useState<ContactStatus | ''>(
     (searchParams?.get('status') as ContactStatus) || ''
   );
+  const [geographicLocation, setGeographicLocation] = useState<string>(
+    searchParams?.get('geographicLocation') || ''
+  );
+  const [preferredEventType, setPreferredEventType] = useState<string>(
+    searchParams?.get('preferredEventType') || ''
+  );
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams?.get('page') || '1')
   );
@@ -60,6 +69,8 @@ export function ContactList({ onExport }: ContactListProps) {
     leadSource: leadSource || undefined,
     leadHeat: leadHeat || undefined,
     status: status || undefined,
+    geographicLocation: geographicLocation || undefined,
+    preferredEventType: preferredEventType || undefined,
     limit,
     offset,
   });
@@ -78,11 +89,13 @@ export function ContactList({ onExport }: ContactListProps) {
     if (leadSource) params.set('leadSource', leadSource);
     if (leadHeat) params.set('leadHeat', leadHeat);
     if (status) params.set('status', status);
+    if (geographicLocation) params.set('geographicLocation', geographicLocation);
+    if (preferredEventType) params.set('preferredEventType', preferredEventType);
     if (currentPage > 1) params.set('page', currentPage.toString());
     
     const newURL = params.toString() ? `?${params.toString()}` : '';
     router.replace(`/contacts${newURL}`, { scroll: false });
-  }, [appliedSearch, leadSource, leadHeat, status, currentPage, router]);
+  }, [appliedSearch, leadSource, leadHeat, status, geographicLocation, preferredEventType, currentPage, router]);
 
   useEffect(() => {
     updateURL();
@@ -115,7 +128,7 @@ export function ContactList({ onExport }: ContactListProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleFilterChange = (filterType: 'leadSource' | 'leadHeat' | 'status', value: string) => {
+  const handleFilterChange = (filterType: 'leadSource' | 'leadHeat' | 'status' | 'geographicLocation' | 'preferredEventType', value: string) => {
     setCurrentPage(1);
     switch (filterType) {
       case 'leadSource':
@@ -127,6 +140,12 @@ export function ContactList({ onExport }: ContactListProps) {
       case 'status':
         setStatus(value as ContactStatus | '');
         break;
+      case 'geographicLocation':
+        setGeographicLocation(value);
+        break;
+      case 'preferredEventType':
+        setPreferredEventType(value);
+        break;
     }
   };
 
@@ -136,6 +155,8 @@ export function ContactList({ onExport }: ContactListProps) {
     setLeadSource('');
     setLeadHeat('');
     setStatus('');
+    setGeographicLocation('');
+    setPreferredEventType('');
     setCurrentPage(1);
     setShowSuggestions(false);
   };
@@ -147,7 +168,7 @@ export function ContactList({ onExport }: ContactListProps) {
   };
 
   const totalPages = contactsData ? Math.ceil(contactsData.total / limit) : 0;
-  const hasFilters = appliedSearch || leadSource || leadHeat || status;
+  const hasFilters = appliedSearch || leadSource || leadHeat || status || geographicLocation || preferredEventType;
 
   // Handle row click to navigate to contact detail
   const handleRowClick = (contactId: string, event: React.MouseEvent) => {
@@ -202,7 +223,7 @@ export function ContactList({ onExport }: ContactListProps) {
 
       {/* Filters */}
       <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           {/* Search */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -312,6 +333,44 @@ export function ContactList({ onExport }: ContactListProps) {
               <option value="LOST">Lost</option>
             </select>
           </div>
+
+          {/* Geographic Location Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Location
+            </label>
+            <select
+              value={geographicLocation}
+              onChange={(e) => handleFilterChange('geographicLocation', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">All Locations</option>
+              {GEOGRAPHIC_REGIONS.map((region) => (
+                <option key={region.value} value={region.value}>
+                  {region.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Preferred Event Type Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Event Type
+            </label>
+            <select
+              value={preferredEventType}
+              onChange={(e) => handleFilterChange('preferredEventType', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">All Event Types</option>
+              {EVENT_TYPE_OPTIONS.map((eventType) => (
+                <option key={eventType.value} value={eventType.value}>
+                  {eventType.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {hasFilters && (
@@ -336,7 +395,7 @@ export function ContactList({ onExport }: ContactListProps) {
         
         <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
           {contactsData.contacts.length > 0 ? (
-            <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1000px' }}>
+            <table className="min-w-full divide-y divide-gray-200" style={{ minWidth: '1200px' }}>
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '150px' }}>
@@ -359,6 +418,12 @@ export function ContactList({ onExport }: ContactListProps) {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
                   Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '100px' }}>
+                  Location
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
+                  Event Type
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ minWidth: '120px' }}>
                   Actions
@@ -408,6 +473,18 @@ export function ContactList({ onExport }: ContactListProps) {
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
                       {contact.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ minWidth: '100px' }}>
+                    {contact.geographicLocation ? 
+                      GEOGRAPHIC_REGIONS.find(r => r.value === contact.geographicLocation)?.label || contact.geographicLocation 
+                      : '-'
+                    }
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" style={{ minWidth: '120px' }}>
+                    {contact.preferredEventType ? 
+                      EVENT_TYPE_OPTIONS.find(e => e.value === contact.preferredEventType)?.label || contact.preferredEventType 
+                      : '-'
+                    }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ minWidth: '120px' }}>
                     <div className="flex space-x-2">

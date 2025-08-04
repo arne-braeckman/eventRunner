@@ -46,6 +46,8 @@ export default defineSchema({
     ),
     notes: v.optional(v.string()),
     assignedTo: v.optional(v.id("users")),
+    geographicLocation: v.optional(v.string()),
+    preferredEventType: v.optional(v.string()),
     socialProfiles: v.optional(v.array(v.object({
       platform: v.union(
         v.literal("FACEBOOK"),
@@ -69,7 +71,9 @@ export default defineSchema({
     .index("by_assignedTo", ["assignedTo"])
     .index("by_leadHeat", ["leadHeat"])
     .index("by_leadHeatScore", ["leadHeatScore"])
-    .index("by_lastInteractionAt", ["lastInteractionAt"]),
+    .index("by_lastInteractionAt", ["lastInteractionAt"])
+    .index("by_geographicLocation", ["geographicLocation"])
+    .index("by_preferredEventType", ["preferredEventType"]),
 
   interactions: defineTable({
     contactId: v.id("contacts"),
@@ -86,7 +90,21 @@ export default defineSchema({
       v.literal("EMAIL_CLICK"),
       v.literal("PHONE_CALL"),
       v.literal("MEETING"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
+      // New interaction types for journey stage management
+      v.literal("EMAIL_SENT"),
+      v.literal("EMAIL_OPENED"),
+      v.literal("EMAIL_CLICKED"),
+      v.literal("EMAIL_REPLIED"),
+      v.literal("MEETING_SCHEDULED"),
+      v.literal("MEETING_COMPLETED"),
+      v.literal("FORM_SUBMITTED"),
+      v.literal("PROPOSAL_SENT"),
+      v.literal("CONTRACT_SENT"),
+      v.literal("PAYMENT_RECEIVED"),
+      v.literal("SOCIAL_MEDIA_ENGAGEMENT"),
+      v.literal("REFERRAL_GIVEN"),
+      v.literal("STAGE_PROGRESSION")
     ),
     platform: v.optional(v.union(
       v.literal("FACEBOOK"),
@@ -97,6 +115,7 @@ export default defineSchema({
     )),
     description: v.optional(v.string()),
     metadata: v.object({}),
+    timestamp: v.optional(v.number()), // For backwards compatibility, use timestamp or createdAt
     createdAt: v.number(),
     createdBy: v.optional(v.id("users")),
   })
@@ -105,4 +124,36 @@ export default defineSchema({
     .index("by_contact_createdAt", ["contactId", "createdAt"])
     .index("by_type", ["type"])
     .index("by_createdAt", ["createdAt"]),
+
+  stageProgressionRules: defineTable({
+    fromStage: v.union(
+      v.literal("UNQUALIFIED"),
+      v.literal("PROSPECT"),
+      v.literal("LEAD"),
+      v.literal("QUALIFIED"),
+      v.literal("CUSTOMER")
+    ),
+    toStage: v.union(
+      v.literal("PROSPECT"),
+      v.literal("LEAD"),
+      v.literal("QUALIFIED"),
+      v.literal("CUSTOMER"),
+      v.literal("LOST")
+    ),
+    triggerType: v.union(
+      v.literal("INTERACTION_COUNT"),
+      v.literal("TIME_BASED"),
+      v.literal("LEAD_HEAT_INCREASE"),
+      v.literal("FORM_SUBMISSION"),
+      v.literal("EMAIL_ENGAGEMENT")
+    ),
+    triggerCondition: v.any(), // Flexible condition object based on trigger type
+    isActive: v.boolean(),
+    priority: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_fromStage", ["fromStage"])
+    .index("by_isActive", ["isActive"])
+    .index("by_priority", ["priority"]),
 });

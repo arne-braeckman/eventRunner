@@ -17,7 +17,21 @@ export type InteractionType =
   | "EMAIL_CLICK"
   | "PHONE_CALL"
   | "MEETING"
-  | "OTHER";
+  | "OTHER"
+  // New interaction types for journey stage management
+  | "EMAIL_SENT"
+  | "EMAIL_OPENED" 
+  | "EMAIL_CLICKED"
+  | "EMAIL_REPLIED"
+  | "MEETING_SCHEDULED"
+  | "MEETING_COMPLETED"
+  | "FORM_SUBMITTED"
+  | "PROPOSAL_SENT"
+  | "CONTRACT_SENT"
+  | "PAYMENT_RECEIVED"
+  | "SOCIAL_MEDIA_ENGAGEMENT"
+  | "REFERRAL_GIVEN"
+  | "STAGE_PROGRESSION";
 
 export interface SocialProfile {
   platform: SocialPlatform;
@@ -50,6 +64,8 @@ export interface Contact {
   status: ContactStatus;
   notes?: string;
   assignedTo?: Id<"users">;
+  geographicLocation?: string;
+  preferredEventType?: string;
   socialProfiles?: SocialProfile[];
   customFields?: Record<string, any>;
   createdAt: number;
@@ -103,7 +119,21 @@ export const INTERACTION_TYPE_OPTIONS = [
   { value: "EMAIL_CLICK", label: "Email Click", weight: 2 },
   { value: "PHONE_CALL", label: "Phone Call", weight: 5 },
   { value: "MEETING", label: "Meeting", weight: 8 },
-  { value: "OTHER", label: "Other", weight: 1 }
+  { value: "OTHER", label: "Other", weight: 1 },
+  // New interaction types for journey stage management
+  { value: "EMAIL_SENT", label: "Email Sent", weight: 2 },
+  { value: "EMAIL_OPENED", label: "Email Opened", weight: 1 },
+  { value: "EMAIL_CLICKED", label: "Email Clicked", weight: 3 },
+  { value: "EMAIL_REPLIED", label: "Email Replied", weight: 4 },
+  { value: "MEETING_SCHEDULED", label: "Meeting Scheduled", weight: 6 },
+  { value: "MEETING_COMPLETED", label: "Meeting Completed", weight: 8 },
+  { value: "FORM_SUBMITTED", label: "Form Submitted", weight: 4 },
+  { value: "PROPOSAL_SENT", label: "Proposal Sent", weight: 7 },
+  { value: "CONTRACT_SENT", label: "Contract Sent", weight: 9 },
+  { value: "PAYMENT_RECEIVED", label: "Payment Received", weight: 12 },
+  { value: "SOCIAL_MEDIA_ENGAGEMENT", label: "Social Media Engagement", weight: 2 },
+  { value: "REFERRAL_GIVEN", label: "Referral Given", weight: 3 },
+  { value: "STAGE_PROGRESSION", label: "Stage Progression", weight: 0 }
 ] as const;
 
 export const LEAD_HEAT_THRESHOLDS = {
@@ -111,6 +141,32 @@ export const LEAD_HEAT_THRESHOLDS = {
   WARM: { min: 6, max: 15 },
   HOT: { min: 16, max: Infinity }
 } as const;
+
+export const EVENT_TYPE_OPTIONS = [
+  { value: "WEDDING", label: "Wedding" },
+  { value: "CORPORATE", label: "Corporate Event" },
+  { value: "BIRTHDAY", label: "Birthday Party" },
+  { value: "ANNIVERSARY", label: "Anniversary" },
+  { value: "CONFERENCE", label: "Conference" },
+  { value: "WORKSHOP", label: "Workshop" },
+  { value: "FUNDRAISER", label: "Fundraiser" },
+  { value: "HOLIDAY", label: "Holiday Party" },
+  { value: "REUNION", label: "Reunion" },
+  { value: "OTHER", label: "Other" }
+] as const;
+
+export const GEOGRAPHIC_REGIONS = [
+  { value: "BRUSSELS", label: "Brussels" },
+  { value: "FLANDERS", label: "Flanders" },
+  { value: "WALLONIA", label: "Wallonia" },
+  { value: "ANTWERP", label: "Antwerp" },
+  { value: "GHENT", label: "Ghent" },
+  { value: "BRUGES", label: "Bruges" },
+  { value: "LEUVEN", label: "Leuven" },
+  { value: "NAMUR", label: "Namur" },
+  { value: "LIEGE", label: "Liège" },
+  { value: "OTHER", label: "Other" }
+] as const;
 
 export const PAGINATION = {
   DEFAULT_LIMIT: 20,

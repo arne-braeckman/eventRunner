@@ -8,6 +8,7 @@ import type { Id } from "../../../../convex/_generated/dataModel";
 import Link from 'next/link';
 import { isValidConvexId, isValidEmail } from "~/lib/utils/validation";
 import type { LeadSource, LeadHeat, ContactStatus } from "~/lib/types/contact";
+import { EVENT_TYPE_OPTIONS, GEOGRAPHIC_REGIONS } from "~/lib/types/contact";
 
 interface ContactEditProps {
   contactId: Id<"contacts">;
@@ -23,6 +24,8 @@ interface ContactFormData {
   leadHeat: LeadHeat;
   status: ContactStatus;
   notes: string;
+  geographicLocation: string;
+  preferredEventType: string;
 }
 
 export function ContactEdit({ contactId }: ContactEditProps) {
@@ -46,6 +49,8 @@ export function ContactEdit({ contactId }: ContactEditProps) {
     leadHeat: 'COLD',
     status: 'UNQUALIFIED',
     notes: '',
+    geographicLocation: '',
+    preferredEventType: '',
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,6 +69,8 @@ export function ContactEdit({ contactId }: ContactEditProps) {
         leadHeat: contact.leadHeat,
         status: contact.status,
         notes: contact.notes || '',
+        geographicLocation: contact.geographicLocation || '',
+        preferredEventType: contact.preferredEventType || '',
       });
     }
   }, [contact]);
@@ -79,7 +86,9 @@ export function ContactEdit({ contactId }: ContactEditProps) {
         formData.leadSource !== contact.leadSource ||
         formData.leadHeat !== contact.leadHeat ||
         formData.status !== contact.status ||
-        formData.notes !== (contact.notes || '');
+        formData.notes !== (contact.notes || '') ||
+        formData.geographicLocation !== (contact.geographicLocation || '') ||
+        formData.preferredEventType !== (contact.preferredEventType || '');
       
       setHasChanges(hasChanges);
     }
@@ -128,6 +137,8 @@ export function ContactEdit({ contactId }: ContactEditProps) {
         leadHeat: formData.leadHeat,
         status: formData.status,
         notes: formData.notes || undefined,
+        geographicLocation: formData.geographicLocation || undefined,
+        preferredEventType: formData.preferredEventType || undefined,
       });
 
       router.push(`/contacts/${contactId}`);
@@ -321,6 +332,50 @@ export function ContactEdit({ contactId }: ContactEditProps) {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter company name"
                   />
+                </div>
+              </div>
+            </div>
+
+            {/* Event & Location Preferences */}
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Event & Location Preferences</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="geographicLocation" className="block text-sm font-medium text-gray-700 mb-1">
+                    Geographic Location
+                  </label>
+                  <select
+                    id="geographicLocation"
+                    value={formData.geographicLocation}
+                    onChange={(e) => handleInputChange('geographicLocation', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Select location...</option>
+                    {GEOGRAPHIC_REGIONS.map((region) => (
+                      <option key={region.value} value={region.value}>
+                        {region.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="preferredEventType" className="block text-sm font-medium text-gray-700 mb-1">
+                    Preferred Event Type
+                  </label>
+                  <select
+                    id="preferredEventType"
+                    value={formData.preferredEventType}
+                    onChange={(e) => handleInputChange('preferredEventType', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Select event type...</option>
+                    {EVENT_TYPE_OPTIONS.map((eventType) => (
+                      <option key={eventType.value} value={eventType.value}>
+                        {eventType.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
