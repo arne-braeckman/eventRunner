@@ -35,7 +35,7 @@ export default defineSchema({
       v.literal("WARM"),
       v.literal("HOT")
     ),
-    leadHeatScore: v.number(),
+    leadHeatScore: v.optional(v.number()),
     status: v.union(
       v.literal("UNQUALIFIED"),
       v.literal("PROSPECT"),
@@ -46,7 +46,7 @@ export default defineSchema({
     ),
     notes: v.optional(v.string()),
     assignedTo: v.optional(v.id("users")),
-    socialProfiles: v.array(v.object({
+    socialProfiles: v.optional(v.array(v.object({
       platform: v.union(
         v.literal("FACEBOOK"),
         v.literal("INSTAGRAM"),
@@ -58,8 +58,8 @@ export default defineSchema({
       username: v.optional(v.string()),
       isConnected: v.boolean(),
       lastSyncAt: v.optional(v.number()),
-    })),
-    customFields: v.object({}),
+    }))),
+    customFields: v.optional(v.object({})),
     createdAt: v.number(),
     updatedAt: v.number(),
     lastInteractionAt: v.optional(v.number()),

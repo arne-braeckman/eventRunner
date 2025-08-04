@@ -46,12 +46,12 @@ export interface Contact {
   company?: string;
   leadSource: LeadSource;
   leadHeat: LeadHeat;
-  leadHeatScore: number;
+  leadHeatScore?: number;
   status: ContactStatus;
   notes?: string;
   assignedTo?: Id<"users">;
-  socialProfiles: SocialProfile[];
-  customFields: Record<string, any>;
+  socialProfiles?: SocialProfile[];
+  customFields?: Record<string, any>;
   createdAt: number;
   updatedAt: number;
   lastInteractionAt?: number;

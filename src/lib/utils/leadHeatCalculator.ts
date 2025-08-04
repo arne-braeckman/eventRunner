@@ -91,6 +91,7 @@ export function calculateLeadHeatScore(
 
 // Legacy function for backward compatibility
 export function calculateLeadHeatScoreSimple(interactions: Array<{ type: InteractionType }>): number {
+  if (!interactions || interactions.length === 0) return 0;
   return interactions.reduce((total, interaction) => {
     const interactionConfig = INTERACTION_TYPE_OPTIONS.find(option => option.value === interaction.type);
     return total + (interactionConfig?.weight || 0);

@@ -127,6 +127,199 @@ export const getInteractionsByType = query({
   },
 });
 
+// Bulk interaction creation for automated social media tracking
+export const createBulkInteractions = mutation({
+  args: {
+    interactions: v.array(v.object({
+      contactId: v.id("contacts"),
+      type: v.union(
+        v.literal("SOCIAL_FOLLOW"),
+        v.literal("SOCIAL_LIKE"),
+        v.literal("SOCIAL_COMMENT"),
+        v.literal("SOCIAL_MESSAGE"),
+        v.literal("WEBSITE_VISIT"),
+        v.literal("INFO_REQUEST"),
+        v.literal("PRICE_QUOTE"),
+        v.literal("SITE_VISIT"),
+        v.literal("EMAIL_OPEN"),
+        v.literal("EMAIL_CLICK"),
+        v.literal("PHONE_CALL"),
+        v.literal("MEETING"),
+        v.literal("OTHER")
+      ),
+      platform: v.optional(v.union(
+        v.literal("FACEBOOK"),
+        v.literal("INSTAGRAM"),
+        v.literal("LINKEDIN"),
+        v.literal("TWITTER"),
+        v.literal("TIKTOK")
+      )),
+      description: v.optional(v.string()),
+      metadata: v.optional(v.object({})),
+      createdAt: v.optional(v.number()),
+    })),
+  },
+  handler: async (ctx, args) => {
+    // Staff and above can create bulk interactions
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+
+    const results = [];
+    const now = Date.now();
+    const contactsToRecalculate = new Set();
+
+    for (const interaction of args.interactions) {
+      try {
+        // Check for duplicate interactions based on metadata
+        const existing = await ctx.db
+          .query("interactions")
+          .filter((q: any) =>
+            q.and(
+              q.eq(q.field("contactId"), interaction.contactId),
+              q.eq(q.field("type"), interaction.type),
+              q.eq(q.field("metadata.externalId"), (interaction.metadata as any)?.externalId)
+            )
+          )
+          .first();
+
+        if (existing && (interaction.metadata as any)?.externalId) {
+          results.push({ success: false, reason: "duplicate", contactId: interaction.contactId });
+          continue;
+        }
+
+        const interactionId = await ctx.db.insert("interactions", {
+          contactId: interaction.contactId,
+          type: interaction.type,
+          platform: interaction.platform,
+          description: interaction.description,
+          metadata: interaction.metadata || {},
+          createdAt: interaction.createdAt || now,
+          createdBy: identity.subject as any,
+        });
+
+        results.push({ success: true, interactionId, contactId: interaction.contactId });
+        contactsToRecalculate.add(interaction.contactId);
+
+        // Update contact's lastInteractionAt
+        await ctx.db.patch(interaction.contactId, {
+          lastInteractionAt: interaction.createdAt || now,
+          updatedAt: now,
+        });
+      } catch (error) {
+        results.push({ success: false, reason: String(error), contactId: interaction.contactId });
+      }
+    }
+
+    // Recalculate heat scores for affected contacts
+    for (const contactId of contactsToRecalculate) {
+      try {
+        await recalculateContactHeatScoreSimple(ctx, contactId);
+      } catch (error) {
+        console.error(`Failed to recalculate heat score for contact ${contactId}:`, error);
+      }
+    }
+
+    return {
+      total: args.interactions.length,
+      successful: results.filter(r => r.success).length,
+      failed: results.filter(r => !r.success).length,
+      duplicates: results.filter(r => !r.success && r.reason === "duplicate").length,
+      results,
+    };
+  },
+});
+
+// Get interaction analytics
+export const getInteractionAnalytics = query({
+  args: {
+    contactId: v.optional(v.id("contacts")),
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+    platform: v.optional(v.union(
+      v.literal("FACEBOOK"),
+      v.literal("INSTAGRAM"),
+      v.literal("LINKEDIN"),
+      v.literal("TWITTER"),
+      v.literal("TIKTOK")
+    )),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+
+    let interactions;
+    
+    if (args.contactId) {
+      interactions = await ctx.db
+        .query("interactions")
+        .withIndex("by_contact", (q) => q.eq("contactId", args.contactId))
+        .collect();
+    } else {
+      interactions = await ctx.db.query("interactions").collect();
+    }
+
+    // Filter by date range
+    if (args.startDate || args.endDate) {
+      interactions = interactions.filter(interaction => {
+        const createdAt = interaction.createdAt;
+        if (args.startDate && createdAt < args.startDate) return false;
+        if (args.endDate && createdAt > args.endDate) return false;
+        return true;
+      });
+    }
+
+    // Filter by platform
+    if (args.platform) {
+      interactions = interactions.filter(interaction => interaction.platform === args.platform);
+    }
+
+    // Calculate analytics
+    const analytics = {
+      totalInteractions: interactions.length,
+      interactionsByType: {} as Record<string, number>,
+      interactionsByPlatform: {} as Record<string, number>,
+      interactionsByDay: {} as Record<string, number>,
+      avgInteractionsPerContact: 0,
+      uniqueContacts: new Set(),
+      timeRange: {
+        earliest: interactions.length > 0 ? Math.min(...interactions.map(i => i.createdAt)) : null,
+        latest: interactions.length > 0 ? Math.max(...interactions.map(i => i.createdAt)) : null,
+      },
+    };
+
+    interactions.forEach(interaction => {
+      // Count by type
+      analytics.interactionsByType[interaction.type] = (analytics.interactionsByType[interaction.type] || 0) + 1;
+      
+      // Count by platform
+      if (interaction.platform) {
+        analytics.interactionsByPlatform[interaction.platform] = (analytics.interactionsByPlatform[interaction.platform] || 0) + 1;
+      }
+      
+      // Count by day
+      const day = new Date(interaction.createdAt).toISOString().split('T')[0];
+      analytics.interactionsByDay[day] = (analytics.interactionsByDay[day] || 0) + 1;
+      
+      // Track unique contacts
+      analytics.uniqueContacts.add(interaction.contactId);
+    });
+
+    analytics.avgInteractionsPerContact = analytics.uniqueContacts.size > 0 
+      ? analytics.totalInteractions / analytics.uniqueContacts.size 
+      : 0;
+
+    return {
+      ...analytics,
+      uniqueContactCount: analytics.uniqueContacts.size,
+      uniqueContacts: undefined, // Remove Set from response
+    };
+  },
+});
+
 export const calculateContactHeatScore = mutation({
   args: {
     contactId: v.id("contacts"),

@@ -15,6 +15,8 @@ export function Navigation() {
   const navItems = [
     { href: "/", label: "Dashboard", auth: true, permission: "canViewDashboard" },
     { href: "/contacts", label: "Contacts", auth: true, permission: "canViewDashboard" }, // All staff can view contacts
+    { href: "/leads", label: "Lead Analytics", auth: true, permission: "canViewDashboard" },
+    { href: "/leads/pipeline", label: "Lead Pipeline", auth: true, permission: "canViewDashboard" },
     { href: "/projects", label: "Projects", auth: true, permission: "canManageProjects" },
     { href: "/admin", label: "User Management", auth: true, permission: "canManageUsers" },
   ];
