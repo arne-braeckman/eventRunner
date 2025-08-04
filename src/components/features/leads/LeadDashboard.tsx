@@ -212,12 +212,25 @@ export function LeadDashboard() {
     }
   };
 
-  if (!allContacts || !recentInteractions) {
+  // Show loading skeleton only if data is explicitly undefined (still loading)
+  // If data is empty array, show the dashboard with empty state
+  if (allContacts === undefined || recentInteractions === undefined) {
     return <DashboardSkeleton />;
   }
 
   return (
     <div className="space-y-6">
+      {/* Debug Info */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+          <strong>Debug Info:</strong> 
+          <span className="ml-2">
+            Contacts: {allContacts === undefined ? 'Loading...' : `${allContacts?.length || 0} found`} | 
+            Interactions: {recentInteractions === undefined ? 'Loading...' : 'Loaded'}
+          </span>
+        </div>
+      )}
+      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

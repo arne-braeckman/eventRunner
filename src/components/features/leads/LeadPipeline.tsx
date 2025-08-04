@@ -197,12 +197,24 @@ export function LeadPipeline() {
     setFilter({});
   };
 
-  if (!allContacts) {
+  // Show loading skeleton only if data is explicitly undefined (still loading)
+  // If data is empty array, show the pipeline with empty columns
+  if (allContacts === undefined) {
     return <PipelineSkeleton />;
   }
 
   return (
     <div className="space-y-6">
+      {/* Debug Info */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+          <strong>Debug Info:</strong> 
+          <span className="ml-2">
+            Contacts: {allContacts === undefined ? 'Loading...' : `${allContacts?.length || 0} found`}
+          </span>
+        </div>
+      )}
+      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
