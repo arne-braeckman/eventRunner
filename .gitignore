@@ -1,3 +1,10 @@
 node_modules
 
 .env.local
+.next/cache/webpack/edge-server-production/0.pack
+.next/cache/webpack/server-production/0.pack
+.next/cache 2/webpack/client-production/1.pack
+.next/cache 2/webpack/client-production/2.pack
+.next/cache 2/webpack/client-production/index.pack.old
+.next/cache 2/webpack/server-production/1.pack
+.next/cache 2/webpack/server-production/2.pack

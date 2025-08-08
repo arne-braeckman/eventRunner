@@ -18,7 +18,9 @@ import type * as contacts from "../contacts.js";
 import type * as http from "../http.js";
 import type * as interactions from "../interactions.js";
 import type * as journeyStages from "../journeyStages.js";
+import type * as middleware from "../middleware.js";
 import type * as migrations from "../migrations.js";
+import type * as opportunities from "../opportunities.js";
 import type * as users from "../users.js";
 
 /**
@@ -35,7 +37,9 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   interactions: typeof interactions;
   journeyStages: typeof journeyStages;
+  middleware: typeof middleware;
   migrations: typeof migrations;
+  opportunities: typeof opportunities;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

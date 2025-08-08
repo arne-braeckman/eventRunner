@@ -125,6 +125,50 @@ export default defineSchema({
     .index("by_type", ["type"])
     .index("by_createdAt", ["createdAt"]),
 
+  opportunities: defineTable({
+    name: v.string(),
+    contactId: v.id("contacts"),
+    stage: v.union(
+      v.literal("PROSPECT"),
+      v.literal("QUALIFIED"),
+      v.literal("PROPOSAL"),
+      v.literal("NEGOTIATION"),
+      v.literal("CLOSED_WON"),
+      v.literal("CLOSED_LOST")
+    ),
+    value: v.number(),
+    eventType: v.union(
+      v.literal("WEDDING"),
+      v.literal("CORPORATE"),
+      v.literal("BIRTHDAY"),
+      v.literal("ANNIVERSARY"),
+      v.literal("CONFERENCE"),
+      v.literal("GALA"),
+      v.literal("OTHER")
+    ),
+    eventDate: v.number(), // timestamp
+    guestCount: v.number(),
+    requiresCatering: v.boolean(),
+    roomAssignment: v.optional(v.string()),
+    venueRequirements: v.optional(v.string()),
+    probability: v.optional(v.number()), // 0-100 probability of closing
+    expectedCloseDate: v.optional(v.number()), // timestamp
+    description: v.optional(v.string()),
+    assignedTo: v.optional(v.id("users")),
+    customFields: v.optional(v.object({})),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_contact", ["contactId"])
+    .index("by_stage", ["stage"])
+    .index("by_event_date", ["eventDate"])
+    .index("by_assigned_to", ["assignedTo"])
+    .index("by_value", ["value"])
+    .index("by_event_type", ["eventType"])
+    .index("by_is_active", ["isActive"])
+    .index("by_expected_close_date", ["expectedCloseDate"]),
+
   stageProgressionRules: defineTable({
     fromStage: v.union(
       v.literal("UNQUALIFIED"),
