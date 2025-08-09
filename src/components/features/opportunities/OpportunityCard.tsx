@@ -12,7 +12,8 @@ import {
   MoreHorizontal,
   Edit,
   Trash2,
-  User
+  User,
+  AlertTriangle
 } from "lucide-react";
 import type { Opportunity } from "~/lib/types/opportunity";
 import { format } from "date-fns";
@@ -25,6 +26,7 @@ interface OpportunityCardProps {
   isSelected?: boolean;
   onToggleSelection?: (opportunity: Opportunity) => void;
   isSelectionMode?: boolean;
+  allOpportunities?: Opportunity[];
 }
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
@@ -44,7 +46,8 @@ export function OpportunityCard({
   onDelete, 
   isSelected, 
   onToggleSelection, 
-  isSelectionMode 
+  isSelectionMode,
+  allOpportunities = []
 }: OpportunityCardProps) {
   const [showActions, setShowActions] = useState(false);
   
@@ -65,6 +68,19 @@ export function OpportunityCard({
   };
 
   const eventTypeColor = EVENT_TYPE_COLORS[opportunity.eventType] || EVENT_TYPE_COLORS.OTHER;
+  
+  // Check for date conflicts with other opportunities
+  const hasDateConflict = allOpportunities.some(opp => 
+    opp._id !== opportunity._id && 
+    opp.isActive && 
+    new Date(opp.eventDate).toDateString() === new Date(opportunity.eventDate).toDateString()
+  );
+  
+  const conflictingOpportunities = allOpportunities.filter(opp =>
+    opp._id !== opportunity._id && 
+    opp.isActive && 
+    new Date(opp.eventDate).toDateString() === new Date(opportunity.eventDate).toDateString()
+  );
 
   if (isDragging || isSortableDragging) {
     return (
@@ -84,8 +100,9 @@ export function OpportunityCard({
       {...listeners}
       className={`
         bg-white rounded-lg shadow-sm border p-4 hover:shadow-md transition-all cursor-grab active:cursor-grabbing
-        ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
+        ${isSelected ? 'border-blue-500 bg-blue-50' : hasDateConflict ? 'border-orange-300 bg-orange-50' : 'border-gray-200'}
         ${isSelectionMode ? 'cursor-pointer' : ''}
+        ${hasDateConflict ? 'ring-1 ring-orange-200' : ''}
       `}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
@@ -166,9 +183,17 @@ export function OpportunityCard({
       {/* Event Details */}
       <div className="space-y-2 text-sm text-gray-600">
         {/* Event Date */}
-        <div className="flex items-center">
-          <Calendar className="w-4 h-4 mr-2" />
-          <span>{format(new Date(opportunity.eventDate), 'MMM dd, yyyy')}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Calendar className="w-4 h-4 mr-2" />
+            <span>{format(new Date(opportunity.eventDate), 'MMM dd, yyyy')}</span>
+          </div>
+          {hasDateConflict && (
+            <div className="flex items-center" title={`Date conflict with ${conflictingOpportunities.length} other opportunity/opportunities`}>
+              <AlertTriangle className="w-4 h-4 text-orange-500" />
+              <span className="text-xs text-orange-600 ml-1">{conflictingOpportunities.length}</span>
+            </div>
+          )}
         </div>
 
         {/* Guest Count */}

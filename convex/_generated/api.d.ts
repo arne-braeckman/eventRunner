@@ -22,6 +22,7 @@ import type * as middleware from "../middleware.js";
 import type * as migrations from "../migrations.js";
 import type * as opportunities from "../opportunities.js";
 import type * as users from "../users.js";
+import type * as venues from "../venues.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   migrations: typeof migrations;
   opportunities: typeof opportunities;
   users: typeof users;
+  venues: typeof venues;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

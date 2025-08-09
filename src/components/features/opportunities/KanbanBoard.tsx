@@ -72,8 +72,22 @@ export function KanbanBoard({
     const activeOpportunity = opportunities.find(opp => opp._id === active.id);
     const newStage = over.id as OpportunityStage;
 
+    // Ensure we're dropping on a valid stage column, not on another opportunity
+    const validStageIds = PIPELINE_STAGES.map(stage => stage.id);
+    if (!validStageIds.includes(newStage)) {
+      console.warn("Invalid drop target:", over.id);
+      return;
+    }
+
     if (activeOpportunity && activeOpportunity.stage !== newStage) {
       try {
+        console.log("Updating opportunity stage:", {
+          opportunityId: activeOpportunity._id,
+          currentStage: activeOpportunity.stage,
+          newStage,
+          overId: over.id
+        });
+        
         await updateOpportunityStage({
           opportunityId: activeOpportunity._id,
           stage: newStage,
@@ -102,6 +116,7 @@ export function KanbanBoard({
             title={stage.title}
             color={stage.color}
             opportunities={groupedOpportunities[stage.id] || []}
+            allOpportunities={opportunities}
             onEditOpportunity={onEditOpportunity}
             onDeleteOpportunity={onDeleteOpportunity}
             selectedOpportunities={selectedOpportunities}

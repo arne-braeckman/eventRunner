@@ -285,10 +285,12 @@ export const deleteOpportunity = mutation({
   },
 });
 
-// Get opportunities with date conflicts (same event date)
+// Enhanced date and venue conflict detection
 export const getDateConflicts = query({
   args: {
     eventDate: v.number(),
+    venueId: v.optional(v.id("venues")),
+    eventDuration: v.optional(v.number()), // in milliseconds
     excludeOpportunityId: v.optional(v.id("opportunities")),
   },
   handler: async (ctx, args) => {
@@ -297,7 +299,45 @@ export const getDateConflicts = query({
       throw new Error("Authentication required");
     }
     
-    let conflicts = await ctx.db
+    const conflicts = [];
+    const eventStart = args.eventDate;
+    const eventEnd = args.eventDate + (args.eventDuration || 4 * 60 * 60 * 1000); // Default 4 hours
+    
+    // Check venue availability conflicts
+    if (args.venueId) {
+      const venueConflicts = await ctx.db
+        .query("venueAvailability")
+        .withIndex("by_venue", (q) => q.eq("venueId", args.venueId!))
+        .filter((q) => 
+          q.and(
+            q.or(
+              q.and(q.gte(q.field("startTime"), eventStart), q.lt(q.field("startTime"), eventEnd)),
+              q.and(q.gt(q.field("endTime"), eventStart), q.lte(q.field("endTime"), eventEnd)),
+              q.and(q.lte(q.field("startTime"), eventStart), q.gte(q.field("endTime"), eventEnd))
+            ),
+            q.or(
+              q.eq(q.field("bookingStatus"), "CONFIRMED"),
+              q.eq(q.field("bookingStatus"), "TENTATIVE")
+            )
+          )
+        )
+        .collect();
+      
+      for (const booking of venueConflicts) {
+        if (booking.opportunityId && booking.opportunityId !== args.excludeOpportunityId) {
+          const conflictingOpp = await ctx.db.get(booking.opportunityId);
+          conflicts.push({
+            type: "VENUE_CONFLICT",
+            booking,
+            opportunity: conflictingOpp,
+            severity: booking.bookingStatus === "CONFIRMED" ? "HIGH" : "MEDIUM",
+          });
+        }
+      }
+    }
+    
+    // Check opportunity date conflicts (same date, regardless of venue)
+    let dateConflicts = await ctx.db
       .query("opportunities")
       .withIndex("by_event_date", (q) => q.eq("eventDate", args.eventDate))
       .filter((q) => q.eq(q.field("isActive"), true))
@@ -305,10 +345,148 @@ export const getDateConflicts = query({
     
     // Exclude the current opportunity if provided
     if (args.excludeOpportunityId) {
-      conflicts = conflicts.filter(opp => opp._id !== args.excludeOpportunityId);
+      dateConflicts = dateConflicts.filter(opp => opp._id !== args.excludeOpportunityId);
+    }
+    
+    for (const opp of dateConflicts) {
+      conflicts.push({
+        type: "DATE_CONFLICT",
+        opportunity: opp,
+        severity: "LOW",
+      });
     }
     
     return conflicts;
+  },
+});
+
+// Book venue for opportunity
+export const bookVenueForOpportunity = mutation({
+  args: {
+    opportunityId: v.id("opportunities"),
+    venueId: v.id("venues"),
+    eventDuration: v.number(), // in milliseconds
+    bookingStatus: v.optional(v.union(
+      v.literal("TENTATIVE"),
+      v.literal("CONFIRMED")
+    )),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await requireRole(ctx, "SALES");
+    
+    const opportunity = await ctx.db.get(args.opportunityId);
+    if (!opportunity) {
+      throw new Error("Opportunity not found");
+    }
+    
+    const venue = await ctx.db.get(args.venueId);
+    if (!venue) {
+      throw new Error("Venue not found");
+    }
+    
+    // Check for conflicts first
+    const conflicts = await ctx.db
+      .query("venueAvailability")
+      .withIndex("by_venue", (q) => q.eq("venueId", args.venueId))
+      .filter((q) => 
+        q.and(
+          q.or(
+            q.and(q.gte(q.field("startTime"), opportunity.eventDate), q.lt(q.field("startTime"), opportunity.eventDate + args.eventDuration)),
+            q.and(q.gt(q.field("endTime"), opportunity.eventDate), q.lte(q.field("endTime"), opportunity.eventDate + args.eventDuration)),
+            q.and(q.lte(q.field("startTime"), opportunity.eventDate), q.gte(q.field("endTime"), opportunity.eventDate + args.eventDuration))
+          ),
+          q.or(
+            q.eq(q.field("bookingStatus"), "CONFIRMED"),
+            q.eq(q.field("bookingStatus"), "TENTATIVE")
+          )
+        )
+      )
+      .collect();
+    
+    if (conflicts.length > 0) {
+      // Log the conflict
+      await ctx.db.insert("conflictDetectionLog", {
+        opportunityId: args.opportunityId,
+        conflictType: "VENUE_DOUBLE_BOOKING",
+        conflictingOpportunityId: conflicts[0]?.opportunityId,
+        venueId: args.venueId,
+        conflictDate: opportunity.eventDate,
+        severity: "HIGH",
+        isResolved: false,
+        detectedAt: Date.now(),
+      });
+      
+      throw new Error("Venue booking conflict detected. Cannot book overlapping time slot.");
+    }
+    
+    const now = Date.now();
+    const startTime = opportunity.eventDate - (venue.setupTime * 60 * 1000);
+    const endTime = opportunity.eventDate + args.eventDuration + (venue.cleanupTime * 60 * 1000);
+    
+    // Create venue booking
+    const bookingId = await ctx.db.insert("venueAvailability", {
+      venueId: args.venueId,
+      date: opportunity.eventDate,
+      startTime,
+      endTime,
+      isBooked: args.bookingStatus === "CONFIRMED",
+      opportunityId: args.opportunityId,
+      bookingStatus: args.bookingStatus || "TENTATIVE",
+      notes: args.notes,
+      createdAt: now,
+      updatedAt: now,
+    });
+    
+    // Update opportunity with venue assignment
+    await ctx.db.patch(args.opportunityId, {
+      roomAssignment: venue.name,
+      updatedAt: now,
+    });
+    
+    return bookingId;
+  },
+});
+
+// Cancel venue booking for opportunity
+export const cancelVenueBooking = mutation({
+  args: {
+    opportunityId: v.id("opportunities"),
+    venueId: v.optional(v.id("venues")),
+  },
+  handler: async (ctx, args) => {
+    await requireRole(ctx, "SALES");
+    
+    // Find existing booking
+    const bookings = await ctx.db
+      .query("venueAvailability")
+      .withIndex("by_opportunity", (q) => q.eq("opportunityId", args.opportunityId))
+      .collect();
+    
+    let booking = bookings[0];
+    if (args.venueId) {
+      booking = bookings.find(b => b.venueId === args.venueId);
+    }
+    
+    if (!booking) {
+      throw new Error("Venue booking not found");
+    }
+    
+    // Update booking to available
+    await ctx.db.patch(booking._id, {
+      isBooked: false,
+      opportunityId: undefined,
+      bookingStatus: "AVAILABLE",
+      updatedAt: Date.now(),
+    });
+    
+    // Update opportunity to remove venue assignment
+    await ctx.db.patch(args.opportunityId, {
+      roomAssignment: undefined,
+      updatedAt: Date.now(),
+    });
+    
+    return booking._id;
   },
 });
 

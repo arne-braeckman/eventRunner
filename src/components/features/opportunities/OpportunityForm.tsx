@@ -208,7 +208,8 @@ export function OpportunityForm({
                 step="0.01"
                 {...register("value", { 
                   required: "Value is required",
-                  min: { value: 0, message: "Value must be positive" }
+                  min: { value: 0, message: "Value must be positive" },
+                  valueAsNumber: true
                 })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="0.00"
@@ -264,7 +265,8 @@ export function OpportunityForm({
                   min="1"
                   {...register("guestCount", { 
                     required: "Guest count is required",
-                    min: { value: 1, message: "Must have at least 1 guest" }
+                    min: { value: 1, message: "Must have at least 1 guest" },
+                    valueAsNumber: true
                   })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="100"

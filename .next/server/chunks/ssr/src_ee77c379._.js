@@ -19,6 +19,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$square$2d$pen$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/square-pen.js [app-ssr] (ecmascript) <export default as Edit>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-ssr] (ecmascript) <export default as Trash2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/triangle-alert.js [app-ssr] (ecmascript) <export default as AlertTriangle>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/date-fns/format.js [app-ssr] (ecmascript) <locals>");
 "use client";
 ;
@@ -36,7 +37,7 @@ const EVENT_TYPE_COLORS = {
     ANNIVERSARY: "bg-indigo-100 text-indigo-800",
     OTHER: "bg-gray-100 text-gray-800"
 };
-function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected, onToggleSelection, isSelectionMode }) {
+function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected, onToggleSelection, isSelectionMode, allOpportunities = [] }) {
     const [showActions, setShowActions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const { attributes, listeners, setNodeRef, transform, transition, isDragging: isSortableDragging } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$sortable$2f$dist$2f$sortable$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSortable"])({
         id: opportunity._id
@@ -46,6 +47,9 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
         transition
     };
     const eventTypeColor = EVENT_TYPE_COLORS[opportunity.eventType] || EVENT_TYPE_COLORS.OTHER;
+    // Check for date conflicts with other opportunities
+    const hasDateConflict = allOpportunities.some((opp)=>opp._id !== opportunity._id && opp.isActive && new Date(opp.eventDate).toDateString() === new Date(opportunity.eventDate).toDateString());
+    const conflictingOpportunities = allOpportunities.filter((opp)=>opp._id !== opportunity._id && opp.isActive && new Date(opp.eventDate).toDateString() === new Date(opportunity.eventDate).toDateString());
     if (isDragging || isSortableDragging) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "bg-white rounded-lg shadow-lg border-2 border-blue-300 p-4 opacity-50 rotate-2",
@@ -56,17 +60,17 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                     children: opportunity.name
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                    lineNumber: 73,
+                    lineNumber: 89,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 72,
+                lineNumber: 88,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-            lineNumber: 71,
+            lineNumber: 87,
             columnNumber: 7
         }, this);
     }
@@ -77,8 +81,9 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
         ...listeners,
         className: `
         bg-white rounded-lg shadow-sm border p-4 hover:shadow-md transition-all cursor-grab active:cursor-grabbing
-        ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
+        ${isSelected ? 'border-blue-500 bg-blue-50' : hasDateConflict ? 'border-orange-300 bg-orange-50' : 'border-gray-200'}
         ${isSelectionMode ? 'cursor-pointer' : ''}
+        ${hasDateConflict ? 'ring-1 ring-orange-200' : ''}
       `,
         onMouseEnter: ()=>setShowActions(true),
         onMouseLeave: ()=>setShowActions(false),
@@ -106,7 +111,7 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                 className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 104,
+                                lineNumber: 121,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
@@ -114,13 +119,13 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                 children: opportunity.name
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 114,
+                                lineNumber: 131,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 102,
+                        lineNumber: 119,
                         columnNumber: 9
                     }, this),
                     showActions && !isSelectionMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -137,12 +142,12 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                     className: "w-4 h-4 text-gray-500"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                    lineNumber: 127,
+                                    lineNumber: 144,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 119,
+                                lineNumber: 136,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -158,12 +163,12 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                     className: "w-4 h-4 text-red-500"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                    lineNumber: 139,
+                                    lineNumber: 156,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 129,
+                                lineNumber: 146,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -172,24 +177,24 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                     className: "w-4 h-4 text-gray-500"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                    lineNumber: 142,
+                                    lineNumber: 159,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 141,
+                                lineNumber: 158,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 118,
+                        lineNumber: 135,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 101,
+                lineNumber: 118,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -199,12 +204,12 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                     children: opportunity.eventType.toLowerCase().replace('_', ' ')
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                    lineNumber: 150,
+                    lineNumber: 167,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 149,
+                lineNumber: 166,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -217,7 +222,7 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                 className: "w-4 h-4 mr-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 158,
+                                lineNumber: 175,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -228,13 +233,13 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 159,
+                                lineNumber: 176,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 157,
+                        lineNumber: 174,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -247,110 +252,68 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                            lineNumber: 162,
+                            lineNumber: 179,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 161,
+                        lineNumber: 178,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 156,
+                lineNumber: 173,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "space-y-2 text-sm text-gray-600",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center",
+                        className: "flex items-center justify-between",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
-                                className: "w-4 h-4 mr-2"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 170,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(opportunity.eventDate), 'MMM dd, yyyy')
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 171,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 169,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                className: "w-4 h-4 mr-2"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 176,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center",
                                 children: [
-                                    opportunity.guestCount,
-                                    " guests"
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
+                                        className: "w-4 h-4 mr-2"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                        lineNumber: 188,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(opportunity.eventDate), 'MMM dd, yyyy')
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                        lineNumber: 189,
+                                        columnNumber: 13
+                                    }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 177,
+                                lineNumber: 187,
                                 columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 175,
-                        columnNumber: 9
-                    }, this),
-                    opportunity.venueRequirements && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
-                                className: "w-4 h-4 mr-2"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 183,
-                                columnNumber: 13
                             }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "truncate",
-                                children: opportunity.venueRequirements
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 184,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 182,
-                        columnNumber: 11
-                    }, this),
-                    opportunity.expectedCloseDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                className: "w-4 h-4 mr-2"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 191,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            hasDateConflict && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center",
+                                title: `Date conflict with ${conflictingOpportunities.length} other opportunity/opportunities`,
                                 children: [
-                                    "Close: ",
-                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(opportunity.expectedCloseDate), 'MMM dd')
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
+                                        className: "w-4 h-4 text-orange-500"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                        lineNumber: 193,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-xs text-orange-600 ml-1",
+                                        children: conflictingOpportunities.length
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                        lineNumber: 194,
+                                        columnNumber: 15
+                                    }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
@@ -360,13 +323,89 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 190,
+                        lineNumber: 186,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
+                                className: "w-4 h-4 mr-2"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                lineNumber: 201,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    opportunity.guestCount,
+                                    " guests"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                lineNumber: 202,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                        lineNumber: 200,
+                        columnNumber: 9
+                    }, this),
+                    opportunity.venueRequirements && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
+                                className: "w-4 h-4 mr-2"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                lineNumber: 208,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "truncate",
+                                children: opportunity.venueRequirements
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                lineNumber: 209,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                        lineNumber: 207,
+                        columnNumber: 11
+                    }, this),
+                    opportunity.expectedCloseDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
+                                className: "w-4 h-4 mr-2"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                lineNumber: 216,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    "Close: ",
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(opportunity.expectedCloseDate), 'MMM dd')
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                                lineNumber: 217,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
+                        lineNumber: 215,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 167,
+                lineNumber: 184,
                 columnNumber: 7
             }, this),
             opportunity.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -376,12 +415,12 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                     children: opportunity.description
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                    lineNumber: 200,
+                    lineNumber: 225,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 199,
+                lineNumber: 224,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -395,7 +434,7 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 206,
+                        lineNumber: 231,
                         columnNumber: 9
                     }, this),
                     opportunity.assignedTo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -405,32 +444,32 @@ function OpportunityCard({ opportunity, isDragging, onEdit, onDelete, isSelected
                                 className: "w-3 h-3 mr-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 212,
+                                lineNumber: 237,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Assigned"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                                lineNumber: 213,
+                                lineNumber: 238,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                        lineNumber: 211,
+                        lineNumber: 236,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-                lineNumber: 205,
+                lineNumber: 230,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/features/opportunities/OpportunityCard.tsx",
-        lineNumber: 80,
+        lineNumber: 96,
         columnNumber: 5
     }, this);
 }
@@ -450,7 +489,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$feature
 ;
 ;
 ;
-function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDeleteOpportunity, selectedOpportunities = [], onToggleSelection, isSelectionMode = false }) {
+function KanbanColumn({ id, title, color, opportunities, allOpportunities = [], onEditOpportunity, onDeleteOpportunity, selectedOpportunities = [], onToggleSelection, isSelectionMode = false }) {
     const { setNodeRef, isOver } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDroppable"])({
         id
     });
@@ -476,7 +515,7 @@ function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDe
                                 children: title
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                                lineNumber: 50,
+                                lineNumber: 52,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -484,13 +523,13 @@ function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDe
                                 children: count
                             }, void 0, false, {
                                 fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                                lineNumber: 51,
+                                lineNumber: 53,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                        lineNumber: 49,
+                        lineNumber: 51,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -501,13 +540,13 @@ function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDe
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                        lineNumber: 55,
+                        lineNumber: 57,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                lineNumber: 48,
+                lineNumber: 50,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$sortable$2f$dist$2f$sortable$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SortableContext"], {
@@ -517,6 +556,7 @@ function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDe
                     className: "space-y-3 flex-1",
                     children: opportunities.map((opportunity)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$features$2f$opportunities$2f$OpportunityCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["OpportunityCard"], {
                             opportunity: opportunity,
+                            allOpportunities: allOpportunities,
                             onEdit: onEditOpportunity,
                             onDelete: onDeleteOpportunity,
                             isSelected: selectedOpportunities.some((selected)=>selected._id === opportunity._id),
@@ -524,17 +564,17 @@ function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDe
                             isSelectionMode: isSelectionMode
                         }, opportunity._id, false, {
                             fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                            lineNumber: 66,
+                            lineNumber: 68,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                    lineNumber: 64,
+                    lineNumber: 66,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                lineNumber: 60,
+                lineNumber: 62,
                 columnNumber: 7
             }, this),
             count === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -544,18 +584,18 @@ function KanbanColumn({ id, title, color, opportunities, onEditOpportunity, onDe
                     children: "Drop opportunities here"
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                    lineNumber: 81,
+                    lineNumber: 84,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-                lineNumber: 80,
+                lineNumber: 83,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/features/opportunities/KanbanColumn.tsx",
-        lineNumber: 39,
+        lineNumber: 41,
         columnNumber: 5
     }, this);
 }
@@ -635,8 +675,20 @@ function KanbanBoard({ opportunities, onEditOpportunity, onDeleteOpportunity, se
         if (!over) return;
         const activeOpportunity = opportunities.find((opp)=>opp._id === active.id);
         const newStage = over.id;
+        // Ensure we're dropping on a valid stage column, not on another opportunity
+        const validStageIds = PIPELINE_STAGES.map((stage)=>stage.id);
+        if (!validStageIds.includes(newStage)) {
+            console.warn("Invalid drop target:", over.id);
+            return;
+        }
         if (activeOpportunity && activeOpportunity.stage !== newStage) {
             try {
+                console.log("Updating opportunity stage:", {
+                    opportunityId: activeOpportunity._id,
+                    currentStage: activeOpportunity.stage,
+                    newStage,
+                    overId: over.id
+                });
                 await updateOpportunityStage({
                     opportunityId: activeOpportunity._id,
                     stage: newStage
@@ -659,6 +711,7 @@ function KanbanBoard({ opportunities, onEditOpportunity, onDeleteOpportunity, se
                         title: stage.title,
                         color: stage.color,
                         opportunities: groupedOpportunities[stage.id] || [],
+                        allOpportunities: opportunities,
                         onEditOpportunity: onEditOpportunity,
                         onDeleteOpportunity: onDeleteOpportunity,
                         selectedOpportunities: selectedOpportunities,
@@ -666,12 +719,12 @@ function KanbanBoard({ opportunities, onEditOpportunity, onDeleteOpportunity, se
                         isSelectionMode: isSelectionMode
                     }, stage.id, false, {
                         fileName: "[project]/src/components/features/opportunities/KanbanBoard.tsx",
-                        lineNumber: 99,
+                        lineNumber: 113,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/KanbanBoard.tsx",
-                lineNumber: 97,
+                lineNumber: 111,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DragOverlay"], {
@@ -680,18 +733,18 @@ function KanbanBoard({ opportunities, onEditOpportunity, onDeleteOpportunity, se
                     isDragging: true
                 }, void 0, false, {
                     fileName: "[project]/src/components/features/opportunities/KanbanBoard.tsx",
-                    lineNumber: 116,
+                    lineNumber: 131,
                     columnNumber: 11
                 }, this) : null
             }, void 0, false, {
                 fileName: "[project]/src/components/features/opportunities/KanbanBoard.tsx",
-                lineNumber: 114,
+                lineNumber: 129,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/features/opportunities/KanbanBoard.tsx",
-        lineNumber: 92,
+        lineNumber: 106,
         columnNumber: 5
     }, this);
 }
@@ -1274,7 +1327,8 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                 min: {
                                                     value: 0,
                                                     message: "Value must be positive"
-                                                }
+                                                },
+                                                valueAsNumber: true
                                             }),
                                             className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
                                             placeholder: "0.00"
@@ -1288,7 +1342,7 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                             children: errors.value.message
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 217,
+                                            lineNumber: 218,
                                             columnNumber: 17
                                         }, this)
                                     ]
@@ -1311,7 +1365,7 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                     children: "Event Details"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                    lineNumber: 224,
+                                    lineNumber: 225,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1326,14 +1380,14 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                             className: "w-4 h-4 inline mr-1"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                            lineNumber: 230,
+                                                            lineNumber: 231,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Event Date *"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 229,
+                                                    lineNumber: 230,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1344,7 +1398,7 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 233,
+                                                    lineNumber: 234,
                                                     columnNumber: 17
                                                 }, this),
                                                 errors.eventDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1352,13 +1406,13 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     children: errors.eventDate.message
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 239,
+                                                    lineNumber: 240,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 228,
+                                            lineNumber: 229,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1370,14 +1424,14 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                             className: "w-4 h-4 inline mr-1"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                            lineNumber: 246,
+                                                            lineNumber: 247,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Expected Close Date"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 245,
+                                                    lineNumber: 246,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1386,13 +1440,13 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 249,
+                                                    lineNumber: 250,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 244,
+                                            lineNumber: 245,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1404,14 +1458,14 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                             className: "w-4 h-4 inline mr-1"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                            lineNumber: 259,
+                                                            lineNumber: 260,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Guest Count *"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 258,
+                                                    lineNumber: 259,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1422,13 +1476,14 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                         min: {
                                                             value: 1,
                                                             message: "Must have at least 1 guest"
-                                                        }
+                                                        },
+                                                        valueAsNumber: true
                                                     }),
                                                     className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
                                                     placeholder: "100"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 262,
+                                                    lineNumber: 263,
                                                     columnNumber: 17
                                                 }, this),
                                                 errors.guestCount && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1436,13 +1491,13 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     children: errors.guestCount.message
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 273,
+                                                    lineNumber: 275,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 257,
+                                            lineNumber: 258,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1454,7 +1509,7 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 279,
+                                                    lineNumber: 281,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1462,19 +1517,19 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     children: "Requires catering"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 284,
+                                                    lineNumber: 286,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 278,
+                                            lineNumber: 280,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                    lineNumber: 226,
+                                    lineNumber: 227,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1487,14 +1542,14 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                                     className: "w-4 h-4 inline mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                                    lineNumber: 293,
+                                                    lineNumber: 295,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Venue Requirements"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 292,
+                                            lineNumber: 294,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1504,13 +1559,13 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                             placeholder: "Describe venue requirements, location preferences, etc..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 296,
+                                            lineNumber: 298,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                    lineNumber: 291,
+                                    lineNumber: 293,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1521,7 +1576,7 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                             children: "Description"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 306,
+                                            lineNumber: 308,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1531,19 +1586,19 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                             placeholder: "Additional notes about this opportunity..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                            lineNumber: 309,
+                                            lineNumber: 311,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                    lineNumber: 305,
+                                    lineNumber: 307,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                            lineNumber: 223,
+                            lineNumber: 224,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1556,7 +1611,7 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                    lineNumber: 320,
+                                    lineNumber: 322,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1566,13 +1621,13 @@ function OpportunityForm({ isOpen, onClose, initialData, opportunityId }) {
                                     children: isSubmitting ? isEditing ? "Updating..." : "Creating..." : isEditing ? "Update Opportunity" : "Create Opportunity"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                                    lineNumber: 327,
+                                    lineNumber: 329,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/features/opportunities/OpportunityForm.tsx",
-                            lineNumber: 319,
+                            lineNumber: 321,
                             columnNumber: 11
                         }, this)
                     ]

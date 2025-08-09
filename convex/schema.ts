@@ -200,4 +200,72 @@ export default defineSchema({
     .index("by_fromStage", ["fromStage"])
     .index("by_isActive", ["isActive"])
     .index("by_priority", ["priority"]),
+
+  venues: defineTable({
+    name: v.string(),
+    description: v.optional(v.string()),
+    capacity: v.number(),
+    location: v.optional(v.string()),
+    amenities: v.optional(v.array(v.string())),
+    hourlyRate: v.optional(v.number()),
+    dailyRate: v.optional(v.number()),
+    setupTime: v.number(), // in minutes
+    cleanupTime: v.number(), // in minutes
+    isActive: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_isActive", ["isActive"])
+    .index("by_capacity", ["capacity"]),
+
+  venueAvailability: defineTable({
+    venueId: v.id("venues"),
+    date: v.number(), // timestamp for the date
+    startTime: v.number(), // timestamp
+    endTime: v.number(), // timestamp
+    isBooked: v.boolean(),
+    opportunityId: v.optional(v.id("opportunities")),
+    bookingStatus: v.union(
+      v.literal("AVAILABLE"),
+      v.literal("TENTATIVE"), // held for opportunity in negotiation
+      v.literal("CONFIRMED"), // booked and confirmed
+      v.literal("BLOCKED") // blocked for maintenance, etc.
+    ),
+    notes: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_venue", ["venueId"])
+    .index("by_venue_date", ["venueId", "date"])
+    .index("by_opportunity", ["opportunityId"])
+    .index("by_booking_status", ["bookingStatus"])
+    .index("by_date_range", ["startTime", "endTime"]),
+
+  conflictDetectionLog: defineTable({
+    opportunityId: v.id("opportunities"),
+    conflictType: v.union(
+      v.literal("VENUE_DOUBLE_BOOKING"),
+      v.literal("RESOURCE_CONFLICT"),
+      v.literal("STAFF_UNAVAILABLE"),
+      v.literal("TIME_OVERLAP")
+    ),
+    conflictingOpportunityId: v.optional(v.id("opportunities")),
+    venueId: v.optional(v.id("venues")),
+    conflictDate: v.number(),
+    severity: v.union(
+      v.literal("LOW"),
+      v.literal("MEDIUM"),
+      v.literal("HIGH"),
+      v.literal("CRITICAL")
+    ),
+    isResolved: v.boolean(),
+    resolutionNotes: v.optional(v.string()),
+    detectedAt: v.number(),
+    resolvedAt: v.optional(v.number()),
+  })
+    .index("by_opportunity", ["opportunityId"])
+    .index("by_venue", ["venueId"])
+    .index("by_conflict_date", ["conflictDate"])
+    .index("by_severity", ["severity"])
+    .index("by_is_resolved", ["isResolved"]),
 });

@@ -10,6 +10,7 @@ interface KanbanColumnProps {
   title: string;
   color: string;
   opportunities: Opportunity[];
+  allOpportunities?: Opportunity[];
   onEditOpportunity?: (opportunity: Opportunity) => void;
   onDeleteOpportunity?: (opportunityId: string) => void;
   selectedOpportunities?: Opportunity[];
@@ -22,6 +23,7 @@ export function KanbanColumn({
   title, 
   color, 
   opportunities, 
+  allOpportunities = [],
   onEditOpportunity, 
   onDeleteOpportunity,
   selectedOpportunities = [],
@@ -66,6 +68,7 @@ export function KanbanColumn({
             <OpportunityCard
               key={opportunity._id}
               opportunity={opportunity}
+              allOpportunities={allOpportunities}
               onEdit={onEditOpportunity}
               onDelete={onDeleteOpportunity}
               isSelected={selectedOpportunities.some(selected => selected._id === opportunity._id)}
