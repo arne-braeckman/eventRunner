@@ -268,4 +268,97 @@ export default defineSchema({
     .index("by_conflict_date", ["conflictDate"])
     .index("by_severity", ["severity"])
     .index("by_is_resolved", ["isResolved"]),
+
+  proposalTemplates: defineTable({
+    name: v.string(),
+    eventTypes: v.array(v.union(
+      v.literal("WEDDING"),
+      v.literal("CORPORATE"),
+      v.literal("BIRTHDAY"),
+      v.literal("ANNIVERSARY"),
+      v.literal("CONFERENCE"),
+      v.literal("GALA"),
+      v.literal("OTHER")
+    )),
+    content: v.object({}), // Rich template structure with dynamic fields
+    version: v.number(),
+    isActive: v.boolean(),
+    createdBy: v.id("users"),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_event_types", ["eventTypes"])
+    .index("by_is_active", ["isActive"])
+    .index("by_created_by", ["createdBy"])
+    .index("by_version", ["version"]),
+
+  proposals: defineTable({
+    opportunityId: v.id("opportunities"),
+    templateId: v.id("proposalTemplates"),
+    title: v.string(),
+    status: v.union(
+      v.literal("DRAFT"),
+      v.literal("SENT"),
+      v.literal("VIEWED"),
+      v.literal("UNDER_REVIEW"),
+      v.literal("ACCEPTED"),
+      v.literal("REJECTED"),
+      v.literal("EXPIRED")
+    ),
+    version: v.number(),
+    content: v.object({}), // Rich content structure
+    clientAccessToken: v.string(), // For secure client portal access
+    sentAt: v.optional(v.number()),
+    viewedAt: v.optional(v.number()),
+    respondedAt: v.optional(v.number()),
+    expiresAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_opportunity", ["opportunityId"])
+    .index("by_template", ["templateId"])
+    .index("by_status", ["status"])
+    .index("by_client_token", ["clientAccessToken"])
+    .index("by_sent_at", ["sentAt"])
+    .index("by_expires_at", ["expiresAt"]),
+
+  proposalInteractions: defineTable({
+    proposalId: v.id("proposals"),
+    type: v.union(
+      v.literal("SENT"),
+      v.literal("VIEWED"),
+      v.literal("DOWNLOADED"),
+      v.literal("COMMENT_ADDED"),
+      v.literal("STATUS_CHANGED"),
+      v.literal("REMINDER_SENT"),
+      v.literal("ACCEPTED"),
+      v.literal("REJECTED")
+    ),
+    userId: v.optional(v.id("users")), // null for client actions
+    clientInfo: v.optional(v.object({
+      ipAddress: v.optional(v.string()),
+      userAgent: v.optional(v.string()),
+    })),
+    metadata: v.object({}), // Additional interaction data
+    createdAt: v.number(),
+  })
+    .index("by_proposal", ["proposalId"])
+    .index("by_user", ["userId"])
+    .index("by_type", ["type"])
+    .index("by_created_at", ["createdAt"]),
+
+  proposalComments: defineTable({
+    proposalId: v.id("proposals"),
+    content: v.string(),
+    isInternal: v.boolean(), // true for internal staff comments, false for client comments
+    authorId: v.optional(v.id("users")), // null for client comments
+    authorName: v.optional(v.string()), // For client comments
+    authorEmail: v.optional(v.string()), // For client comments
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_proposal", ["proposalId"])
+    .index("by_author", ["authorId"])
+    .index("by_is_internal", ["isInternal"])
+    .index("by_created_at", ["createdAt"]),
 });
