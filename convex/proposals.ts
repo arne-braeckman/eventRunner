@@ -409,6 +409,71 @@ export const getProposalsRequiringFollowUp = query({
   },
 });
 
+// Send proposal email to client
+export const sendProposalEmail = mutation({
+  args: {
+    proposalId: v.id("proposals"),
+    clientEmail: v.string(),
+    customMessage: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await requireRole(ctx, "SALES");
+    
+    // Get proposal with template details
+    const proposal = await ctx.db.get(args.proposalId);
+    if (!proposal) {
+      throw new Error("Proposal not found");
+    }
+
+    // Get opportunity details
+    const opportunity = await ctx.db.get(proposal.opportunityId);
+    if (!opportunity) {
+      throw new Error("Opportunity not found");
+    }
+
+    // Get contact details
+    const contact = await ctx.db.get(opportunity.contactId);
+    if (!contact) {
+      throw new Error("Contact not found");
+    }
+
+    // Log email sent interaction
+    await ctx.db.insert("proposalInteractions", {
+      proposalId: args.proposalId,
+      type: "EMAIL_SENT",
+      metadata: {
+        to: args.clientEmail,
+        customMessage: args.customMessage,
+        clientName: contact.name,
+        opportunityName: opportunity.name,
+      },
+      createdAt: Date.now(),
+    });
+
+    // Update proposal status to SENT
+    await ctx.db.patch(args.proposalId, {
+      status: "SENT",
+      sentAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    // Return email data for frontend to handle actual sending
+    return { 
+      success: true,
+      emailData: {
+        proposalId: args.proposalId,
+        clientName: contact.name,
+        clientEmail: args.clientEmail,
+        proposalTitle: proposal.title,
+        opportunityName: opportunity.name,
+        customMessage: args.customMessage,
+        clientAccessToken: proposal.clientAccessToken,
+        expiresAt: proposal.expiresAt,
+      }
+    };
+  },
+});
+
 // Utility function to generate secure tokens
 function generateSecureToken(): string {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

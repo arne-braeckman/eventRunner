@@ -331,6 +331,7 @@ export default defineSchema({
       v.literal("COMMENT_ADDED"),
       v.literal("STATUS_CHANGED"),
       v.literal("REMINDER_SENT"),
+      v.literal("EMAIL_SENT"),
       v.literal("ACCEPTED"),
       v.literal("REJECTED")
     ),
