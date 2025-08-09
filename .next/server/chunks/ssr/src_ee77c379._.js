@@ -2205,12 +2205,12 @@ function OpportunitiesPage() {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$convex$2f$dist$2f$esm$2f$react$2f$auth_helpers$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Authenticated"], {
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(OpportunitiesContent, {}, void 0, false, {
                         fileName: "[project]/src/app/opportunities/page.tsx",
-                        lineNumber: 12,
+                        lineNumber: 23,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/opportunities/page.tsx",
-                    lineNumber: 11,
+                    lineNumber: 22,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$convex$2f$dist$2f$esm$2f$react$2f$auth_helpers$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Unauthenticated"], {
@@ -2222,7 +2222,7 @@ function OpportunitiesPage() {
                                 children: "Access Restricted"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/opportunities/page.tsx",
-                                lineNumber: 17,
+                                lineNumber: 28,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2230,7 +2230,7 @@ function OpportunitiesPage() {
                                 children: "Please sign in to view opportunities."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/opportunities/page.tsx",
-                                lineNumber: 18,
+                                lineNumber: 29,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$clerk$2f$clerk$2d$react$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["SignInButton"], {
@@ -2240,34 +2240,34 @@ function OpportunitiesPage() {
                                     children: "Sign In"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/opportunities/page.tsx",
-                                    lineNumber: 20,
+                                    lineNumber: 31,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/opportunities/page.tsx",
-                                lineNumber: 19,
+                                lineNumber: 30,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/opportunities/page.tsx",
-                        lineNumber: 16,
+                        lineNumber: 27,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/opportunities/page.tsx",
-                    lineNumber: 15,
+                    lineNumber: 26,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/opportunities/page.tsx",
-            lineNumber: 10,
+            lineNumber: 21,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/opportunities/page.tsx",
-        lineNumber: 9,
+        lineNumber: 20,
         columnNumber: 5
     }, this);
 }
@@ -2282,23 +2282,23 @@ function OpportunitiesContent() {
                     children: "Sales Pipeline"
                 }, void 0, false, {
                     fileName: "[project]/src/app/opportunities/page.tsx",
-                    lineNumber: 35,
+                    lineNumber: 46,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/opportunities/page.tsx",
-                lineNumber: 34,
+                lineNumber: 45,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$features$2f$opportunities$2f$OpportunityPipeline$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["OpportunityPipeline"], {}, void 0, false, {
                 fileName: "[project]/src/app/opportunities/page.tsx",
-                lineNumber: 38,
+                lineNumber: 49,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/opportunities/page.tsx",
-        lineNumber: 33,
+        lineNumber: 44,
         columnNumber: 5
     }, this);
 }

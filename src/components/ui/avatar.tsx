@@ -35,7 +35,7 @@ const AvatarFallback = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-muted",
+      "flex h-full w-full items-center justify-center rounded-full bg-gray-100 text-gray-600",
       className
     )}
     {...props}
@@ -43,4 +43,16 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = "AvatarFallback"
 
-export { Avatar, AvatarImage, AvatarFallback }
+// Helper component for initials
+const AvatarInitials = ({ name }: { name: string }) => {
+  const initials = name
+    .split(' ')
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+  
+  return <span className="text-sm font-medium">{initials}</span>;
+};
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarInitials }

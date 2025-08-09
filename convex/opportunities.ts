@@ -543,3 +543,197 @@ export const getRevenueForecasting = query({
     };
   },
 });
+
+// Advanced pipeline analytics
+export const getPipelineAnalytics = query({
+  args: {
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+    groupBy: v.optional(v.union(
+      v.literal("stage"),
+      v.literal("eventType"),
+      v.literal("assignedTo"),
+      v.literal("month")
+    )),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+    
+    const opportunities = await ctx.db.query("opportunities")
+      .filter((q) => q.eq(q.field("isActive"), true))
+      .collect();
+    
+    // Filter by date range if provided
+    let filteredOpportunities = opportunities;
+    if (args.startDate || args.endDate) {
+      filteredOpportunities = opportunities.filter(opp => {
+        if (args.startDate && opp.createdAt < args.startDate) return false;
+        if (args.endDate && opp.createdAt > args.endDate) return false;
+        return true;
+      });
+    }
+    
+    // Stage-wise metrics
+    const stageMetrics = ["PROSPECT", "QUALIFIED", "PROPOSAL", "NEGOTIATION", "CLOSED_WON", "CLOSED_LOST"].map(stage => {
+      const stageOpps = filteredOpportunities.filter(opp => opp.stage === stage);
+      const totalValue = stageOpps.reduce((sum, opp) => sum + opp.value, 0);
+      const avgDaysInStage = stageOpps.length > 0 
+        ? stageOpps.reduce((sum, opp) => sum + ((Date.now() - opp.updatedAt) / (24 * 60 * 60 * 1000)), 0) / stageOpps.length
+        : 0;
+      
+      return {
+        stage,
+        count: stageOpps.length,
+        value: totalValue,
+        weightedValue: stageOpps.reduce((sum, opp) => sum + (opp.value * ((opp.probability || 0) / 100)), 0),
+        avgProbability: stageOpps.length > 0 ? stageOpps.reduce((sum, opp) => sum + (opp.probability || 0), 0) / stageOpps.length : 0,
+        avgDaysInStage: Math.round(avgDaysInStage),
+      };
+    });
+    
+    // Conversion rates between stages
+    const conversionRates = {
+      prospectToQualified: calculateConversionRate(filteredOpportunities, "PROSPECT", "QUALIFIED"),
+      qualifiedToProposal: calculateConversionRate(filteredOpportunities, "QUALIFIED", "PROPOSAL"),
+      proposalToNegotiation: calculateConversionRate(filteredOpportunities, "PROPOSAL", "NEGOTIATION"),
+      negotiationToClosed: calculateConversionRate(filteredOpportunities, "NEGOTIATION", "CLOSED_WON"),
+      overallWinRate: calculateWinRate(filteredOpportunities),
+    };
+    
+    // Monthly trends (last 12 months)
+    const monthlyTrends = generateMonthlyTrends(opportunities);
+    
+    // Performance by event type
+    const eventTypeMetrics = ["WEDDING", "CORPORATE", "GALA", "CONFERENCE", "BIRTHDAY", "ANNIVERSARY", "OTHER"].map(eventType => {
+      const typeOpps = filteredOpportunities.filter(opp => opp.eventType === eventType);
+      return {
+        eventType,
+        count: typeOpps.length,
+        value: typeOpps.reduce((sum, opp) => sum + opp.value, 0),
+        avgValue: typeOpps.length > 0 ? typeOpps.reduce((sum, opp) => sum + opp.value, 0) / typeOpps.length : 0,
+        winRate: calculateWinRate(typeOpps),
+      };
+    }).filter(metric => metric.count > 0);
+    
+    return {
+      stageMetrics,
+      conversionRates,
+      monthlyTrends,
+      eventTypeMetrics,
+      summary: {
+        totalOpportunities: filteredOpportunities.length,
+        totalValue: filteredOpportunities.reduce((sum, opp) => sum + opp.value, 0),
+        avgDealSize: filteredOpportunities.length > 0 ? filteredOpportunities.reduce((sum, opp) => sum + opp.value, 0) / filteredOpportunities.length : 0,
+        winRate: calculateWinRate(filteredOpportunities),
+        avgSalesCycle: calculateAvgSalesCycle(filteredOpportunities),
+      }
+    };
+  },
+});
+
+// Sales performance by team member
+export const getSalesPerformance = query({
+  args: {
+    startDate: v.optional(v.number()),
+    endDate: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Authentication required");
+    }
+    
+    const opportunities = await ctx.db.query("opportunities")
+      .filter((q) => q.eq(q.field("isActive"), true))
+      .collect();
+    
+    const users = await ctx.db.query("users").collect();
+    
+    // Filter by date range if provided
+    let filteredOpportunities = opportunities;
+    if (args.startDate || args.endDate) {
+      filteredOpportunities = opportunities.filter(opp => {
+        if (args.startDate && opp.createdAt < args.startDate) return false;
+        if (args.endDate && opp.createdAt > args.endDate) return false;
+        return true;
+      });
+    }
+    
+    const performanceByUser = users.map(user => {
+      const userOpps = filteredOpportunities.filter(opp => opp.assignedTo === user._id);
+      const closedWon = userOpps.filter(opp => opp.stage === "CLOSED_WON");
+      
+      return {
+        userId: user._id,
+        name: user.name || user.email,
+        email: user.email,
+        totalOpportunities: userOpps.length,
+        closedWon: closedWon.length,
+        totalValue: userOpps.reduce((sum, opp) => sum + opp.value, 0),
+        closedValue: closedWon.reduce((sum, opp) => sum + opp.value, 0),
+        winRate: userOpps.length > 0 ? (closedWon.length / userOpps.length) * 100 : 0,
+        avgDealSize: userOpps.length > 0 ? userOpps.reduce((sum, opp) => sum + opp.value, 0) / userOpps.length : 0,
+        avgSalesCycle: calculateAvgSalesCycle(closedWon),
+      };
+    }).filter(perf => perf.totalOpportunities > 0);
+    
+    return performanceByUser.sort((a, b) => b.closedValue - a.closedValue);
+  },
+});
+
+// Helper functions
+function calculateConversionRate(opportunities: any[], fromStage: string, toStage: string): number {
+  const fromStageOpps = opportunities.filter(opp => opp.stage === fromStage);
+  const toStageOpps = opportunities.filter(opp => opp.stage === toStage);
+  
+  if (fromStageOpps.length === 0) return 0;
+  return Math.round((toStageOpps.length / (fromStageOpps.length + toStageOpps.length)) * 100);
+}
+
+function calculateWinRate(opportunities: any[]): number {
+  if (opportunities.length === 0) return 0;
+  const closedWon = opportunities.filter(opp => opp.stage === "CLOSED_WON").length;
+  return Math.round((closedWon / opportunities.length) * 100);
+}
+
+function calculateAvgSalesCycle(opportunities: any[]): number {
+  const closedOpps = opportunities.filter(opp => opp.stage === "CLOSED_WON");
+  if (closedOpps.length === 0) return 0;
+  
+  const totalDays = closedOpps.reduce((sum, opp) => {
+    return sum + ((opp.updatedAt - opp.createdAt) / (24 * 60 * 60 * 1000));
+  }, 0);
+  
+  return Math.round(totalDays / closedOpps.length);
+}
+
+function generateMonthlyTrends(opportunities: any[]): any[] {
+  const now = new Date();
+  const trends = [];
+  
+  for (let i = 11; i >= 0; i--) {
+    const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+    
+    const monthOpps = opportunities.filter(opp => {
+      const oppDate = new Date(opp.createdAt);
+      return oppDate >= monthStart && oppDate <= monthEnd;
+    });
+    
+    const closedWon = monthOpps.filter(opp => opp.stage === "CLOSED_WON");
+    
+    trends.push({
+      month: monthStart.toISOString().slice(0, 7), // YYYY-MM format
+      totalOpportunities: monthOpps.length,
+      totalValue: monthOpps.reduce((sum, opp) => sum + opp.value, 0),
+      closedWon: closedWon.length,
+      closedValue: closedWon.reduce((sum, opp) => sum + opp.value, 0),
+      winRate: monthOpps.length > 0 ? (closedWon.length / monthOpps.length) * 100 : 0,
+    });
+  }
+  
+  return trends;
+}
