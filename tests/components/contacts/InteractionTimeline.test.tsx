@@ -46,6 +46,19 @@ const getInteractionWeight = (type: InteractionType): number => {
     PHONE_CALL: 5,
     MEETING: 8,
     OTHER: 1,
+    EMAIL_SENT: 2,
+    EMAIL_OPENED: 1,
+    EMAIL_CLICKED: 3,
+    EMAIL_REPLIED: 4,
+    MEETING_SCHEDULED: 6,
+    MEETING_COMPLETED: 8,
+    FORM_SUBMITTED: 4,
+    PROPOSAL_SENT: 7,
+    CONTRACT_SENT: 9,
+    PAYMENT_RECEIVED: 12,
+    SOCIAL_MEDIA_ENGAGEMENT: 2,
+    REFERRAL_GIVEN: 3,
+    STAGE_PROGRESSION: 0,
   };
   return weights[type] || 0;
 };

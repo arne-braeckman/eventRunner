@@ -23,6 +23,7 @@ import type * as opportunities from "../opportunities.js";
 import type * as proposalTemplates from "../proposalTemplates.js";
 import type * as proposals from "../proposals.js";
 import type * as users from "../users.js";
+import type * as utils_sanitization from "../utils/sanitization.js";
 import type * as venues from "../venues.js";
 
 /**
@@ -44,6 +45,7 @@ declare const fullApi: ApiFromModules<{
   proposalTemplates: typeof proposalTemplates;
   proposals: typeof proposals;
   users: typeof users;
+  "utils/sanitization": typeof utils_sanitization;
   venues: typeof venues;
 }>;
 export declare const api: FilterApi<

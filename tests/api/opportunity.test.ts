@@ -7,7 +7,7 @@ describe('Opportunity API', () => {
   let t: ReturnType<typeof convexTest>;
 
   beforeEach(async () => {
-    t = convexTest(schema, { opportunities });
+    t = convexTest(schema, opportunities);
     await t.run(async (ctx) => {
       // Create test user
       await ctx.db.insert('users', {
@@ -39,6 +39,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         const contacts = await ctx.db.query('contacts').collect();
@@ -84,6 +85,7 @@ describe('Opportunity API', () => {
             tokenIdentifier: 'test-token',
             subject: 'test-user',
             email: 'admin@test.com',
+            issuer: 'https://test.clerk.accounts.dev',
           });
 
           return await opportunities.createOpportunity(ctx, {
@@ -105,6 +107,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         const contacts = await ctx.db.query('contacts').collect();
@@ -175,6 +178,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         return await opportunities.getAllOpportunities(ctx, {});
@@ -189,6 +193,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         return await opportunities.getAllOpportunities(ctx, {
@@ -206,6 +211,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         return await opportunities.getAllOpportunities(ctx, {
@@ -249,6 +255,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         await opportunities.updateOpportunityStage(ctx, {
@@ -271,6 +278,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         await opportunities.updateOpportunityStage(ctx, {
@@ -336,6 +344,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         return await opportunities.getDateConflicts(ctx, {
@@ -358,6 +367,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         return await opportunities.getDateConflicts(ctx, {
@@ -420,6 +430,7 @@ describe('Opportunity API', () => {
           tokenIdentifier: 'test-token',
           subject: 'test-user',
           email: 'admin@test.com',
+          issuer: 'test-issuer',
         });
 
         return await opportunities.getRevenueForecasting(ctx, {});

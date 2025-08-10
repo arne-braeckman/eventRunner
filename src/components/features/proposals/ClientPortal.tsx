@@ -40,6 +40,12 @@ import {
 import { ProposalComments } from "./ProposalComments";
 import { PdfGenerator, type ProposalPdfData } from "@/lib/utils/pdfGenerator";
 import { cn } from "@/lib/utils";
+import { 
+  sanitizeText, 
+  sanitizeName, 
+  sanitizeEmail, 
+  sanitizeTemplateContent 
+} from "@/lib/utils/sanitization";
 
 interface ClientPortalProps {
   proposal: any;
@@ -117,33 +123,37 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
   };
 
   const handleAcceptProposal = async () => {
-    if (!clientName || !clientEmail) {
-      alert("Please provide your name and email");
+    const sanitizedName = sanitizeName(clientName);
+    const sanitizedEmail = sanitizeEmail(clientEmail);
+    
+    if (!sanitizedName || !sanitizedEmail) {
+      alert("Please provide valid name and email");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // Update proposal status
+      // Update proposal status with sanitized data
       await updateProposalStatus({
         proposalId: proposal._id,
         status: "ACCEPTED",
         metadata: {
-          clientName,
-          clientEmail,
-          clientCompany,
+          clientName: sanitizedName,
+          clientEmail: sanitizedEmail,
+          clientCompany: sanitizeName(clientCompany),
           acceptedAt: Date.now()
         }
       });
 
       // Add acceptance comment if feedback provided
       if (feedbackMessage) {
+        const sanitizedFeedback = sanitizeText(feedbackMessage);
         await addComment({
           proposalId: proposal._id,
-          content: `Proposal accepted! ${feedbackMessage}`,
+          content: `Proposal accepted! ${sanitizedFeedback}`,
           isInternal: false,
-          authorName: clientName,
-          authorEmail: clientEmail,
+          authorName: sanitizedName,
+          authorEmail: sanitizedEmail,
         });
       }
 
@@ -159,34 +169,38 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
   };
 
   const handleRejectProposal = async () => {
-    if (!clientName || !clientEmail) {
-      alert("Please provide your name and email");
+    const sanitizedName = sanitizeName(clientName);
+    const sanitizedEmail = sanitizeEmail(clientEmail);
+    
+    if (!sanitizedName || !sanitizedEmail) {
+      alert("Please provide valid name and email");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // Update proposal status
+      // Update proposal status with sanitized data
       await updateProposalStatus({
         proposalId: proposal._id,
         status: "REJECTED",
         metadata: {
-          clientName,
-          clientEmail,
-          clientCompany,
+          clientName: sanitizedName,
+          clientEmail: sanitizedEmail,
+          clientCompany: sanitizeName(clientCompany),
           rejectedAt: Date.now(),
-          reason: feedbackMessage
+          reason: sanitizeText(feedbackMessage)
         }
       });
 
       // Add rejection comment if feedback provided
       if (feedbackMessage) {
+        const sanitizedFeedback = sanitizeText(feedbackMessage);
         await addComment({
           proposalId: proposal._id,
-          content: `Proposal declined. Reason: ${feedbackMessage}`,
+          content: `Proposal declined. Reason: ${sanitizedFeedback}`,
           isInternal: false,
-          authorName: clientName,
-          authorEmail: clientEmail,
+          authorName: sanitizedName,
+          authorEmail: sanitizedEmail,
         });
       }
 
@@ -206,22 +220,18 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
     
     const opportunity = proposal.opportunity || {};
     const replacements: Record<string, string> = {
-      '{{opportunity.name}}': opportunity.name || '',
-      '{{opportunity.eventType}}': opportunity.eventType || '',
-      '{{opportunity.guestCount}}': opportunity.guestCount?.toString() || '',
-      '{{opportunity.value}}': opportunity.value ? formatCurrency(opportunity.value) : '',
-      '{{opportunity.eventDate}}': opportunity.eventDate ? formatDate(opportunity.eventDate) : '',
-      '{{contact.name}}': clientName || '',
-      '{{contact.company}}': clientCompany || '',
-      '{{contact.email}}': clientEmail || '',
+      '{{opportunity.name}}': sanitizeText(opportunity.name || ''),
+      '{{opportunity.eventType}}': sanitizeText(opportunity.eventType || ''),
+      '{{opportunity.guestCount}}': sanitizeText(opportunity.guestCount?.toString() || ''),
+      '{{opportunity.value}}': sanitizeText(opportunity.value ? formatCurrency(opportunity.value) : ''),
+      '{{opportunity.eventDate}}': sanitizeText(opportunity.eventDate ? formatDate(opportunity.eventDate) : ''),
+      '{{contact.name}}': sanitizeText(clientName || ''),
+      '{{contact.company}}': sanitizeText(clientCompany || ''),
+      '{{contact.email}}': sanitizeText(clientEmail || ''),
     };
 
-    let processedContent = content;
-    Object.entries(replacements).forEach(([placeholder, value]) => {
-      processedContent = processedContent.replace(new RegExp(placeholder, 'g'), value);
-    });
-
-    return processedContent;
+    // Use sanitized template content processing
+    return sanitizeTemplateContent(content, replacements);
   };
 
   return (
@@ -301,7 +311,7 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle className="text-2xl">{proposal.title}</CardTitle>
+                    <CardTitle className="text-2xl">{sanitizeText(proposal.title || '')}</CardTitle>
                     <p className="text-gray-600 mt-2">
                       Prepared on {formatDate(proposal.createdAt)}
                     </p>
@@ -337,7 +347,7 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                       <div>
                         <p className="font-medium text-gray-900">Guest Count</p>
                         <p className="text-gray-600">
-                          {proposal.opportunity?.guestCount || 'To be determined'} guests
+                          {sanitizeText(proposal.opportunity?.guestCount?.toString() || 'To be determined')} guests
                         </p>
                       </div>
                     </div>
@@ -347,7 +357,7 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                       <Building className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                       <div>
                         <p className="font-medium text-gray-900">Event Type</p>
-                        <p className="text-gray-600">{proposal.opportunity?.eventType || 'Event'}</p>
+                        <p className="text-gray-600">{sanitizeText(proposal.opportunity?.eventType || 'Event')}</p>
                       </div>
                     </div>
                     <div className="flex items-start">
@@ -370,11 +380,14 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
               <CardContent>
                 {proposal.content?.sections?.map((section: any, index: number) => (
                   <div key={index} className="mb-6 last:mb-0">
-                    <h3 className="text-lg font-semibold mb-3">{section.title}</h3>
+                    <h3 className="text-lg font-semibold mb-3">{sanitizeText(section.title || '')}</h3>
                     <div className="prose prose-gray max-w-none">
-                      <p className="whitespace-pre-wrap text-gray-700">
-                        {processTemplateContent(section.content || '')}
-                      </p>
+                      <div 
+                        className="whitespace-pre-wrap text-gray-700"
+                        dangerouslySetInnerHTML={{ 
+                          __html: processTemplateContent(section.content || '') 
+                        }}
+                      />
                     </div>
                   </div>
                 )) || (
@@ -450,9 +463,10 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                             <Input
                               id="name"
                               value={clientName}
-                              onChange={(e) => setClientName(e.target.value)}
+                              onChange={(e) => setClientName(sanitizeName(e.target.value))}
                               placeholder="John Doe"
                               required
+                              maxLength={100}
                             />
                           </div>
                           <div>
@@ -461,9 +475,10 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                               id="email"
                               type="email"
                               value={clientEmail}
-                              onChange={(e) => setClientEmail(e.target.value)}
+                              onChange={(e) => setClientEmail(e.target.value.trim())}
                               placeholder="john@example.com"
                               required
+                              maxLength={254}
                             />
                           </div>
                           <div>
@@ -471,8 +486,9 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                             <Input
                               id="company"
                               value={clientCompany}
-                              onChange={(e) => setClientCompany(e.target.value)}
+                              onChange={(e) => setClientCompany(sanitizeName(e.target.value))}
                               placeholder="Company Name"
+                              maxLength={100}
                             />
                           </div>
                           <div>
@@ -480,9 +496,10 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                             <Textarea
                               id="feedback"
                               value={feedbackMessage}
-                              onChange={(e) => setFeedbackMessage(e.target.value)}
+                              onChange={(e) => setFeedbackMessage(e.target.value.substring(0, 1000))}
                               placeholder="Any additional comments or special requests..."
                               rows={3}
+                              maxLength={1000}
                             />
                           </div>
                           <div className="flex gap-3">
@@ -525,9 +542,10 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                             <Input
                               id="reject-name"
                               value={clientName}
-                              onChange={(e) => setClientName(e.target.value)}
+                              onChange={(e) => setClientName(sanitizeName(e.target.value))}
                               placeholder="John Doe"
                               required
+                              maxLength={100}
                             />
                           </div>
                           <div>
@@ -536,9 +554,10 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                               id="reject-email"
                               type="email"
                               value={clientEmail}
-                              onChange={(e) => setClientEmail(e.target.value)}
+                              onChange={(e) => setClientEmail(e.target.value.trim())}
                               placeholder="john@example.com"
                               required
+                              maxLength={254}
                             />
                           </div>
                           <div>
@@ -546,8 +565,9 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                             <Input
                               id="reject-company"
                               value={clientCompany}
-                              onChange={(e) => setClientCompany(e.target.value)}
+                              onChange={(e) => setClientCompany(sanitizeName(e.target.value))}
                               placeholder="Company Name"
+                              maxLength={100}
                             />
                           </div>
                           <div>
@@ -555,9 +575,10 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                             <Textarea
                               id="reject-feedback"
                               value={feedbackMessage}
-                              onChange={(e) => setFeedbackMessage(e.target.value)}
+                              onChange={(e) => setFeedbackMessage(e.target.value.substring(0, 1000))}
                               placeholder="Please let us know why this proposal doesn't meet your needs..."
                               rows={3}
+                              maxLength={1000}
                             />
                           </div>
                           <div className="flex gap-3">

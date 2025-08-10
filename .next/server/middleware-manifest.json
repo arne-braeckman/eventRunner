@@ -3,35 +3,34 @@
   "middleware": {
     "/": {
       "files": [
-        "server/edge/chunks/_2db6e6e4._.js",
-        "server/edge/chunks/[root-of-the-server]__de110ef0._.js",
-        "server/edge/chunks/edge-wrapper_a97c3c98.js"
+        "server/edge-runtime-webpack.js",
+        "server/src/middleware.js"
       ],
-      "name": "middleware",
+      "name": "src/middleware",
       "page": "/",
       "matchers": [
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*))(\\\\.json)?[\\/#\\?]?$",
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*))(\\.json)?[\\/#\\?]?$",
           "originalSource": "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)"
         },
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/(api|trpc))(.*)(\\\\.json)?[\\/#\\?]?$",
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/(api|trpc))(.*)(\\.json)?[\\/#\\?]?$",
           "originalSource": "/(api|trpc)(.*)"
         }
       ],
       "wasm": [],
       "assets": [],
       "env": {
-        "__NEXT_BUILD_ID": "development",
+        "__NEXT_BUILD_ID": "v0llUbY8tOr4GmUoyIOfi",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "f6oIl7nqYWbawoJ/jGoS0UPSj8UY0LZHJdazNel/X+w=",
-        "__NEXT_PREVIEW_MODE_ID": "86293095db1816ae13259d6b637afb56",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "013701bc541505d17c3f9c2f4eb3d55c80e2ad2a4f87d2368ab4b5bb0a684b2d",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "361bc240262b932088e5b5c18f268925fe375b8f247533bc75610187b95a3519"
+        "__NEXT_PREVIEW_MODE_ID": "bafbdcbba3ef64f57dafea2b8f1eb278",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "428abf51ef298fe58c69cf356d23ad2616eb2ce792e6ade8f2be235b79977fc6",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "cc44d65385f40affcc035bf13815885e8f16cf69e6c4ded36bf062402ceaedac"
       }
     }
   },
+  "functions": {},
   "sortedMiddleware": [
     "/"
-  ],
-  "functions": {}
+  ]
 }

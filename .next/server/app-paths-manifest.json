@@ -1,9 +1,22 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/trpc/[trpc]/route": "app/api/trpc/[trpc]/route.js",
+  "/api/webhooks/facebook/route": "app/api/webhooks/facebook/route.js",
+  "/api/webhooks/instagram/route": "app/api/webhooks/instagram/route.js",
+  "/api/webhooks/linkedin/route": "app/api/webhooks/linkedin/route.js",
+  "/(dashboard)/proposals/page": "app/(dashboard)/proposals/page.js",
   "/admin/page": "app/admin/page.js",
+  "/contacts/[id]/page": "app/contacts/[id]/page.js",
   "/contacts/page": "app/contacts/page.js",
+  "/contacts/[id]/edit/page": "app/contacts/[id]/edit/page.js",
+  "/leads/debug/page": "app/leads/debug/page.js",
   "/leads/page": "app/leads/page.js",
-  "/leads/pipeline/page": "app/leads/pipeline/page.js",
-  "/opportunities/page": "app/opportunities/page.js",
   "/page": "app/page.js",
-  "/projects/page": "app/projects/page.js"
+  "/opportunities/page": "app/opportunities/page.js",
+  "/projects/page": "app/projects/page.js",
+  "/proposals/[id]/edit/page": "app/proposals/[id]/edit/page.js",
+  "/proposals/[id]/page": "app/proposals/[id]/page.js",
+  "/leads/pipeline/page": "app/leads/pipeline/page.js",
+  "/proposals/all/page": "app/proposals/all/page.js",
+  "/portal/[token]/page": "app/portal/[token]/page.js"
 }

@@ -5,8 +5,8 @@ import { requireRole } from "./auth";
 // Journey stage progression rules configuration
 export interface StageProgressionRule {
   _id?: string;
-  fromStage: string;
-  toStage: string;
+  fromStage: "UNQUALIFIED" | "PROSPECT" | "LEAD" | "QUALIFIED" | "CUSTOMER";
+  toStage: "PROSPECT" | "LEAD" | "QUALIFIED" | "CUSTOMER" | "LOST";
   triggerType: "INTERACTION_COUNT" | "TIME_BASED" | "LEAD_HEAT_INCREASE" | "FORM_SUBMISSION" | "EMAIL_ENGAGEMENT";
   triggerCondition: any; // Specific condition data based on trigger type
   isActive: boolean;
@@ -251,7 +251,8 @@ export const evaluateStageProgression = mutation({
             triggerCondition: rule.triggerCondition,
             automated: true
           },
-          timestamp: Date.now(),
+          createdAt: Date.now(),
+          createdBy: identity.subject as any,
         });
 
         return {
@@ -294,17 +295,17 @@ async function evaluateRule(
     case "TIME_BASED": {
       const { daysSinceLastInteraction, noResponseToEmails } = rule.triggerCondition;
       const lastInteraction = interactions
-        .sort((a, b) => b.timestamp - a.timestamp)[0];
+        .sort((a, b) => b.createdAt - a.createdAt)[0];
       
       if (!lastInteraction) return false;
       
-      const daysSince = (now - lastInteraction.timestamp) / (1000 * 60 * 60 * 24);
+      const daysSince = (now - lastInteraction.createdAt) / (1000 * 60 * 60 * 24);
       const emailsWithoutResponse = interactions
         .filter(i => i.type === "EMAIL_SENT")
         .filter(email => {
           // Check if there's a reply after this email
           const repliesAfter = interactions.filter(i => 
-            i.type === "EMAIL_REPLIED" && i.timestamp > email.timestamp
+            i.type === "EMAIL_REPLIED" && i.createdAt > email.createdAt
           );
           return repliesAfter.length === 0;
         });
@@ -412,7 +413,6 @@ export const runBulkStageProgression = mutation({
                 triggerCondition: rule.triggerCondition,
                 automated: true
               },
-              timestamp: Date.now(),
               createdAt: Date.now(),
             });
 

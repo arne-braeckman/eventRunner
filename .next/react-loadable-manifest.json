@@ -2,13 +2,45 @@
   "../node_modules/@clerk/nextjs/dist/esm/app-router/client/ClerkProvider.js -> ./keyless-creator-reader.js": {
     "id": 22642,
     "files": [
-      "static/chunks/642.fe33b40f6974d3db.js"
+      "static/chunks/2642.dbdf5e3db9e237dc.js"
     ]
   },
   "../node_modules/@clerk/nextjs/dist/esm/app-router/client/keyless-cookie-sync.js -> ../keyless-actions.js": {
     "id": 68479,
     "files": [
-      "static/chunks/479.9e2c5ccc36702458.js"
+      "static/chunks/8479.f34a2fd78c7377e1.js"
+    ]
+  },
+  "../node_modules/jspdf/dist/jspdf.es.min.js -> canvg": {
+    "id": 34137,
+    "files": [
+      "static/chunks/bc98253f.ce50eee70995d8cd.js",
+      "static/chunks/2121.afc742c022cae4ec.js"
+    ]
+  },
+  "../node_modules/jspdf/dist/jspdf.es.min.js -> dompurify": {
+    "id": 10822,
+    "files": [
+      "static/chunks/822-d1eebe7df2d8fc0a.js"
+    ]
+  },
+  "../node_modules/jspdf/dist/jspdf.es.min.js -> html2canvas": {
+    "id": 52699,
+    "files": [
+      "static/chunks/ad2866b8.d24ec0a5e084098f.js"
+    ]
+  },
+  "lib/utils/pdfGenerator.ts -> html2canvas": {
+    "id": 52699,
+    "files": [
+      "static/chunks/ad2866b8.d24ec0a5e084098f.js"
+    ]
+  },
+  "lib/utils/pdfGenerator.ts -> jspdf": {
+    "id": 26597,
+    "files": [
+      "static/chunks/164f4fb6.30ff2234c8c7f087.js",
+      "static/chunks/913.da2802283863eaf4.js"
     ]
   }
 }

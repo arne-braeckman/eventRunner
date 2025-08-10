@@ -1,6 +1,15 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { requireRole } from "./auth";
+import { 
+  sanitizeText, 
+  sanitizeName, 
+  sanitizeEmail, 
+  sanitizeMetadata,
+  sanitizeCommentContent,
+  validateProposalStatus,
+  sanitizeProposalContent 
+} from "./utils/sanitization";
 
 // Create new proposal
 export const createProposal = mutation({
@@ -196,6 +205,11 @@ export const updateProposalStatus = mutation({
   handler: async (ctx, args) => {
     await requireRole(ctx, "SALES");
     
+    // Validate proposal status
+    if (!validateProposalStatus(args.status)) {
+      throw new Error("Invalid proposal status");
+    }
+    
     const proposal = await ctx.db.get(args.proposalId);
     if (!proposal) {
       throw new Error("Proposal not found");
@@ -204,10 +218,14 @@ export const updateProposalStatus = mutation({
     const now = Date.now();
     const previousStatus = proposal.status;
     
+    // Sanitize metadata if provided
+    const sanitizedMetadata = args.metadata ? sanitizeMetadata(args.metadata) : undefined;
+    
     // Update timestamps based on status changes
     const updates: any = {
       status: args.status,
       updatedAt: now,
+      ...(sanitizedMetadata && { metadata: sanitizedMetadata })
     };
     
     if (args.status === "SENT" && !proposal.sentAt) {
@@ -296,23 +314,46 @@ export const addProposalComment = mutation({
       throw new Error("Proposal not found");
     }
     
+    // Sanitize comment content
+    const sanitizedContent = sanitizeCommentContent(args.content);
+    if (!sanitizedContent) {
+      throw new Error("Comment content is required and must be valid");
+    }
+    
     const now = Date.now();
     let authorId = null;
+    let sanitizedAuthorName = null;
+    let sanitizedAuthorEmail = null;
     
     // For internal comments, require authentication
     if (args.isInternal) {
       await requireRole(ctx, "SALES");
       const identity = await ctx.auth.getUserIdentity();
       authorId = identity?.subject as any;
+    } else {
+      // For client comments, sanitize author information
+      if (args.authorName) {
+        sanitizedAuthorName = sanitizeName(args.authorName);
+        if (!sanitizedAuthorName) {
+          throw new Error("Valid author name is required for client comments");
+        }
+      }
+      
+      if (args.authorEmail) {
+        sanitizedAuthorEmail = sanitizeEmail(args.authorEmail);
+        if (!sanitizedAuthorEmail) {
+          throw new Error("Valid author email is required for client comments");
+        }
+      }
     }
     
     const commentId = await ctx.db.insert("proposalComments", {
       proposalId: args.proposalId,
-      content: args.content,
+      content: sanitizedContent,
       isInternal: args.isInternal,
       authorId,
-      authorName: args.authorName,
-      authorEmail: args.authorEmail,
+      authorName: sanitizedAuthorName || undefined,
+      authorEmail: sanitizedAuthorEmail || undefined,
       createdAt: now,
       updatedAt: now,
     });
@@ -483,3 +524,4 @@ function generateSecureToken(): string {
   }
   return result;
 }
+

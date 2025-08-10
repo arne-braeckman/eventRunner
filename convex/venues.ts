@@ -31,13 +31,13 @@ export const getVenues = query({
     activeOnly: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("venues");
-    
     if (args.activeOnly) {
-      query = query.withIndex("by_isActive", (q) => q.eq("isActive", true));
+      return await ctx.db.query("venues")
+        .withIndex("by_isActive", (q) => q.eq("isActive", true))
+        .collect();
     }
     
-    return await query.order("desc").collect();
+    return await ctx.db.query("venues").collect();
   },
 });
 
@@ -105,17 +105,25 @@ export const getVenueAvailability = query({
     )),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("venueAvailability");
+    let slots;
     
-    if (args.venueId) {
-      query = query.withIndex("by_venue", (q) => q.eq("venueId", args.venueId));
+    if (args.venueId && args.bookingStatus) {
+      // Both filters - use venue index and filter by status
+      const allSlots = await ctx.db.query("venueAvailability")
+        .withIndex("by_venue", (q) => q.eq("venueId", args.venueId!))
+        .collect();
+      slots = allSlots.filter(slot => slot.bookingStatus === args.bookingStatus);
+    } else if (args.venueId) {
+      slots = await ctx.db.query("venueAvailability")
+        .withIndex("by_venue", (q) => q.eq("venueId", args.venueId!))
+        .collect();
+    } else if (args.bookingStatus) {
+      slots = await ctx.db.query("venueAvailability")
+        .withIndex("by_booking_status", (q) => q.eq("bookingStatus", args.bookingStatus!))
+        .collect();
+    } else {
+      slots = await ctx.db.query("venueAvailability").collect();
     }
-    
-    if (args.bookingStatus) {
-      query = query.withIndex("by_booking_status", (q) => q.eq("bookingStatus", args.bookingStatus));
-    }
-    
-    const slots = await query.collect();
     
     // Filter by date range if provided
     return slots.filter(slot => {
@@ -162,10 +170,7 @@ export const checkDateConflicts = query({
     // Get existing bookings that overlap with the requested time
     const existingBookings = await ctx.db
       .query("venueAvailability")
-      .withIndex("by_date_range", (q) => 
-        q.gte("startTime", args.startTime - 24 * 60 * 60 * 1000) // Check 1 day before
-         .lte("endTime", args.endTime + 24 * 60 * 60 * 1000) // Check 1 day after
-      )
+      .withIndex("by_venue", (q) => q.eq("venueId", args.venueId!))
       .collect();
     
     for (const booking of existingBookings) {
@@ -254,21 +259,33 @@ export const getConflicts = query({
     unresolvedOnly: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("conflictDetectionLog");
-    
     if (args.opportunityId) {
-      query = query.withIndex("by_opportunity", (q) => q.eq("opportunityId", args.opportunityId));
+      const conflicts = await ctx.db.query("conflictDetectionLog")
+        .withIndex("by_opportunity", (q) => q.eq("opportunityId", args.opportunityId!))
+        .collect();
+      if (args.unresolvedOnly) {
+        return conflicts.filter(c => !c.isResolved);
+      }
+      return conflicts;
     }
     
     if (args.venueId) {
-      query = query.withIndex("by_venue", (q) => q.eq("venueId", args.venueId));
+      const conflicts = await ctx.db.query("conflictDetectionLog")
+        .withIndex("by_venue", (q) => q.eq("venueId", args.venueId!))
+        .collect();
+      if (args.unresolvedOnly) {
+        return conflicts.filter(c => !c.isResolved);
+      }
+      return conflicts;
     }
     
     if (args.unresolvedOnly) {
-      query = query.withIndex("by_is_resolved", (q) => q.eq("isResolved", false));
+      return await ctx.db.query("conflictDetectionLog")
+        .withIndex("by_is_resolved", (q) => q.eq("isResolved", false))
+        .collect();
     }
     
-    return await query.order("desc").collect();
+    return await ctx.db.query("conflictDetectionLog").collect();
   },
 });
 

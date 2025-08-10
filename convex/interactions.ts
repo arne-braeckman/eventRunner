@@ -18,7 +18,20 @@ export const createInteraction = mutation({
       v.literal("EMAIL_CLICK"),
       v.literal("PHONE_CALL"),
       v.literal("MEETING"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
+      v.literal("EMAIL_SENT"),
+      v.literal("EMAIL_OPENED"),
+      v.literal("EMAIL_CLICKED"),
+      v.literal("EMAIL_REPLIED"),
+      v.literal("MEETING_SCHEDULED"),
+      v.literal("MEETING_COMPLETED"),
+      v.literal("FORM_SUBMITTED"),
+      v.literal("PROPOSAL_SENT"),
+      v.literal("CONTRACT_SENT"),
+      v.literal("PAYMENT_RECEIVED"),
+      v.literal("SOCIAL_MEDIA_ENGAGEMENT"),
+      v.literal("REFERRAL_GIVEN"),
+      v.literal("STAGE_PROGRESSION")
     ),
     platform: v.optional(v.union(
       v.literal("FACEBOOK"),
@@ -109,7 +122,20 @@ export const getInteractionsByType = query({
       v.literal("EMAIL_CLICK"),
       v.literal("PHONE_CALL"),
       v.literal("MEETING"),
-      v.literal("OTHER")
+      v.literal("OTHER"),
+      v.literal("EMAIL_SENT"),
+      v.literal("EMAIL_OPENED"),
+      v.literal("EMAIL_CLICKED"),
+      v.literal("EMAIL_REPLIED"),
+      v.literal("MEETING_SCHEDULED"),
+      v.literal("MEETING_COMPLETED"),
+      v.literal("FORM_SUBMITTED"),
+      v.literal("PROPOSAL_SENT"),
+      v.literal("CONTRACT_SENT"),
+      v.literal("PAYMENT_RECEIVED"),
+      v.literal("SOCIAL_MEDIA_ENGAGEMENT"),
+      v.literal("REFERRAL_GIVEN"),
+      v.literal("STAGE_PROGRESSION")
     ),
     limit: v.optional(v.number()),
   },
@@ -213,7 +239,7 @@ export const createBulkInteractions = mutation({
     }
 
     // Recalculate heat scores for affected contacts
-    for (const contactId of contactsToRecalculate) {
+    for (const contactId of Array.from(contactsToRecalculate)) {
       try {
         await recalculateContactHeatScoreSimple(ctx, contactId);
       } catch (error) {
@@ -256,7 +282,7 @@ export const getInteractionAnalytics = query({
     if (args.contactId) {
       interactions = await ctx.db
         .query("interactions")
-        .withIndex("by_contact", (q) => q.eq("contactId", args.contactId))
+        .withIndex("by_contact", (q) => q.eq("contactId", args.contactId!))
         .collect();
     } else {
       interactions = await ctx.db.query("interactions").collect();
@@ -274,7 +300,7 @@ export const getInteractionAnalytics = query({
 
     // Filter by platform
     if (args.platform) {
-      interactions = interactions.filter(interaction => interaction.platform === args.platform);
+      interactions = interactions.filter(interaction => interaction.platform === args.platform!);
     }
 
     // Calculate analytics
@@ -297,12 +323,13 @@ export const getInteractionAnalytics = query({
       
       // Count by platform
       if (interaction.platform) {
-        analytics.interactionsByPlatform[interaction.platform] = (analytics.interactionsByPlatform[interaction.platform] || 0) + 1;
+        const platform = interaction.platform;
+        analytics.interactionsByPlatform[platform] = (analytics.interactionsByPlatform[platform] || 0) + 1;
       }
       
       // Count by day
       const day = new Date(interaction.createdAt).toISOString().split('T')[0];
-      analytics.interactionsByDay[day] = (analytics.interactionsByDay[day] || 0) + 1;
+      analytics.interactionsByDay[day as string] = (analytics.interactionsByDay[day as string] || 0) + 1;
       
       // Track unique contacts
       analytics.uniqueContacts.add(interaction.contactId);
@@ -392,6 +419,20 @@ export const calculateContactHeatScore = mutation({
         PHONE_CALL: 5,
         MEETING: 8,
         OTHER: 1,
+        // New interaction types for journey stage management
+        EMAIL_SENT: 2,
+        EMAIL_OPENED: 1,
+        EMAIL_CLICKED: 3,
+        EMAIL_REPLIED: 4,
+        MEETING_SCHEDULED: 6,
+        MEETING_COMPLETED: 8,
+        FORM_SUBMITTED: 4,
+        PROPOSAL_SENT: 7,
+        CONTRACT_SENT: 9,
+        PAYMENT_RECEIVED: 12,
+        SOCIAL_MEDIA_ENGAGEMENT: 2,
+        REFERRAL_GIVEN: 3,
+        STAGE_PROGRESSION: 0,
       };
 
       heatScore = interactions.reduce((total, interaction) => {
@@ -492,6 +533,19 @@ async function recalculateContactHeatScoreSimple(ctx: any, contactId: any): Prom
     PHONE_CALL: 5,
     MEETING: 8,
     OTHER: 1,
+    EMAIL_SENT: 2,
+    EMAIL_OPENED: 1,
+    EMAIL_CLICKED: 3,
+    EMAIL_REPLIED: 4,
+    MEETING_SCHEDULED: 6,
+    MEETING_COMPLETED: 8,
+    FORM_SUBMITTED: 4,
+    PROPOSAL_SENT: 7,
+    CONTRACT_SENT: 9,
+    PAYMENT_RECEIVED: 12,
+    SOCIAL_MEDIA_ENGAGEMENT: 2,
+    REFERRAL_GIVEN: 3,
+    STAGE_PROGRESSION: 0,
   };
 
   const heatScore = interactions.reduce((total: number, interaction: any) => {
