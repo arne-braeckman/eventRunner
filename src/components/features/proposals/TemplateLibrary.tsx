@@ -25,6 +25,7 @@ import {
 import { Plus, Edit, Eye, Copy, Archive, Clock } from "lucide-react";
 import { TemplateEditor } from "./TemplateEditor";
 import { TemplatePreview } from "./TemplatePreview";
+import { useToast } from "@/hooks/useToast";
 import type { Id } from "../../../../convex/_generated/dataModel";
 
 type EventType = "WEDDING" | "CORPORATE" | "BIRTHDAY" | "ANNIVERSARY" | "CONFERENCE" | "GALA" | "OTHER";
@@ -41,6 +42,9 @@ export function TemplateLibrary({ onTemplateSelect, selectionMode = false }: Tem
   const [selectedTemplate, setSelectedTemplate] = useState<Id<"proposalTemplates"> | null>(null);
   const [editorOpen, setEditorOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [templateToDelete, setTemplateToDelete] = useState<Id<"proposalTemplates"> | null>(null);
+  const { toast } = useToast();
 
   // Query templates with filters
   const templates = useQuery(api.proposalTemplates.getAllTemplates, {
@@ -55,13 +59,30 @@ export function TemplateLibrary({ onTemplateSelect, selectionMode = false }: Tem
     template.name.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
-  const handleDeleteTemplate = async (templateId: Id<"proposalTemplates">) => {
-    if (confirm("Are you sure you want to archive this template?")) {
-      try {
-        await deleteTemplate({ templateId });
-      } catch (error) {
-        console.error("Failed to archive template:", error);
-      }
+  const handleDeleteTemplate = (templateId: Id<"proposalTemplates">) => {
+    setTemplateToDelete(templateId);
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmDeleteTemplate = async () => {
+    if (!templateToDelete) return;
+    
+    try {
+      await deleteTemplate({ templateId: templateToDelete });
+      toast({
+        type: 'success',
+        title: 'Template Archived',
+        description: 'Template has been archived successfully.'
+      });
+    } catch (error) {
+      toast({
+        type: 'error',
+        title: 'Archive Failed',
+        description: 'Failed to archive template. Please try again.'
+      });
+    } finally {
+      setConfirmDialogOpen(false);
+      setTemplateToDelete(null);
     }
   };
 
@@ -72,8 +93,17 @@ export function TemplateLibrary({ onTemplateSelect, selectionMode = false }: Tem
         name: `${template.name} (Copy)`,
         content: template.content,
       });
+      toast({
+        type: 'success',
+        title: 'Template Duplicated',
+        description: 'Template has been successfully duplicated.'
+      });
     } catch (error) {
-      console.error("Failed to duplicate template:", error);
+      toast({
+        type: 'error',
+        title: 'Duplication Failed',
+        description: 'Failed to duplicate template. Please try again.'
+      });
     }
   };
 
@@ -279,6 +309,32 @@ export function TemplateLibrary({ onTemplateSelect, selectionMode = false }: Tem
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Archive Template</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to archive this template? It will be moved to inactive status and won't appear in the main list.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-3 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDeleteTemplate}
+            >
+              Archive Template
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

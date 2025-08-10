@@ -5,7 +5,8 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import type { ContactStatus } from '~/lib/types/contact';
-import { ChevronRightIcon, CheckIcon } from 'lucide-react';
+import { ChevronRightIcon, CheckIcon, AlertCircleIcon } from 'lucide-react';
+import { useToast } from '@/hooks/useToast';
 
 const JOURNEY_STAGES: { value: ContactStatus; label: string; description: string; color: string }[] = [
   { 
@@ -60,6 +61,7 @@ export function ContactJourneyStage({
   readonly = false 
 }: ContactJourneyStageProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const { toast } = useToast();
   const updateContactStatus = useMutation(api.contacts.updateContactStatus);
 
   const currentStageIndex = JOURNEY_STAGES.findIndex(stage => stage.value === currentStatus);
@@ -73,9 +75,22 @@ export function ContactJourneyStage({
         contactId,
         status: newStatus
       });
+      
+      const newStage = JOURNEY_STAGES.find(s => s.value === newStatus);
+      toast({
+        type: 'success',
+        title: 'Stage Updated',
+        description: `Contact moved to ${newStage?.label || newStatus} stage`
+      });
+      
       onStatusUpdate?.(newStatus);
     } catch (error) {
       console.error('Failed to update contact status:', error);
+      toast({
+        type: 'error',
+        title: 'Update Failed',
+        description: 'Failed to update contact stage. Please try again.'
+      });
     } finally {
       setIsUpdating(false);
     }

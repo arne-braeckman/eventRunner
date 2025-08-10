@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ConvexClientProvider } from "~/components/providers/ConvexAuthProvider";
 import { Navigation } from "~/components/layout/Navigation";
+import { ToastProvider } from "~/hooks/useToast";
 
 export const metadata: Metadata = {
   title: "eventRunner",
@@ -28,8 +29,10 @@ export default function RootLayout({
         <body>
           <ConvexClientProvider>
             <TRPCReactProvider>
-              <Navigation />
-              {children}
+              <ToastProvider>
+                <Navigation />
+                {children}
+              </ToastProvider>
             </TRPCReactProvider>
           </ConvexClientProvider>
         </body>

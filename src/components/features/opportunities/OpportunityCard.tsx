@@ -15,6 +15,7 @@ import {
   User,
   AlertTriangle
 } from "lucide-react";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import type { Opportunity } from "~/lib/types/opportunity";
 import { format } from "date-fns";
 
@@ -50,6 +51,7 @@ export function OpportunityCard({
   allOpportunities = []
 }: OpportunityCardProps) {
   const [showActions, setShowActions] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const {
     attributes,
@@ -146,9 +148,7 @@ export function OpportunityCard({
             <button 
               onClick={(e) => {
                 e.stopPropagation();
-                if (confirm("Are you sure you want to delete this opportunity?")) {
-                  onDelete?.(opportunity._id);
-                }
+                setShowDeleteConfirm(true);
               }}
               className="p-1 hover:bg-gray-100 rounded"
               title="Delete opportunity"
@@ -239,6 +239,19 @@ export function OpportunityCard({
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={() => {
+          onDelete?.(opportunity._id);
+          setShowDeleteConfirm(false);
+        }}
+        title="Delete Opportunity"
+        description={`Are you sure you want to delete "${opportunity.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        variant="danger"
+      />
     </div>
   );
 }

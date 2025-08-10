@@ -44,6 +44,7 @@ import { ProposalStatusTracker } from "./ProposalStatusTracker";
 import { ProposalGenerator } from "./ProposalGenerator";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/useToast";
 
 type ProposalStatus = 
   | "DRAFT"
@@ -116,6 +117,7 @@ export function ProposalPipeline({
   const [generatorOpen, setGeneratorOpen] = useState(false);
   const [currentViewMode, setCurrentViewMode] = useState(viewMode);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const { toast } = useToast();
 
   // Fetch proposals with real-time updates
   const proposals = useQuery(api.proposals.getAllProposals, {
@@ -141,6 +143,18 @@ export function ProposalPipeline({
 
     return () => clearInterval(interval);
   }, [autoRefresh]);
+
+  // Handle loading states
+  const isLoading = proposals === undefined;
+
+  // Handle errors - if query fails due to auth, show message
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   // Filter proposals based on search
   const filteredProposals = proposals?.filter(proposal => {
@@ -175,7 +189,11 @@ export function ProposalPipeline({
         status: newStatus,
       });
     } catch (error) {
-      console.error("Failed to update proposal status:", error);
+      toast({
+        type: 'error',
+        title: 'Status Update Failed',
+        description: 'Unable to update proposal status. Please try again.'
+      });
     }
   };
 
@@ -191,7 +209,11 @@ export function ProposalPipeline({
         customMessage: "Just following up on the proposal we sent. Please let us know if you have any questions.",
       });
     } catch (error) {
-      console.error("Failed to send reminder:", error);
+      toast({
+        type: 'error',
+        title: 'Reminder Failed',
+        description: 'Unable to send reminder. Please try again.'
+      });
     }
   };
 

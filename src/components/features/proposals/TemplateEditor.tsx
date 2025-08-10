@@ -32,6 +32,7 @@ import {
   Users,
   MapPin
 } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
 import type { Id } from "../../../../convex/_generated/dataModel";
 
 type EventType = "WEDDING" | "CORPORATE" | "BIRTHDAY" | "ANNIVERSARY" | "CONFERENCE" | "GALA" | "OTHER";
@@ -84,6 +85,7 @@ const PREDEFINED_FIELDS: DynamicField[] = [
 export function TemplateEditor({ templateId, onSave, onCancel }: TemplateEditorProps) {
   const [templateName, setTemplateName] = useState("");
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
+  const { toast } = useToast();
   const [content, setContent] = useState<TemplateContent>({
     sections: [
       { id: "intro", title: "Introduction", content: "", order: 1 },
@@ -119,7 +121,11 @@ export function TemplateEditor({ templateId, onSave, onCancel }: TemplateEditorP
 
   const handleSave = async () => {
     if (!templateName.trim() || selectedEventTypes.length === 0) {
-      alert("Please provide a template name and select at least one event type.");
+      toast({
+        type: 'error',
+        title: 'Missing Information',
+        description: 'Please provide a template name and select at least one event type.'
+      });
       return;
     }
 
@@ -140,8 +146,11 @@ export function TemplateEditor({ templateId, onSave, onCancel }: TemplateEditorP
       }
       onSave();
     } catch (error) {
-      console.error("Failed to save template:", error);
-      alert("Failed to save template. Please try again.");
+      toast({
+        type: 'error',
+        title: 'Save Failed',
+        description: 'Failed to save template. Please try again.'
+      });
     }
   };
 

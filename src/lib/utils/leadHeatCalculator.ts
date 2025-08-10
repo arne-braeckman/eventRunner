@@ -1,5 +1,14 @@
 import { INTERACTION_TYPE_OPTIONS, LEAD_HEAT_THRESHOLDS, type LeadHeat, type InteractionType } from "../types/contact";
 
+// Simple cache for expensive heat calculations
+const heatCalculationCache = new Map<string, { result: number; timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+// Helper function to generate cache key
+function getCacheKey(interactions: Array<{ type: InteractionType; createdAt?: number }>): string {
+  return JSON.stringify(interactions.map(i => ({ type: i.type, createdAt: i.createdAt })));
+}
+
 // Configurable weight multipliers for different scenarios
 export interface LeadScoringConfig {
   baseWeights: Record<InteractionType, number>;
@@ -45,6 +54,13 @@ export function calculateLeadHeatScore(
 ): number {
   if (interactions.length === 0) return 0;
 
+  // Check cache first for performance
+  const cacheKey = getCacheKey(interactions);
+  const cached = heatCalculationCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.result;
+  }
+
   const now = Date.now();
   const weekMs = 7 * 24 * 60 * 60 * 1000;
   const dayMs = 24 * 60 * 60 * 1000;
@@ -86,7 +102,22 @@ export function calculateLeadHeatScore(
     }
   }
 
-  return Math.round(totalScore * 100) / 100; // Round to 2 decimal places
+  const result = Math.round(totalScore * 100) / 100; // Round to 2 decimal places
+  
+  // Cache the result for performance
+  heatCalculationCache.set(cacheKey, { result, timestamp: Date.now() });
+  
+  // Clean old cache entries periodically
+  if (heatCalculationCache.size > 100) {
+    const now = Date.now();
+    for (const [key, value] of heatCalculationCache.entries()) {
+      if (now - value.timestamp > CACHE_TTL) {
+        heatCalculationCache.delete(key);
+      }
+    }
+  }
+  
+  return result;
 }
 
 // Legacy function for backward compatibility

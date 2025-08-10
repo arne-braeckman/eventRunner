@@ -1,31 +1,21 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import Link from 'next/link';
-import { EVENT_TYPE_OPTIONS, GEOGRAPHIC_REGIONS } from '~/lib/types/contact';
-
-type LeadSource = "WEBSITE" | "FACEBOOK" | "INSTAGRAM" | "LINKEDIN" | "REFERRAL" | "DIRECT" | "OTHER";
-type LeadHeat = "COLD" | "WARM" | "HOT";
-type ContactStatus = "UNQUALIFIED" | "PROSPECT" | "LEAD" | "QUALIFIED" | "CUSTOMER" | "LOST";
-
-interface Contact {
-  _id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  leadSource: LeadSource;
-  leadHeat: LeadHeat;
-  status: ContactStatus;
-  notes?: string;
-  geographicLocation?: string;
-  preferredEventType?: string;
-  createdAt: number;
-  updatedAt: number;
-}
+import { 
+  Contact, 
+  LeadSource, 
+  LeadHeat, 
+  ContactStatus,
+  EVENT_TYPE_OPTIONS, 
+  GEOGRAPHIC_REGIONS,
+  LEAD_SOURCE_OPTIONS,
+  LEAD_HEAT_OPTIONS,
+  CONTACT_STATUS_OPTIONS
+} from '~/lib/types/contact';
 
 interface ContactListProps {
   onExport?: (filteredContacts: Contact[]) => void;
@@ -167,8 +157,15 @@ export function ContactList({ onExport }: ContactListProps) {
     }
   };
 
-  const totalPages = contactsData ? Math.ceil(contactsData.total / limit) : 0;
-  const hasFilters = appliedSearch || leadSource || leadHeat || status || geographicLocation || preferredEventType;
+  const totalPages = useMemo(() => 
+    contactsData ? Math.ceil(contactsData.total / limit) : 0, 
+    [contactsData?.total, limit]
+  );
+  
+  const hasFilters = useMemo(() => 
+    appliedSearch || leadSource || leadHeat || status || geographicLocation || preferredEventType,
+    [appliedSearch, leadSource, leadHeat, status, geographicLocation, preferredEventType]
+  );
 
   // Handle row click to navigate to contact detail
   const handleRowClick = (contactId: string, event: React.MouseEvent) => {
@@ -242,6 +239,10 @@ export function ContactList({ onExport }: ContactListProps) {
                 }
               }}
               placeholder="Search by name or email..."
+              aria-label="Search contacts by name or email"
+              aria-expanded={showSuggestions}
+              aria-haspopup="listbox"
+              aria-owns={showSuggestions ? "contact-suggestions" : undefined}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             
@@ -249,12 +250,17 @@ export function ContactList({ onExport }: ContactListProps) {
             {showSuggestions && suggestionsData && suggestionsData.contacts.length > 0 && (
               <div
                 ref={dropdownRef}
+                id="contact-suggestions"
+                role="listbox"
+                aria-label="Contact search suggestions"
                 className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto"
               >
                 {suggestionsData.contacts.map((contact) => (
                   <button
                     key={contact._id}
                     onClick={() => applySearch(contact.name)}
+                    role="option"
+                    aria-selected="false"
                     className="w-full px-3 py-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none border-b border-gray-100 last:border-b-0"
                   >
                     <div className="font-medium text-gray-900">{contact.name}</div>
@@ -287,13 +293,11 @@ export function ContactList({ onExport }: ContactListProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Sources</option>
-              <option value="WEBSITE">Website</option>
-              <option value="FACEBOOK">Facebook</option>
-              <option value="INSTAGRAM">Instagram</option>
-              <option value="LINKEDIN">LinkedIn</option>
-              <option value="REFERRAL">Referral</option>
-              <option value="DIRECT">Direct</option>
-              <option value="OTHER">Other</option>
+              {LEAD_SOURCE_OPTIONS.map((source) => (
+                <option key={source.value} value={source.value}>
+                  {source.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -308,9 +312,11 @@ export function ContactList({ onExport }: ContactListProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Heat Levels</option>
-              <option value="HOT">Hot</option>
-              <option value="WARM">Warm</option>
-              <option value="COLD">Cold</option>
+              {LEAD_HEAT_OPTIONS.map((heat) => (
+                <option key={heat.value} value={heat.value}>
+                  {heat.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -325,12 +331,11 @@ export function ContactList({ onExport }: ContactListProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Statuses</option>
-              <option value="UNQUALIFIED">Unqualified</option>
-              <option value="PROSPECT">Prospect</option>
-              <option value="LEAD">Lead</option>
-              <option value="QUALIFIED">Qualified</option>
-              <option value="CUSTOMER">Customer</option>
-              <option value="LOST">Lost</option>
+              {CONTACT_STATUS_OPTIONS.map((status) => (
+                <option key={status.value} value={status.value}>
+                  {status.label}
+                </option>
+              ))}
             </select>
           </div>
 

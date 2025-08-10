@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { X, Calendar, Users, Euro, MapPin, Clock, FileText } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import type { OpportunityStage, EventType } from "~/lib/types/opportunity";
 
@@ -55,6 +56,7 @@ export function OpportunityForm({
   opportunityId 
 }: OpportunityFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   
   const contacts = useQuery(api.contacts.getAllContacts, {});
   const createOpportunity = useMutation(api.opportunities.createOpportunity);
@@ -91,10 +93,21 @@ export function OpportunityForm({
         await createOpportunity(formattedData);
       }
 
+      toast({
+        type: 'success',
+        title: isEditing ? 'Opportunity Updated' : 'Opportunity Created',
+        description: `The opportunity "${data.name}" has been ${isEditing ? 'updated' : 'created'} successfully.`
+      });
+
       reset();
       onClose();
     } catch (error) {
       console.error("Error saving opportunity:", error);
+      toast({
+        type: 'error',
+        title: 'Save Failed',
+        description: `Failed to ${isEditing ? 'update' : 'create'} opportunity. Please try again.`
+      });
     } finally {
       setIsSubmitting(false);
     }

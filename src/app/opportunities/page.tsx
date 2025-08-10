@@ -6,6 +6,7 @@ import { OpportunityPipeline } from "~/components/features/opportunities/Opportu
 import { PipelineAnalytics } from "~/components/features/opportunities/PipelineAnalytics";
 import { SalesPerformanceReport } from "~/components/features/opportunities/SalesPerformanceReport";
 import { PipelineHealthIndicators } from "~/components/features/opportunities/PipelineHealthIndicators";
+import { OpportunityErrorBoundary } from "~/components/features/opportunities/OpportunityErrorBoundary";
 import { useState } from "react";
 import { 
   BarChart3, 
@@ -53,15 +54,35 @@ function OpportunitiesContent() {
   const renderContent = () => {
     switch (activeTab) {
       case "pipeline":
-        return <OpportunityPipeline />;
+        return (
+          <OpportunityErrorBoundary>
+            <OpportunityPipeline />
+          </OpportunityErrorBoundary>
+        );
       case "analytics":
-        return <PipelineAnalytics />;
+        return (
+          <OpportunityErrorBoundary>
+            <PipelineAnalytics />
+          </OpportunityErrorBoundary>
+        );
       case "performance":
-        return <SalesPerformanceReport />;
+        return (
+          <OpportunityErrorBoundary>
+            <SalesPerformanceReport />
+          </OpportunityErrorBoundary>
+        );
       case "health":
-        return <PipelineHealthIndicators />;
+        return (
+          <OpportunityErrorBoundary>
+            <PipelineHealthIndicators />
+          </OpportunityErrorBoundary>
+        );
       default:
-        return <OpportunityPipeline />;
+        return (
+          <OpportunityErrorBoundary>
+            <OpportunityPipeline />
+          </OpportunityErrorBoundary>
+        );
     }
   };
 

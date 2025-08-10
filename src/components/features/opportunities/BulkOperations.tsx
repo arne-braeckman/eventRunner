@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useMutation } from "convex/react";
 import { Check, X, Trash2, UserPlus, ArrowRight } from "lucide-react";
 import { api } from "../../../../convex/_generated/api";
+import { useToast } from "@/hooks/useToast";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import type { Opportunity, OpportunityStage } from "~/lib/types/opportunity";
 
@@ -30,6 +32,8 @@ export function BulkOperations({
   const [isProcessing, setIsProcessing] = useState(false);
   const [operation, setOperation] = useState<"stage" | "delete" | "assign" | null>(null);
   const [targetStage, setTargetStage] = useState<OpportunityStage>("QUALIFIED");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { toast } = useToast();
   
   const updateOpportunityStage = useMutation(api.opportunities.updateOpportunityStage);
   const deleteOpportunity = useMutation(api.opportunities.deleteOpportunity);
@@ -45,9 +49,21 @@ export function BulkOperations({
           })
         )
       );
+      
+      toast({
+        type: 'success',
+        title: 'Bulk Update Complete',
+        description: `Successfully updated ${selectedOpportunities.length} opportunities to ${STAGE_OPTIONS.find(s => s.value === targetStage)?.label}.`
+      });
+      
       onBulkComplete();
     } catch (error) {
       console.error("Error updating opportunities:", error);
+      toast({
+        type: 'error',
+        title: 'Update Failed',
+        description: 'Failed to update some opportunities. Please try again.'
+      });
     } finally {
       setIsProcessing(false);
       setOperation(null);
@@ -55,10 +71,6 @@ export function BulkOperations({
   };
 
   const handleBulkDelete = async () => {
-    if (!confirm(`Are you sure you want to delete ${selectedOpportunities.length} opportunities?`)) {
-      return;
-    }
-    
     setIsProcessing(true);
     try {
       await Promise.all(
@@ -66,14 +78,32 @@ export function BulkOperations({
           deleteOpportunity({ opportunityId: opp._id })
         )
       );
+      
+      toast({
+        type: 'success',
+        title: 'Bulk Delete Complete',
+        description: `Successfully deleted ${selectedOpportunities.length} opportunities.`
+      });
+      
       onBulkComplete();
     } catch (error) {
       console.error("Error deleting opportunities:", error);
+      toast({
+        type: 'error',
+        title: 'Delete Failed',
+        description: 'Failed to delete some opportunities. Please try again.'
+      });
     } finally {
       setIsProcessing(false);
       setOperation(null);
+      setShowDeleteConfirm(false);
     }
   };
+
+  const totalValue = useMemo(() => 
+    selectedOpportunities.reduce((sum, opp) => sum + opp.value, 0).toLocaleString(),
+    [selectedOpportunities]
+  );
 
   if (selectedOpportunities.length === 0) {
     return null;
@@ -92,7 +122,7 @@ export function BulkOperations({
             </div>
             
             <div className="text-sm text-gray-600">
-              Total value: €{selectedOpportunities.reduce((sum, opp) => sum + opp.value, 0).toLocaleString()}
+              Total value: €{totalValue}
             </div>
           </div>
 
@@ -108,7 +138,7 @@ export function BulkOperations({
                 </button>
                 
                 <button
-                  onClick={() => setOperation("delete")}
+                  onClick={() => setShowDeleteConfirm(true)}
                   className="inline-flex items-center px-3 py-1.5 border border-red-300 text-sm font-medium rounded text-red-700 bg-white hover:bg-red-50"
                 >
                   <Trash2 className="w-4 h-4 mr-1" />
@@ -147,25 +177,6 @@ export function BulkOperations({
                 </button>
               </div>
             )}
-
-            {operation === "delete" && (
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={handleBulkDelete}
-                  disabled={isProcessing}
-                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded text-white bg-red-600 hover:bg-red-700 disabled:opacity-50"
-                >
-                  {isProcessing ? "Deleting..." : "Confirm Delete"}
-                </button>
-                
-                <button
-                  onClick={() => setOperation(null)}
-                  className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
             
             <button
               onClick={onClearSelection}
@@ -177,6 +188,17 @@ export function BulkOperations({
           </div>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleBulkDelete}
+        title="Delete Opportunities"
+        description={`Are you sure you want to delete ${selectedOpportunities.length} opportunities? This action cannot be undone and will remove all associated data.`}
+        confirmText="Delete All"
+        variant="danger"
+        isLoading={isProcessing}
+      />
     </div>
   );
 }

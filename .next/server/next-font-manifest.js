@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/arnebraeckman/Documents/GitHub/eventRunner/src/app/layout":["static/media/569ce4b8f30dc480-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';
+self.__NEXT_FONT_MANIFEST="{\n  \"app\": {\n    \"[project]/src/app/(dashboard)/proposals/page\": [\n      \"static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2\"\n    ],\n    \"[project]/src/app/page\": [\n      \"static/media/b0a57561b6cb5495-s.p.da1ebef7.woff2\"\n    ]\n  },\n  \"appUsingSizeAdjust\": true,\n  \"pages\": {},\n  \"pagesUsingSizeAdjust\": false\n}"

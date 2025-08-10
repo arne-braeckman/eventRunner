@@ -6,6 +6,7 @@ import { api } from "../../../convex/_generated/api";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PlayIcon, PauseIcon, PlusIcon, SettingsIcon } from 'lucide-react';
+import { useToast } from '@/hooks/useToast';
 
 const STAGE_OPTIONS = [
   { value: 'UNQUALIFIED', label: 'Unqualified' },
@@ -27,6 +28,8 @@ const TRIGGER_TYPES = [
 export function StageProgressionRules() {
   const [showAddRule, setShowAddRule] = useState(false);
   const [editingRule, setEditingRule] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const progressionRules = useQuery(api.journeyStages.getProgressionRules);
   const initializeDefaultRules = useMutation(api.journeyStages.initializeDefaultRules);
@@ -34,26 +37,55 @@ export function StageProgressionRules() {
   const upsertRule = useMutation(api.journeyStages.upsertProgressionRule);
 
   const handleInitializeRules = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
     try {
       const result = await initializeDefaultRules();
-      alert(result.message);
+      toast({
+        type: 'success',
+        title: 'Rules Initialized',
+        description: result.message
+      });
     } catch (error) {
       console.error('Failed to initialize rules:', error);
-      alert('Failed to initialize rules. Please check console for details.');
+      toast({
+        type: 'error',
+        title: 'Initialization Failed',
+        description: 'Failed to initialize rules. Please try again.'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRunBulkProgression = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
     try {
       const result = await runBulkProgression();
-      alert(`Bulk progression completed. ${result.progressionsMade} contacts progressed out of ${result.totalContactsEvaluated} evaluated.`);
+      toast({
+        type: 'success',
+        title: 'Bulk Progression Complete',
+        description: `${result.progressionsMade} contacts progressed out of ${result.totalContactsEvaluated} evaluated.`
+      });
     } catch (error) {
       console.error('Failed to run bulk progression:', error);
-      alert('Failed to run bulk progression. Please check console for details.');
+      toast({
+        type: 'error',
+        title: 'Progression Failed',
+        description: 'Failed to run bulk progression. Please try again.'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const toggleRuleActive = async (rule: any) => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
     try {
       await upsertRule({
         ruleId: rule._id,
@@ -64,9 +96,21 @@ export function StageProgressionRules() {
         isActive: !rule.isActive,
         priority: rule.priority,
       });
+      
+      toast({
+        type: 'success',
+        title: 'Rule Updated',
+        description: `Rule ${rule.isActive ? 'deactivated' : 'activated'} successfully.`
+      });
     } catch (error) {
       console.error('Failed to toggle rule:', error);
-      alert('Failed to update rule. Please check console for details.');
+      toast({
+        type: 'error',
+        title: 'Update Failed',
+        description: 'Failed to update rule. Please try again.'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -116,18 +160,20 @@ export function StageProgressionRules() {
       <div className="mb-6 flex gap-3 flex-wrap">
         <button
           onClick={handleInitializeRules}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={isLoading}
+          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <SettingsIcon className="w-4 h-4 mr-2" />
-          Initialize Default Rules
+          {isLoading ? 'Initializing...' : 'Initialize Default Rules'}
         </button>
         
         <button
           onClick={handleRunBulkProgression}
-          className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+          disabled={isLoading}
+          className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <PlayIcon className="w-4 h-4 mr-2" />
-          Run Bulk Progression
+          {isLoading ? 'Processing...' : 'Run Bulk Progression'}
         </button>
         
         <button
@@ -150,9 +196,10 @@ export function StageProgressionRules() {
             </p>
             <button
               onClick={handleInitializeRules}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+              disabled={isLoading}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Initialize Default Rules
+              {isLoading ? 'Initializing...' : 'Initialize Default Rules'}
             </button>
           </CardContent>
         </Card>
@@ -181,7 +228,8 @@ export function StageProgressionRules() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => toggleRuleActive(rule)}
-                      className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-md ${
+                      disabled={isLoading}
+                      className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-md disabled:opacity-50 disabled:cursor-not-allowed ${
                         rule.isActive 
                           ? 'bg-red-100 text-red-700 hover:bg-red-200' 
                           : 'bg-green-100 text-green-700 hover:bg-green-200'

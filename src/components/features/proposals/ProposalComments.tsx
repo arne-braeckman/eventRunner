@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/useToast";
 
 interface Comment {
   _id: Id<"proposalComments">;
@@ -51,6 +52,7 @@ export function ProposalComments({
   const [newComment, setNewComment] = useState("");
   const [isInternal, setIsInternal] = useState(!isClientView);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const addComment = useMutation(api.proposals.addProposalComment);
 
@@ -78,7 +80,11 @@ export function ProposalComments({
       setNewComment("");
       onCommentAdded?.();
     } catch (error) {
-      console.error("Failed to add comment:", error);
+      toast({
+        type: 'error',
+        title: 'Comment Failed',
+        description: 'Unable to add comment. Please try again.'
+      });
     } finally {
       setIsSubmitting(false);
     }

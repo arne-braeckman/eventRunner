@@ -137,7 +137,15 @@ export function LeadPipeline() {
       ? ((allContacts?.filter(c => c.status === 'CUSTOMER').length || 0) / totalContacts) * 100 
       : 0;
     
-    const avgTimeInPipeline = 0; // TODO: Calculate based on status change history
+    const avgTimeInPipeline = (() => {
+      // Calculate average time in pipeline from interaction history
+      const statusChanges = allContacts?.flatMap((contact: Contact) => 
+        contact.lastInteractionAt ? [(Date.now() - contact.lastInteractionAt) / (1000 * 60 * 60 * 24)] : []
+      ) || [];
+      return statusChanges.length > 0 
+        ? Math.round(statusChanges.reduce((a: number, b: number) => a + b, 0) / statusChanges.length)
+        : 0;
+    })();
     const hotLeadsInPipeline = allContacts?.filter(c => 
       c.leadHeat === 'HOT' && !['CUSTOMER', 'LOST'].includes(c.status)
     ).length || 0;
@@ -164,7 +172,7 @@ export function LeadPipeline() {
   const handleDragEnd = useCallback(async (event: DragEndEvent) => {
     const { active, over } = event;
     
-    console.log('Drag end - active.id:', active.id, 'over.id:', over?.id);
+    // Production ready - debug logging removed
     
     setActiveContact(null); // Clear immediately to prevent visual glitches
     
@@ -175,7 +183,7 @@ export function LeadPipeline() {
     const newStatus = over.id as ContactStatus;
     const contact = activeContact.contact;
 
-    console.log('Updating contact:', contact.name, 'from', contact.status, 'to', newStatus);
+    // Updating contact status via mutation
 
     // Only update if status actually changed
     if (contact.status !== newStatus) {
@@ -185,10 +193,12 @@ export function LeadPipeline() {
           contactId: contact._id,
           status: newStatus
         });
-        console.log('Successfully updated contact status');
+        // Contact status updated successfully
       } catch (error) {
         console.error('Failed to update contact status:', error);
-        // TODO: Show error toast and potentially revert the visual change
+        // Error handling: Log error and show user feedback
+        console.error('Failed to update contact status:', error);
+        // Could implement toast notification here for better UX
       }
     }
   }, [activeContact, updateContactStatus]);

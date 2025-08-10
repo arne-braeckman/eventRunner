@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { MapPinIcon, CalendarIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,24 +12,25 @@ interface ContactProfileSectionProps {
 }
 
 export function ContactProfileSection({ contact }: ContactProfileSectionProps) {
-  // Get display labels for the stored values
-  const getGeographicLocationLabel = (value?: string) => {
-    if (!value) return null;
-    const region = GEOGRAPHIC_REGIONS.find(r => r.value === value);
-    return region?.label || value;
-  };
+  // Memoize label lookups for performance
+  const { geographicLabel, eventTypeLabel, hasPreferences } = useMemo(() => {
+    const geographicLabel = contact.geographicLocation 
+      ? GEOGRAPHIC_REGIONS.find(r => r.value === contact.geographicLocation)?.label || contact.geographicLocation
+      : null;
 
-  const getEventTypeLabel = (value?: string) => {
-    if (!value) return null;
-    const eventType = EVENT_TYPE_OPTIONS.find(e => e.value === value);
-    return eventType?.label || value;
-  };
+    const eventTypeLabel = contact.preferredEventType
+      ? EVENT_TYPE_OPTIONS.find(e => e.value === contact.preferredEventType)?.label || contact.preferredEventType
+      : null;
 
-  const geographicLabel = getGeographicLocationLabel(contact.geographicLocation);
-  const eventTypeLabel = getEventTypeLabel(contact.preferredEventType);
+    return {
+      geographicLabel,
+      eventTypeLabel,
+      hasPreferences: Boolean(geographicLabel || eventTypeLabel)
+    };
+  }, [contact.geographicLocation, contact.preferredEventType]);
 
   // If neither field has data, don't render the section
-  if (!geographicLabel && !eventTypeLabel) {
+  if (!hasPreferences) {
     return null;
   }
 

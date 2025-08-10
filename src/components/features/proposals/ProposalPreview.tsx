@@ -16,6 +16,7 @@ import {
   Building
 } from "lucide-react";
 import { PdfGenerator, type ProposalPdfData } from "@/lib/utils/pdfGenerator";
+import { useToast } from "@/hooks/useToast";
 import type { OpportunityWithContact } from "@/lib/types/opportunity";
 
 interface ProposalPreviewProps {
@@ -37,6 +38,7 @@ export function ProposalPreview({
 }: ProposalPreviewProps) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const handleDownloadPdf = async () => {
     if (onDownloadPdf) {
@@ -64,7 +66,11 @@ export function ProposalPreview({
 
       PdfGenerator.downloadBlob(pdfBlob, `${opportunity.name}-proposal.pdf`);
     } catch (error) {
-      console.error("Failed to generate PDF:", error);
+      toast({
+        type: 'error',
+        title: 'PDF Generation Failed',
+        description: 'Unable to generate PDF. Please try again.'
+      });
     } finally {
       setIsGeneratingPdf(false);
     }

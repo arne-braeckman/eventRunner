@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/useToast";
 import { 
   Calendar, 
   MapPin, 
@@ -50,6 +51,7 @@ export function BookingConfirmation({
   isOpen
 }: BookingConfirmationProps) {
   const [step, setStep] = useState<'review' | 'pricing' | 'confirm' | 'complete'>('review');
+  const { toast } = useToast();
   const [pricing, setPricing] = useState({
     venueRate: venue.hourlyRate || venue.dailyRate || 0,
     duration: 4, // hours
@@ -176,8 +178,19 @@ Event Management Team`;
       await new Promise(resolve => setTimeout(resolve, 2000));
       onConfirm?.(bookingConfirmation);
       setStep('complete');
+      
+      toast({
+        type: 'success',
+        title: 'Booking Confirmed',
+        description: `Event booking for "${opportunity.name}" has been confirmed successfully.`
+      });
     } catch (error) {
       console.error('Booking confirmation failed:', error);
+      toast({
+        type: 'error',
+        title: 'Booking Failed',
+        description: 'Failed to confirm booking. Please try again.'
+      });
     } finally {
       setIsLoading(false);
     }

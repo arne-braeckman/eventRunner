@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { Plus } from "lucide-react";
 import { api } from "../../../../convex/_generated/api";
@@ -8,6 +8,7 @@ import { KanbanBoard } from "./KanbanBoard";
 import { OpportunityFilters } from "./OpportunityFilters";
 import { OpportunityForm } from "./OpportunityForm";
 import { BulkOperations } from "./BulkOperations";
+import { useToast } from "@/hooks/useToast";
 import type { OpportunityStage, Opportunity, EventType } from "~/lib/types/opportunity";
 import type { Id } from "../../../../convex/_generated/dataModel";
 
@@ -23,32 +24,43 @@ export function OpportunityPipeline() {
   const [editingOpportunity, setEditingOpportunity] = useState<Opportunity | null>(null);
   const [selectedOpportunities, setSelectedOpportunities] = useState<Opportunity[]>([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const { toast } = useToast();
   
   const opportunities = useQuery(api.opportunities.getAllOpportunities, filters);
   const deleteOpportunity = useMutation(api.opportunities.deleteOpportunity);
 
-  const handleFilterChange = (newFilters: OpportunityFilterState) => {
+  const handleFilterChange = useCallback((newFilters: OpportunityFilterState) => {
     setFilters(newFilters);
-  };
+  }, []);
 
-  const handleEditOpportunity = (opportunity: Opportunity) => {
+  const handleEditOpportunity = useCallback((opportunity: Opportunity) => {
     setEditingOpportunity(opportunity);
-  };
+  }, []);
 
-  const handleDeleteOpportunity = async (opportunityId: string) => {
+  const handleDeleteOpportunity = useCallback(async (opportunityId: string) => {
     try {
       await deleteOpportunity({ opportunityId: opportunityId as Id<"opportunities"> });
+      toast({
+        type: 'success',
+        title: 'Opportunity Deleted',
+        description: 'The opportunity has been deleted successfully.'
+      });
     } catch (error) {
       console.error("Error deleting opportunity:", error);
+      toast({
+        type: 'error',
+        title: 'Delete Failed',
+        description: 'Failed to delete opportunity. Please try again.'
+      });
     }
-  };
+  }, [deleteOpportunity, toast]);
 
-  const handleCloseForm = () => {
+  const handleCloseForm = useCallback(() => {
     setShowCreateForm(false);
     setEditingOpportunity(null);
-  };
+  }, []);
 
-  const handleToggleSelection = (opportunity: Opportunity) => {
+  const handleToggleSelection = useCallback((opportunity: Opportunity) => {
     setSelectedOpportunities(prev => {
       const isSelected = prev.some(opp => opp._id === opportunity._id);
       if (isSelected) {
@@ -57,24 +69,30 @@ export function OpportunityPipeline() {
         return [...prev, opportunity];
       }
     });
-  };
+  }, []);
 
-  const handleClearSelection = () => {
+  const handleClearSelection = useCallback(() => {
     setSelectedOpportunities([]);
     setIsSelectionMode(false);
-  };
+  }, []);
 
-  const handleBulkComplete = () => {
+  const handleBulkComplete = useCallback(() => {
     setSelectedOpportunities([]);
     setIsSelectionMode(false);
-  };
+  }, []);
 
-  const toggleSelectionMode = () => {
+  const toggleSelectionMode = useCallback(() => {
     setIsSelectionMode(!isSelectionMode);
     if (!isSelectionMode) {
       setSelectedOpportunities([]);
     }
-  };
+  }, [isSelectionMode]);
+
+  // Memoize total value calculation only when opportunities exist
+  const totalValue = useMemo(() => {
+    if (!opportunities) return '0';
+    return opportunities.reduce((sum, opp) => sum + opp.value, 0).toLocaleString();
+  }, [opportunities]);
 
   if (opportunities === undefined) {
     return (
@@ -93,7 +111,7 @@ export function OpportunityPipeline() {
             Pipeline Overview
           </h2>
           <p className="text-sm text-gray-600">
-            {opportunities.length} opportunities • Total value: €{opportunities.reduce((sum, opp) => sum + opp.value, 0).toLocaleString()}
+            {opportunities.length} opportunities • Total value: €{totalValue}
           </p>
         </div>
         

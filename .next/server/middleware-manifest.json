@@ -3,34 +3,35 @@
   "middleware": {
     "/": {
       "files": [
-        "server/edge-runtime-webpack.js",
-        "server/src/middleware.js"
+        "server/edge/chunks/_d0e68648._.js",
+        "server/edge/chunks/[root-of-the-server]__de110ef0._.js",
+        "server/edge/chunks/edge-wrapper_58c02ea4.js"
       ],
-      "name": "src/middleware",
+      "name": "middleware",
       "page": "/",
       "matchers": [
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*))(\\.json)?[\\/#\\?]?$",
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*))(\\\\.json)?[\\/#\\?]?$",
           "originalSource": "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)"
         },
         {
-          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/(api|trpc))(.*)(\\.json)?[\\/#\\?]?$",
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/(api|trpc))(.*)(\\\\.json)?[\\/#\\?]?$",
           "originalSource": "/(api|trpc)(.*)"
         }
       ],
       "wasm": [],
       "assets": [],
       "env": {
-        "__NEXT_BUILD_ID": "v0llUbY8tOr4GmUoyIOfi",
+        "__NEXT_BUILD_ID": "development",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "f6oIl7nqYWbawoJ/jGoS0UPSj8UY0LZHJdazNel/X+w=",
-        "__NEXT_PREVIEW_MODE_ID": "bafbdcbba3ef64f57dafea2b8f1eb278",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "428abf51ef298fe58c69cf356d23ad2616eb2ce792e6ade8f2be235b79977fc6",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "cc44d65385f40affcc035bf13815885e8f16cf69e6c4ded36bf062402ceaedac"
+        "__NEXT_PREVIEW_MODE_ID": "ba8079d57dc492bed39229f5f02b6d85",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "15942c052927c22c0570c7cfe3f5932db6eefb0dcc5840ed9b3f31074c8d0dca",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "b9548bc6c507fa8cb3a86ebeba76970f161f72a08121b7a8b8c547bfd7d3ab92"
       }
     }
   },
-  "functions": {},
   "sortedMiddleware": [
     "/"
-  ]
+  ],
+  "functions": {}
 }

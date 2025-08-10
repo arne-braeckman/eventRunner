@@ -1,8 +1,20 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export default clerkMiddleware((auth, req: NextRequest) => {
+const isProtectedRoute = createRouteMatcher([
+  '/(dashboard)(.*)',
+  '/proposals(.*)',
+  '/opportunities(.*)',
+  '/contacts(.*)',
+  '/admin(.*)'
+]);
+
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  // Protect dashboard and internal routes
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
   // Get the response from Clerk middleware
   const response = NextResponse.next();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   DndContext,
   type DragEndEvent,
@@ -13,6 +13,7 @@ import {
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { KanbanColumn } from "./KanbanColumn";
 import { OpportunityCard } from "./OpportunityCard";
+import { useToast } from "@/hooks/useToast";
 import type { Opportunity, OpportunityStage } from "~/lib/types/opportunity";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
@@ -44,6 +45,7 @@ export function KanbanBoard({
   isSelectionMode = false 
 }: KanbanBoardProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const { toast } = useToast();
   const updateOpportunityStage = useMutation(api.opportunities.updateOpportunityStage);
 
   const sensors = useSensors(
@@ -54,10 +56,6 @@ export function KanbanBoard({
     })
   );
 
-  const groupedOpportunities = PIPELINE_STAGES.reduce((acc, stage) => {
-    acc[stage.id] = opportunities.filter(opp => opp.stage === stage.id);
-    return acc;
-  }, {} as Record<OpportunityStage, Opportunity[]>);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -92,8 +90,20 @@ export function KanbanBoard({
           opportunityId: activeOpportunity._id,
           stage: newStage,
         });
+        
+        const stageLabel = PIPELINE_STAGES.find(s => s.id === newStage)?.title || newStage;
+        toast({
+          type: 'success',
+          title: 'Stage Updated',
+          description: `"${activeOpportunity.name}" moved to ${stageLabel}.`
+        });
       } catch (error) {
         console.error("Failed to update opportunity stage:", error);
+        toast({
+          type: 'error',
+          title: 'Update Failed',
+          description: 'Failed to update opportunity stage. Please try again.'
+        });
       }
     }
   };
@@ -101,6 +111,15 @@ export function KanbanBoard({
   const activeOpportunity = activeId 
     ? opportunities.find(opp => opp._id === activeId)
     : null;
+
+  // Memoize opportunities grouped by stage for performance
+  const opportunitiesByStage = useMemo(() => {
+    const grouped = PIPELINE_STAGES.reduce((acc, stage) => {
+      acc[stage.id] = opportunities.filter(opp => opp.stage === stage.id);
+      return acc;
+    }, {} as Record<OpportunityStage, Opportunity[]>);
+    return grouped;
+  }, [opportunities]);
 
   return (
     <DndContext
@@ -115,7 +134,7 @@ export function KanbanBoard({
             id={stage.id}
             title={stage.title}
             color={stage.color}
-            opportunities={groupedOpportunities[stage.id] || []}
+            opportunities={opportunitiesByStage[stage.id] || []}
             allOpportunities={opportunities}
             onEditOpportunity={onEditOpportunity}
             onDeleteOpportunity={onDeleteOpportunity}

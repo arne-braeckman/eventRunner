@@ -72,6 +72,7 @@ export function ProposalGenerator({ opportunity, onProposalCreated }: ProposalGe
   const [isGenerating, setIsGenerating] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+  const { toast } = useToast();
 
   // Get the selected template details
   const template = useQuery(
@@ -127,7 +128,11 @@ export function ProposalGenerator({ opportunity, onProposalCreated }: ProposalGe
       setStep('template');
       
     } catch (error) {
-      console.error("Failed to generate proposal:", error);
+      toast({
+        type: 'error',
+        title: 'Generation Failed',
+        description: 'Unable to generate proposal. Please try again.'
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -159,7 +164,11 @@ export function ProposalGenerator({ opportunity, onProposalCreated }: ProposalGe
 
       PdfGenerator.downloadBlob(pdfBlob, `${opportunity.name}-proposal.pdf`);
     } catch (error) {
-      console.error("Failed to generate PDF:", error);
+      toast({
+        type: 'error',
+        title: 'PDF Generation Failed',
+        description: 'Unable to generate PDF. Please try again.'
+      });
     }
   };
 

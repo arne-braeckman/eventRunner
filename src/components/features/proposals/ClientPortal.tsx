@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { ProposalComments } from "./ProposalComments";
 import { PdfGenerator, type ProposalPdfData } from "@/lib/utils/pdfGenerator";
+import { useToast } from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
 import { 
   sanitizeText, 
@@ -46,6 +47,7 @@ import {
   sanitizeEmail, 
   sanitizeTemplateContent 
 } from "@/lib/utils/sanitization";
+import { PdfErrorBoundary } from "./PdfErrorBoundary";
 
 interface ClientPortalProps {
   proposal: any;
@@ -61,6 +63,7 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const { toast } = useToast();
 
   // Mutations
   const updateProposalStatus = useMutation(api.proposals.updateProposalStatus);
@@ -116,7 +119,11 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
 
       PdfGenerator.downloadBlob(pdfBlob, `${proposal.title}-proposal.pdf`);
     } catch (error) {
-      console.error("Failed to generate PDF:", error);
+      toast({
+        type: 'error',
+        title: 'PDF Generation Failed',
+        description: 'Unable to generate PDF. Please try again or contact support.'
+      });
     } finally {
       setDownloadingPdf(false);
     }
@@ -127,7 +134,11 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
     const sanitizedEmail = sanitizeEmail(clientEmail);
     
     if (!sanitizedName || !sanitizedEmail) {
-      alert("Please provide valid name and email");
+      toast({
+        type: 'error',
+        title: 'Missing Information',
+        description: 'Please provide valid name and email address.'
+      });
       return;
     }
 
@@ -161,8 +172,11 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
       // Reload to show updated status
       window.location.reload();
     } catch (error) {
-      console.error("Failed to accept proposal:", error);
-      alert("Failed to accept proposal. Please try again.");
+      toast({
+        type: 'error',
+        title: 'Acceptance Failed',
+        description: 'Unable to accept proposal. Please try again or contact support.'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -173,7 +187,11 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
     const sanitizedEmail = sanitizeEmail(clientEmail);
     
     if (!sanitizedName || !sanitizedEmail) {
-      alert("Please provide valid name and email");
+      toast({
+        type: 'error',
+        title: 'Missing Information',
+        description: 'Please provide valid name and email address.'
+      });
       return;
     }
 
@@ -208,8 +226,11 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
       // Reload to show updated status
       window.location.reload();
     } catch (error) {
-      console.error("Failed to reject proposal:", error);
-      alert("Failed to decline proposal. Please try again.");
+      toast({
+        type: 'error',
+        title: 'Rejection Failed',
+        description: 'Unable to decline proposal. Please try again or contact support.'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -429,15 +450,17 @@ export function ClientPortal({ proposal, token }: ClientPortalProps) {
                 <CardTitle className="text-lg">Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button
-                  onClick={handleDownloadPdf}
-                  disabled={downloadingPdf}
-                  variant="outline"
-                  className="w-full"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  {downloadingPdf ? "Generating..." : "Download PDF"}
-                </Button>
+                <PdfErrorBoundary onRetry={() => handleDownloadPdf()}>
+                  <Button
+                    onClick={handleDownloadPdf}
+                    disabled={downloadingPdf}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    {downloadingPdf ? "Generating..." : "Download PDF"}
+                  </Button>
+                </PdfErrorBoundary>
 
                 {!isFinalized && !isExpired && (
                   <>
